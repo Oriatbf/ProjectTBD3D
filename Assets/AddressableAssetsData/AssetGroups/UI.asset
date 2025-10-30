@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  m_GroupName: UI
+  m_GUID: 0dab0557e1844894fa4ca90a6ec8224f
+  m_SerializeEntries:
+  - m_GUID: eb9ee628091661043afd18ed5278ebe5
+    m_Address: Assets/Prefab/UI/TurnCounterCanvas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: be1719bc3deec8d458d8cd3d5efbd493, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e848312ce53e7c0479085e009d2ab758, type: 2}
+    - {fileID: 11400000, guid: 62f5c12a946dfad4f985d8ba893822f6, type: 2}
