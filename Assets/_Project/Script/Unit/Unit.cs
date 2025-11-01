@@ -42,6 +42,7 @@ public class Unit : MonoBehaviour
 
     public void GetDamage(float damage)
     {
+        Debug.Log($"{damage} 만큼 데미지를 받음");
         if (damage > 0)
         {
             var remainDamage = damage - _statContainer.barrier._baseValue;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GoogleSheet.Core.Type;
+using UnityEngine;
 
 [UGS(typeof(SkillAttribute))]
 public enum SkillAttribute
@@ -37,6 +38,7 @@ namespace SkillData
         {
             _data = data;
             FindSkillEffects(_data.EffectData);
+            skillContext.Init(data.RowCount,data.ColumnCount);
         }
 
         /// <summary>

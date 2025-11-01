@@ -10,6 +10,12 @@ namespace SkillData
         public Action GiveDamage { get; set; }
         public int rowCount=0,columnCount=0;
 
+        public void Init(int rowCount, int columnCount)
+        {
+            this.rowCount = rowCount;
+            this.columnCount = columnCount;
+        }
+
         public void DamageToTarget(float damage)
         {
             var tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
@@ -17,8 +23,8 @@ namespace SkillData
             {
                 tile.GetUnit()?.GetDamage(damage);
             }
-            
         }
+        
         public void DamageToSource(float damage)
         {
             SourceTile.GetUnit().GetDamage(damage);

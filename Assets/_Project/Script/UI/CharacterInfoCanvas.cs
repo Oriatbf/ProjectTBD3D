@@ -66,10 +66,19 @@ public class CharacterInfoCanvas : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent(out Tile tile))
                 {
+                    var skill = curSkillIcon.GetSkill();
+                    var data = skill.GetData();
+                    if(Input.GetMouseButtonDown(0))
+                    {
+                        skill.InitTarget(tile);
+                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(Team.PlayerTeam,skill);
+                        isTargeting = false;
+                        foreach ( var lastTile in lastTiles)lastTile.UnTarget();
+                        lastTiles = new List<Tile>();
+                    }
                     if (lastTile == tile) return;
                     lastTile = tile;
                     foreach ( var lastTile in lastTiles)lastTile.UnTarget();
-                    var data = curSkillIcon.GetSkill().GetData();
                     var targetTiles =  TileManager.Inst.GetTiles(tile,data.RowCount,data.ColumnCount);
                     lastTiles = new List<Tile>();
                     lastTiles.AddRange(targetTiles);
@@ -77,6 +86,7 @@ public class CharacterInfoCanvas : MonoBehaviour
                     {
                         _tile.Target();
                     }
+                    
                 }
             }
         }

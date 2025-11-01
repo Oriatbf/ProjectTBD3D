@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
@@ -10,13 +11,31 @@ public class SkillTurnCounterController : BaseController
     private string enemyTurnImagePath = "Assets/Prefab/UI/EnemyTurnCounter";
     private GameObject playerTurnImage,enemyTurnImage;
     
-    private Queue<Transform> turnQueue = new Queue<Transform>();
+    private Queue<SkillData.SkillBase> turnQueue = new Queue<SkillData.SkillBase>();
     private GameObject canvas;
     private Transform parent;
     
     public override void OnInitialize()
     {
         SetCanvas();
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            TBDLogger.CommandLog(KeyCode.F4,this);
+            ActionSkill();
+        }
+    }
+
+    public void ActionSkill()
+    {
+        foreach (var skill in turnQueue)
+        {
+            skill.SkillAction();
+        }
     }
 
     private async void SetCanvas()
@@ -28,15 +47,15 @@ public class SkillTurnCounterController : BaseController
         parent = obj.transform.GetChild(0);
     }
 
-    public void Enqueue(Team team,string info)
+    public void Enqueue(Team team,SkillBase skill)
     {
         var image = team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
         var obj = GameObject.Instantiate(image, parent);
         if (obj.TryGetComponent(out TurnImage turnImage))
         {
-            turnImage.SetInfo(info);
+            turnImage.SetInfo(skill.GetData().Name);
         }
-        turnQueue.Enqueue(obj.transform);
+        turnQueue.Enqueue(skill);
     }
     
     

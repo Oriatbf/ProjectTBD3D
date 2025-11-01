@@ -15,7 +15,7 @@ public class EnemyController : UnitController
     {
         Debug.Log("스킬 등록");
         var _skill = sheetDataManager.GetSkillBase(1); 
-        applicationManager.GetModule<SkillTurnCounterController>().Enqueue(Team.EnemyTeam,_skill.GetData().Name);
+        applicationManager.GetModule<SkillTurnCounterController>().Enqueue(Team.EnemyTeam,_skill);
         await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
     }
 }
