@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class PlayerController : CharacterController
+public class PlayerController : UnitController
 {
-    
+    public void ShowBattleUI()
+    {
+        
+    }
 }

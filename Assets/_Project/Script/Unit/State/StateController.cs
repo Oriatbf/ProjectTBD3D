@@ -8,17 +8,18 @@ public enum State
     Idle,Attack,None
 }
 
-public interface IChangeState
+public abstract class StateControllerBase : MonoBehaviour
 {
-    public void Init(Unit unit);
-    public void ChangeState(State newState);
-    public State GetState();
+    [SerializeField]protected State curState = State.None;
+    public abstract void ChangeState(State newState);
+    public State CurState { get { return curState; } }
 }
-public class StateController<T> : MonoBehaviour where T : StateController<T>
+
+
+public class StateController<T> : StateControllerBase where T : StateController<T>
 {
     protected Dictionary<State,IState<T>> m_states = new Dictionary<State, IState<T>>();
     protected StateMachine<T> m_stateMachine;
-    [SerializeField]protected State curState = State.None;
 
 
     protected virtual void Update()
@@ -32,7 +33,7 @@ public class StateController<T> : MonoBehaviour where T : StateController<T>
     /// <summary>
     ///  ChracterController의 state를 바꾸는 함수
     /// </summary>
-    public void ChangeState(State newState)
+    public override void ChangeState(State newState)
     {
         m_stateMachine.SetState(m_states[newState]);
         curState = newState;

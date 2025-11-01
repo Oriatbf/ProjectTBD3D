@@ -9,14 +9,12 @@ using UnityEngine;
 public abstract class SkillEffect
 {
     protected List<int> values = new List<int>(); //스킬마다 사용되는 정수 값
-    protected SkillBase skillBase; //부모 스킬데이터
 
     /// <summary>
     /// SkillBase, values 데이터 받는 코드 values는 스킬별 사용되는 값들이 저장되어 있음
     /// </summary>
     public void Init(SkillBase skillBase,List<int> values)
     {
-        this.skillBase = skillBase;
         this.values = values;
     }
     

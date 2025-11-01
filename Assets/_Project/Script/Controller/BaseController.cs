@@ -8,4 +8,9 @@ public abstract class BaseController
     {
         
     }
+
+    public virtual void OnUpdate()
+    {
+        
+    }
 }

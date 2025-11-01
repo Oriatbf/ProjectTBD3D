@@ -15,6 +15,16 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: 0dab0557e1844894fa4ca90a6ec8224f
   m_SerializeEntries:
+  - m_GUID: 80902250a613d194eaef69caea2daf10
+    m_Address: Assets/Prefab/UI/EnemyTurnCounter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d8fa101f330c4d8458c79465fb66d704
+    m_Address: Assets/Prefab/UI/PlayerTurnCounter
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb9ee628091661043afd18ed5278ebe5
     m_Address: Assets/Prefab/UI/TurnCounterCanvas
     m_ReadOnly: 0

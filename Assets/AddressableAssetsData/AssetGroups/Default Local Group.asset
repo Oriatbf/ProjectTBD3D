@@ -14,17 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 4edf8074a3b598b41938bb30811f69b9
-  m_SerializeEntries:
-  - m_GUID: de07e36ae94154e44a35310d53702359
-    m_Address: Assets/Prefab/UI/PlayerTurnCounter
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e912e6afdb30b7f42a52a18b36b807e9
-    m_Address: Assets/Prefab/UI/EnemyTurnCounter
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be1719bc3deec8d458d8cd3d5efbd493, type: 2}
   m_SchemaSet:

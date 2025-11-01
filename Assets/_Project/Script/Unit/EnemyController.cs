@@ -1,7 +1,9 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VInspector;
 
-public class EnemyController : CharacterController
+public class EnemyController : UnitController
 {
     protected override void Start()
     {
@@ -9,10 +11,11 @@ public class EnemyController : CharacterController
     }
 
     [Button]
-    public void RegisterSKill(int id)
+    public async UniTask  RegisterSKill()
     {
-        var _skill = sheetDataManager.GetSkillBase(id); 
-        applicationManager.GetModule<SkillTurnCounterController>().Enqueue(Team.EnemyTeam);
-        
+        Debug.Log("스킬 등록");
+        var _skill = sheetDataManager.GetSkillBase(1); 
+        applicationManager.GetModule<SkillTurnCounterController>().Enqueue(Team.EnemyTeam,_skill.GetData().Name);
+        await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
     }
 }

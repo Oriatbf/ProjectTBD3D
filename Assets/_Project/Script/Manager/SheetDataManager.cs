@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SkillData;
 using UnityEngine;
 
 public class SheetDataManager : MonoBehaviour
 {
+    private List<SkillData.SkillBase> skillList = new List<SkillData.SkillBase>();
     private void Awake()
     {
         SkillData.Data.Load();
@@ -12,17 +14,13 @@ public class SheetDataManager : MonoBehaviour
         
         foreach (var data in SkillData.Data.DataList)
         {
-            /*
-            SkillBase newSkill = new SkillBase(data);
-            if(data.SkillType == SkillType.Skill) skillList.Add(newSkill);
-            else itemList.Add(newSkill);
-            */
+            SkillData.SkillBase newSkill = new SkillData.SkillBase(data);
+            skillList.Add(newSkill);
         }
         
         DIContainer.RegisterService(this);
     }
-    
     public UnitData.Data GetUnitData(int id) => UnitData.Data.DataList.FirstOrDefault(d=>d.Id==id);
-    public int GetSkillBase(int id) => 1;
+    public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id);
 
 }

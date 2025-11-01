@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ApplicationManager : MonoBehaviour
+public class ApplicationManager : Singleton<ApplicationManager>
 {
     private Dictionary<Type, BaseController> _modulesByType = new Dictionary<Type, BaseController>();
     private void Awake()
     {
-        DIContainer.RegisterService(this);
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
+        _modulesByType.Add(typeof(TurnController), new TurnController());
+        _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
     }
     private void Start()
     {
@@ -17,7 +18,15 @@ public class ApplicationManager : MonoBehaviour
             value.OnIntialize();
         }
     }
-    
+
+    private void Update()
+    {
+        foreach (var value in _modulesByType.Values)
+        {
+            value.OnUpdate();
+        }
+    }
+
     public T GetModule<T>() where T : BaseController
     {
         if (_modulesByType.TryGetValue(typeof(T), out var module))

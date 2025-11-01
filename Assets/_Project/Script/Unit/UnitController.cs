@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class UnitController : MonoBehaviour
 {
     protected SheetDataManager sheetDataManager;
     protected ApplicationManager applicationManager;
@@ -12,7 +12,7 @@ public class CharacterController : MonoBehaviour
 
     protected virtual void Start()
     {
-        applicationManager = DIContainer.ResolveService<ApplicationManager>();
+        applicationManager = ApplicationManager.Inst;
         sheetDataManager = DIContainer.ResolveService<SheetDataManager>();
     }
 }

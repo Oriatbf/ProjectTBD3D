@@ -26,15 +26,20 @@ public class SkillTurnCounterController : BaseController
         enemyTurnImage = await Addressables.LoadAssetAsync<GameObject>(enemyTurnImagePath).Task;
         var obj = GameObject.Instantiate(canvas);
         parent = obj.transform.GetChild(0);
-        Enqueue(Team.PlayerTeam);
     }
 
-    public void Enqueue(Team team)
+    public void Enqueue(Team team,string info)
     {
         var image = team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
         var obj = GameObject.Instantiate(image, parent);
+        if (obj.TryGetComponent(out TurnImage turnImage))
+        {
+            turnImage.SetInfo(info);
+        }
         turnQueue.Enqueue(obj.transform);
     }
+    
+    
 
     public void Dequeue()
     {

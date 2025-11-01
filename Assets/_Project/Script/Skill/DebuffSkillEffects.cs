@@ -9,7 +9,6 @@ public class Fire : SkillEffect
     {
         BuffDebuff debuff = new BuffDebuff(
             () => Action(skillContext.Target),null,
-            skillBase,
             values[0],false
         );
       //  skillContext.Target.AddBuffDebuff(debuff);
@@ -31,7 +30,6 @@ public class Posion : SkillEffect
     {
         BuffDebuff debuff = new BuffDebuff(
             () => Action(skillContext.Target),null,
-            skillBase,
             values[0],
             true,
             values[1]
@@ -68,7 +66,6 @@ public class StrDebuff : SkillEffect
     {
         BuffDebuff debuff = new BuffDebuff(
             () => Action(skillContext.Target), ()=>RemoveDebuff(skillContext.Target),
-            skillBase,
             values[0],false
         );
       //  skillContext.Target.AddBuffDebuff(debuff);

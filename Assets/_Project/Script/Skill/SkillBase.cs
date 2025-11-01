@@ -1,12 +1,6 @@
 using System;
 using System.Collections.Generic;
 using GoogleSheet.Core.Type;
-using Unity.VisualScripting;
-using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
-
-[UGS(typeof(SkillType))]
-public enum SkillType{Skill,Item}
 
 [UGS(typeof(SkillAttribute))]
 public enum SkillAttribute
@@ -26,20 +20,28 @@ namespace SkillData
     public class SkillBase 
     {
         
-        public Data _data;
+        private Data _data; 
         private SkillContext skillContext = new SkillContext();
         private List<SkillEffect> effects = new List<SkillEffect>();
         string effectInfor = "";
             
         public void InitTarget(Unit target)=>skillContext.Target = target;
-        public void InitOwner(Unit owner) => skillContext.Source = owner;
+        public void InitSource(Unit owner) => skillContext.Source = owner;
         
+        public Data GetData()=>_data;
+        
+        /// <summary>
+        /// Data를 통해서 SkillBase 생성
+        /// </summary>
         public SkillBase(Data data)
         {
-            _data = data; 
+            _data = data;
             FindSkillEffects(_data.EffectData);
         }
 
+        /// <summary>
+        /// EffectData split해서 리스트에 저장
+        /// </summary>
         private void FindSkillEffects(string data)
         {
             string[] parts = data.Split('/');        // Split 사용
@@ -63,8 +65,14 @@ namespace SkillData
                 effectInfor += effect.ReturnInformation() + " ";
         }
         
+        /// <summary>
+        /// 스킬 정보 받기
+        /// </summary>
         public string GetSkillDescription()=>_data.Infor + " " + effectInfor;
-
+        
+        /// <summary>
+        /// 스킬 실행
+        /// </summary>
         public void SkillAction()
         {
             foreach (SkillEffect effect in effects)
@@ -75,6 +83,9 @@ namespace SkillData
 
         public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.Source.GetStatContainer());
 
+        /// <summary>
+        /// SkillBase 깊은 복사
+        /// </summary>
         public SkillBase Clone()
         {
             SkillBase clone = new SkillBase(_data);
