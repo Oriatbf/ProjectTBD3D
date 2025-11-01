@@ -171,10 +171,10 @@ namespace DG.DOTweenEditor
             "OTHER", "Will animate components on the given gameObject instead than on this one"
         );
         static readonly GUIContent _GuiC_tweenTargetIsTargetGO_true = new GUIContent(
-            "Use As Tween Target", "Will set the tween target (via SetTarget, used to control a tween directly from a target) to the \"OTHER\" gameObject"
+            "Use As Tween TargetTile", "Will set the tween target (via SetTarget, used to control a tween directly from a target) to the \"OTHER\" gameObject"
         );
         static readonly GUIContent _GuiC_tweenTargetIsTargetGO_false = new GUIContent(
-            "Use As Tween Target", "Will set the tween target (via SetTarget, used to control a tween directly from a target) to the gameObject containing this animation, not the \"OTHER\" one"
+            "Use As Tween TargetTile", "Will set the tween target (via SetTarget, used to control a tween directly from a target) to the gameObject containing this animation, not the \"OTHER\" one"
         );
 
         #region MonoBehaviour Methods
@@ -449,9 +449,9 @@ namespace DG.DOTweenEditor
                 if (_chooseTargetMode == ChooseTargetMode.BetweenCanvasGroupAndImage && _src.forcedTargetType != DOTweenAnimation.TargetType.Unset) {
                     FadeTargetType fadeTargetType = (FadeTargetType)Enum.Parse(typeof(FadeTargetType), _src.forcedTargetType.ToString());
                     DOTweenAnimation.TargetType prevTargetType = _src.forcedTargetType;
-                    _src.forcedTargetType = (DOTweenAnimation.TargetType)Enum.Parse(typeof(DOTweenAnimation.TargetType), EditorGUILayout.EnumPopup(_src.animationType + " Target", fadeTargetType).ToString());
+                    _src.forcedTargetType = (DOTweenAnimation.TargetType)Enum.Parse(typeof(DOTweenAnimation.TargetType), EditorGUILayout.EnumPopup(_src.animationType + " TargetTile", fadeTargetType).ToString());
                     if (_src.forcedTargetType != prevTargetType) {
-                        // Target type change > assign correct target
+                        // TargetTile type change > assign correct target
                         switch (_src.forcedTargetType) {
                         case DOTweenAnimation.TargetType.CanvasGroup:
                             _src.target = targetGO.GetComponent<CanvasGroup>();

@@ -7,7 +7,7 @@ public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-       // skillContext.Target.GetDamage(skillBase.GetFinalDamage(values[0]));
+        skillContext.DamageToTarget(values[0]);
     }
 
     public override string ReturnInformation()
@@ -29,9 +29,9 @@ public class SelfPDamage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        //float casterHp = skillContext.Source.GetStatContainer().hp._baseValue;
+        //float casterHp = skillContext.SourceTile.GetStatContainer().hp._baseValue;
        // float damage =(int)(casterHp *( (float)values[0]/100f));
-      //  skillContext.Source.GetDamage(damage);
+      //  skillContext.SourceTile.GetDamage(damage);
     }
 
     public override string ReturnInformation()
@@ -44,7 +44,7 @@ public class Heal : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-       // skillContext.Source.GetDamage(-values[0]);
+       // skillContext.SourceTile.GetDamage(-values[0]);
     }
 
     public override string ReturnInformation()
@@ -57,7 +57,7 @@ public class Barrier : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-      // skillContext.Source.GetStatContainer().barrier.AddBaseValue(values[0]);
+      // skillContext.SourceTile.GetStatContainer().barrier.AddBaseValue(values[0]);
     }
 
     public override string ReturnInformation()

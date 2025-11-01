@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using SkillData;
-using UnitData;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using VInspector;
 
 public enum Team{PlayerTeam,EnemyTeam,neutralityTeam } //neutrality == 중립
-
 
 public class Unit : MonoBehaviour
 {
@@ -18,16 +12,28 @@ public class Unit : MonoBehaviour
     private Team team; 
     private int tileIndex;
     private Animator animator;
+    private UnitData.Data unitData;
+    private UnitController unitController;
     string animatorPath = "Assets/Art/Animator/";
+    
     private static readonly int Idle = Animator.StringToHash("Idle");
     private static readonly int Attack = Animator.StringToHash("Attack");
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        unitController = GetComponent<UnitController>();
     }
     private void Start()
     {
         animator.Play("Idle");
+    }
+    
+    public void Init(UnitData.Data unitData, Team team)
+    {
+        _statContainer = new StatContainer(unitData);
+        unitController.Init(unitData);
+        this.unitData = unitData;
+        this.team = team;
     }
     
     public Team GetTeam() => team;
@@ -48,12 +54,6 @@ public class Unit : MonoBehaviour
             _statContainer.hp.AddBaseValue( -damage);
         }
         // PopUpUIManager.Inst.SpawnDamagePopUp(damage,transform );
-    }
-
-    public void Init(UnitData.Data unitData, Team team)
-    {
-        _statContainer = new StatContainer(unitData);
-        this.team = team;
     }
     private void OnHpChange(float value)
     {

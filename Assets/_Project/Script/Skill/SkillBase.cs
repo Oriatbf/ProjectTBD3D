@@ -25,8 +25,8 @@ namespace SkillData
         private List<SkillEffect> effects = new List<SkillEffect>();
         string effectInfor = "";
             
-        public void InitTarget(Unit target)=>skillContext.Target = target;
-        public void InitSource(Unit owner) => skillContext.Source = owner;
+        public void InitTarget(Tile target)=>skillContext.TargetTile = target;
+        public void InitSource(Tile owner) => skillContext.SourceTile = owner;
         
         public Data GetData()=>_data;
         
@@ -81,7 +81,7 @@ namespace SkillData
             }
         }
 
-        public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.Source.GetStatContainer());
+        public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());
 
         /// <summary>
         /// SkillBase 깊은 복사

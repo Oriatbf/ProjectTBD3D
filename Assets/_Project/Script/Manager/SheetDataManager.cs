@@ -4,7 +4,7 @@ using System.Linq;
 using SkillData;
 using UnityEngine;
 
-public class SheetDataManager : MonoBehaviour
+public class SheetDataManager : Singleton<SheetDataManager>
 {
     private List<SkillData.SkillBase> skillList = new List<SkillData.SkillBase>();
     private void Awake()
@@ -22,5 +22,9 @@ public class SheetDataManager : MonoBehaviour
     }
     public UnitData.Data GetUnitData(int id) => UnitData.Data.DataList.FirstOrDefault(d=>d.Id==id);
     public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id);
+
+    public List<SkillBase> GetSkillBaseList(List<int> ids)
+        => skillList.Where(s => ids.Contains(s.GetData().ID)).ToList();
+    
 
 }

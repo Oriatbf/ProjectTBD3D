@@ -8,13 +8,13 @@ public class Fire : SkillEffect
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
         BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.Target),null,
+            () => Action(skillContext.TargetTile),null,
             values[0],false
         );
-      //  skillContext.Target.AddBuffDebuff(debuff);
+      //  skillContext.TargetTile.AddBuffDebuff(debuff);
     }
 
-    private void Action(Unit target)
+    private void Action(Tile target)
     {
         //target.GetDamage(values[1]);
     }
@@ -29,15 +29,15 @@ public class Posion : SkillEffect
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
         BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.Target),null,
+            () => Action(skillContext.TargetTile),null,
             values[0],
             true,
             values[1]
         );
-        //skillContext.Target.AddBuffDebuff(debuff);
+        //skillContext.TargetTile.AddBuffDebuff(debuff);
     }
 
-    private void Action(Unit target)
+    private void Action(Tile target)
     {
         /*
         // 현재 독 스택 수만큼 데미지
@@ -65,18 +65,18 @@ public class StrDebuff : SkillEffect
     public override void Apply(SkillContext skillContext)
     {
         BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.Target), ()=>RemoveDebuff(skillContext.Target),
+            () => Action(skillContext.TargetTile), ()=>RemoveDebuff(skillContext.TargetTile),
             values[0],false
         );
-      //  skillContext.Target.AddBuffDebuff(debuff);
+      //  skillContext.TargetTile.AddBuffDebuff(debuff);
     }
     
-    private void Action(Unit target)
+    private void Action(Tile target)
     {
        // target.GetStatContainer().str.AddBaseValue(-values[1]);
     }
 
-    private void RemoveDebuff(Unit target)
+    private void RemoveDebuff(Tile target)
     {
        // target.GetStatContainer().str.AddBaseValue(values[1]);
     }

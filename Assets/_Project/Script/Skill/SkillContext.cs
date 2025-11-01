@@ -5,19 +5,23 @@ namespace SkillData
 {
     public class SkillContext
     {
-        public Unit Source { get; set; }
-        public Unit Target { get; set; }
+        public Tile SourceTile { get; set; }
+        public Tile TargetTile { get; set; }
         public Action GiveDamage { get; set; }
-        public Vector2 StartPosition { get; set; }
-        public Vector2 EndPosition { get; set; }
+        public int rowCount=0,columnCount=0;
 
         public void DamageToTarget(float damage)
         {
-            Target.GetDamage(damage);
+            var tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
+            foreach (var tile in tiles)
+            {
+                tile.GetUnit()?.GetDamage(damage);
+            }
+            
         }
         public void DamageToSource(float damage)
         {
-            Source.GetDamage(damage);
+            SourceTile.GetUnit().GetDamage(damage);
         }
     }
 }

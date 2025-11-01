@@ -8,7 +8,7 @@ public class FactoryManager : MonoBehaviour
 {
      private SheetDataManager sheetDataManager;
      private TileManager tileManager;
-     [SerializeField] private Unit unit;
+     [SerializeField] private Unit playerUnitPrefab,enemyUnitPrefab;
      [Foldout("Testing")]
      public EnemyArrangeSO testSO;
      public int playerIndex;
@@ -41,9 +41,10 @@ public class FactoryManager : MonoBehaviour
      /// </summary>
      public void PlayerSpawn(int id)
      {
-          var _unit = CreateUnit(id);
+          var _unit = CreateUnit(id,Team.PlayerTeam);
           playerUnits.Add(_unit);
           var _tile = tileManager.GetTile(new Vector2(2, 0)); //임시 배치
+          _tile.SetUnit(_unit);
           _unit.transform.position = _tile.GetPos();
      }
 
@@ -54,9 +55,10 @@ public class FactoryManager : MonoBehaviour
      {
           foreach (var enemyArrange in so.EnemyArranges)
           {
-               var _unit = CreateUnit(enemyArrange.unitIndex);
+               var _unit = CreateUnit(enemyArrange.unitIndex,Team.EnemyTeam);
                enemyUnits.Add(_unit);
                var _tile = tileManager.GetEnemyTile(enemyArrange.posIndex);
+               _tile.SetUnit(_unit);
                _unit.transform.position = _tile.GetPos();
           }
      }
@@ -64,11 +66,12 @@ public class FactoryManager : MonoBehaviour
      /// <summary>
      /// id에 기반해 유닛 생성
      /// </summary>
-     private Unit CreateUnit(int id)
+     private Unit CreateUnit(int id,Team team)
      {
           var unitData = sheetDataManager.GetUnitData(id);
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
-          Unit unit = Instantiate(this.unit);
+          var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
+          Unit unit = Instantiate(prefab);
           unit.Init(unitData,Team.EnemyTeam);
           return unit;
      }

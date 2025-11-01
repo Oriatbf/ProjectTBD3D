@@ -10,12 +10,13 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
+        _modulesByType.Add(typeof(CharacterInfoController), new CharacterInfoController());
     }
     private void Start()
     {
         foreach (var value in _modulesByType.Values)
         {
-            value.OnIntialize();
+            value.OnInitialize();
         }
     }
 

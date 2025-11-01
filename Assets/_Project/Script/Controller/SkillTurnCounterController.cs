@@ -14,7 +14,7 @@ public class SkillTurnCounterController : BaseController
     private GameObject canvas;
     private Transform parent;
     
-    public override void OnIntialize()
+    public override void OnInitialize()
     {
         SetCanvas();
     }

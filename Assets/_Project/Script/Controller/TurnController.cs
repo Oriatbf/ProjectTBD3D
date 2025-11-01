@@ -1,24 +1,53 @@
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 public class TurnController : BaseController
 {
+    private readonly string turnEndCanvasPath = "Assets/_Project/Prefab/UI/PlayerTurnEndCanvas";
     private List<StateControllerBase> players = new List<StateControllerBase>();
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
+    private Team AttackTurn = Team.EnemyTeam;
 
+    public override void OnInitialize()
+    {
+        base.OnInitialize();
+        SetCanvas();
+    }
+
+    private async void SetCanvas()
+    {
+        var canvas = await Addressables.LoadAssetAsync<GameObject>(turnEndCanvasPath).Task;
+        var obj = GameObject.Instantiate(canvas);
+        if(obj.TryGetComponent(out PlayerTurnEnd playerTurnEnd))
+            playerTurnEnd.SetAction(PlayerTurnEndAction);
+    }
+
+    /// <summary>
+    /// playerTurnEnd 버튼에 들어갈 액션
+    /// </summary>
+    private void PlayerTurnEndAction()
+    {
+        if (AttackTurn == Team.EnemyTeam) return;
+        ChangeStates(State.Idle, Team.PlayerTeam);
+        ChangeStates(State.Attack, Team.EnemyTeam);
+    }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
         if (Input.GetKeyDown(KeyCode.P))
         {
-            Debug.Log("Debugging on TurnController");
+            TBDLogger.CommandLog(KeyCode.P, this);
             ChangeStates(State.Idle,Team.PlayerTeam);
             ChangeStates(State.Attack,Team.EnemyTeam);
         }
     }
 
+    /// <summary>
+    /// 팀 추가
+    /// </summary>
     public void Add(List<Unit> units, Team team)
     {
         foreach (var unit in units)
@@ -53,9 +82,11 @@ public class TurnController : BaseController
                 break;
         }
 
-        foreach (var stateControll in selectedTeams)
+        if (state == State.Attack) AttackTurn = team;
+        
+        foreach (var stateControl in selectedTeams)
         {
-            stateControll.ChangeState(state);
+            stateControl.ChangeState(state);
         }
 
         if (team == Team.EnemyTeam && state == State.Attack) EnemyRegisterSkill();
