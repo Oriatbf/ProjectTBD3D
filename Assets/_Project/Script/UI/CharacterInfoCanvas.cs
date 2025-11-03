@@ -4,6 +4,7 @@ using DG.Tweening;
 using SkillData;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -11,13 +12,19 @@ public class CharacterInfoCanvas : MonoBehaviour
 {
     [SerializeField] private RectTransform backGroundParent;
     [SerializeField] private Transform skillContent;
-    [SerializeField] private SkillIcon skillIcon;
+    private SkillIcon skillIconPrefab;
     [SerializeField] private Image image;
     private SkillIcon curSkillIcon;
     private bool isTargeting = false;
     private Tile lastTile;
     private List<Tile> lastTiles = new List<Tile>();
+    private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
 
+    private async void Awake()
+    {
+        var obj = await Addressables.LoadAssetAsync<GameObject>(skillIconPath).Task;
+        skillIconPrefab = obj.GetComponent<SkillIcon>();
+    }
 
     public void Init(List<SkillBase> skills)
     {
@@ -30,7 +37,7 @@ public class CharacterInfoCanvas : MonoBehaviour
         }
         foreach (var skillBase in skills)
         {
-            var _skillIcon = Instantiate(skillIcon, skillContent);
+            var _skillIcon = Instantiate(skillIconPrefab, skillContent);
             _skillIcon.Init(skillBase);
         }
     }

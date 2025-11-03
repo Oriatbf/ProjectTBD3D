@@ -35,6 +35,9 @@ public class SkillTurnCounterController : BaseController
         }
     }
 
+    /// <summary>
+    /// 등록된 모든 스킬 사행
+    /// </summary>
     public async void ActionSkill()
     {
         List<GameObject> destroyObj = new List<GameObject>();
@@ -69,6 +72,9 @@ public class SkillTurnCounterController : BaseController
         parent = obj.transform.GetChild(0);
     }
 
+    /// <summary>
+    /// 스킬 등록
+    /// </summary>
     public void Enqueue(Team team,SkillBase skill)
     {
         var image = team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
@@ -81,6 +87,9 @@ public class SkillTurnCounterController : BaseController
         RefreshUI();
     }
 
+    /// <summary>
+    /// RequireTurn에 따라 데이터 재배치
+    /// </summary>
     private void EnqueueSkill(SkillBase skill,TurnImage turnImage)
     {
         var skillList = turnQueue.ToList();
@@ -104,6 +113,9 @@ public class SkillTurnCounterController : BaseController
         turnImageQueue = new Queue<TurnImage>(turnImageList);
     }
 
+    /// <summary>
+    /// UI재배치
+    /// </summary>
     private void RefreshUI()
     {
         var list = turnImageQueue.ToList();

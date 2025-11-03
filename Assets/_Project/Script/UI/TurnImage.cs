@@ -26,7 +26,7 @@ public class TurnImage : MonoBehaviour
     {
         this.team = team;
         this.skill = skill;
-        text.text = info;
+        text.text = info + $" turn : {skill.GetData().RequireTurn}";
     }
 
     public  void ArrowAlpha()

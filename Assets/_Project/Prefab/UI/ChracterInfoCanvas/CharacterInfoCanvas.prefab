@@ -47,7 +47,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backGroundParent: {fileID: 168514216183240841}
   skillContent: {fileID: 6688051003092290189}
-  skillIcon: {fileID: 6163026110163759261, guid: 63b45ee3db24d164f9253ce71269a6fb, type: 3}
   image: {fileID: 7562873391888329576}
 --- !u!1 &2828860591097145441
 GameObject:
@@ -182,11 +181,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 168514216183240841}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 640, y: 0}
-  m_SizeDelta: {x: 400, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 416.5, y: 0}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &7767777854111525575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,11 +200,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Right: 10
+    m_Top: 20
+    m_Bottom: 10
   m_ChildAlignment: 0
-  m_Spacing: 5
+  m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0

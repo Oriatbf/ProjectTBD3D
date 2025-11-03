@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 31e13a68c68ecbe47a3c4059aa97d223
+    m_Address: Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b18aaab9d650434eb633d2b5b598565
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Gold.png
     m_ReadOnly: 0
