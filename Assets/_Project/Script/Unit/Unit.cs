@@ -10,10 +10,11 @@ public class Unit : MonoBehaviour
     [EndFoldout]
     
     private Team team; 
-    private int tileIndex;
+    private Tile tile; 
     private Animator animator;
     private UnitData.Data unitData;
     private UnitController unitController;
+    private HealthContent healthContent;
     string animatorPath = "Assets/Art/Animator/";
     
     private static readonly int Idle = Animator.StringToHash("Idle");
@@ -35,6 +36,27 @@ public class Unit : MonoBehaviour
         this.unitData = unitData;
         this.team = team;
     }
+
+    public void SetTile(Tile tile)
+    {
+        this.tile = tile;
+        SetHealthContent();
+        SetAction();
+    }
+
+    private void SetAction()
+    {
+        _statContainer.hp.OnValueChanged += OnHpChange;
+        _statContainer.turnGauge.OnValueChanged += OnCostChange;
+    }
+
+    private void SetHealthContent()
+    {
+        healthContent = PoolManager.Inst.Spawn<HealthContent>();
+        healthContent.Init(_statContainer);
+        healthContent.SetPos(tile.GetPos());
+      
+    }
     
     public Team GetTeam() => team;
     public StatContainer GetStatContainer() => _statContainer;
@@ -54,7 +76,7 @@ public class Unit : MonoBehaviour
         {
             _statContainer.hp.AddBaseValue( -damage);
         }
-        // PopUpUIManager.Inst.SpawnDamagePopUp(damage,transform );
+        ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }
     private void OnHpChange(float value)
     {

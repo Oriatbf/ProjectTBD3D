@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class CharacterInfoController : BaseController
 {
-    private string canvasPath = "Assets/_Project/Prefab/UI/CharacterInfoCanvas";
+    private string canvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterInfoCanvas.prefab";
     private bool isShow = false;
     private static readonly Vector2 InitializePos = new Vector2(0, -400);
     private CharacterInfoCanvas _characterInfoCanvas;
@@ -28,6 +28,7 @@ public class CharacterInfoController : BaseController
     public void Init(UnitData.Data unitData)
     {
         var skills = SheetDataManager.Inst.GetSkillBaseList(unitData.BringSkill);
+        Debug.Log(skills.Count);
         _characterInfoCanvas.Init(skills);
     }
 

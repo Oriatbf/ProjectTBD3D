@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 
 public class TurnController : BaseController
 {
-    private readonly string turnEndCanvasPath = "Assets/_Project/Prefab/UI/PlayerTurnEndCanvas";
+    private readonly string turnEndCanvasPath = "Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab";
     private List<StateControllerBase> players = new List<StateControllerBase>();
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
     private Team AttackTurn = Team.EnemyTeam;

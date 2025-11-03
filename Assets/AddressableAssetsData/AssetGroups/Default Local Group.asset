@@ -14,17 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: Default Local Group
   m_GUID: 4edf8074a3b598b41938bb30811f69b9
-  m_SerializeEntries:
-  - m_GUID: 18f87c6d50cf998459ef462c4df98923
-    m_Address: Assets/_Project/Prefab/UI/PlayerTurnEndCanvas
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c5baa87c1b0bb3a4a8890abedb849bee
-    m_Address: Assets/_Project/Prefab/UI/CharacterInfoCanvas
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be1719bc3deec8d458d8cd3d5efbd493, type: 2}
   m_SchemaSet:

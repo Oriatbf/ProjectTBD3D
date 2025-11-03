@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PoolManager : MonoBehaviour
+public class PoolManager : Singleton<PoolManager>
 {
     private readonly Dictionary<Type,object> pools = new Dictionary<Type, object>();
     private readonly Dictionary<Type,Transform>poolsParent = new Dictionary<Type, Transform>();

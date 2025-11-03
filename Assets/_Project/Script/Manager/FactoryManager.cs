@@ -44,6 +44,7 @@ public class FactoryManager : MonoBehaviour
           var _unit = CreateUnit(id,Team.PlayerTeam);
           playerUnits.Add(_unit);
           var _tile = tileManager.GetTile(new Vector2(2, 0)); //임시 배치
+          _unit.SetTile(_tile);
           _tile.SetUnit(_unit);
           _unit.transform.position = _tile.GetPos();
      }
@@ -58,6 +59,7 @@ public class FactoryManager : MonoBehaviour
                var _unit = CreateUnit(enemyArrange.unitIndex,Team.EnemyTeam);
                enemyUnits.Add(_unit);
                var _tile = tileManager.GetEnemyTile(enemyArrange.posIndex);
+               _unit.SetTile(_tile);
                _tile.SetUnit(_unit);
                _unit.transform.position = _tile.GetPos();
           }

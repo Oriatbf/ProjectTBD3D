@@ -11,6 +11,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
         _modulesByType.Add(typeof(CharacterInfoController), new CharacterInfoController());
+        _modulesByType.Add(typeof(PopUpUIController), new PopUpUIController());
     }
     private void Start()
     {

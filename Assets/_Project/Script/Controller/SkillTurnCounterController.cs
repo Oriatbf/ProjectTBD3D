@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class SkillTurnCounterController : BaseController
 {
-    private string canvasPath = "Assets/Prefab/UI/TurnCounterCanvas";
-    private string playerTurnImagePath = "Assets/Prefab/UI/PlayerTurnCounter";
-    private string enemyTurnImagePath = "Assets/Prefab/UI/EnemyTurnCounter";
+    private string canvasPath = "Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab";
+    private string playerTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab";
+    private string enemyTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab";
     private GameObject playerTurnImage,enemyTurnImage;
     
     private Queue<SkillData.SkillBase> turnQueue = new Queue<SkillData.SkillBase>();
