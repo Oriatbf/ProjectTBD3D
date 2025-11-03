@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 24b2a44d47b807e4887ddb400535d0fb
-    m_Address: Assets/_Project/Prefab/UI/PopUp/DamagePopUP.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be1719bc3deec8d458d8cd3d5efbd493, type: 2}
   m_SchemaSet:

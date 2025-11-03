@@ -29,6 +29,9 @@ public class Unit : MonoBehaviour
         animator.Play("Idle");
     }
     
+
+    #region 생성 시
+
     public void Init(UnitData.Data unitData, Team team)
     {
         _statContainer = new StatContainer(unitData);
@@ -36,13 +39,22 @@ public class Unit : MonoBehaviour
         this.unitData = unitData;
         this.team = team;
     }
-
+    
     public void SetTile(Tile tile)
     {
         this.tile = tile;
+    }
+    public virtual void Initalize()
+    {
         SetHealthContent();
         SetAction();
+        unitController.Initialize(tile);
     }
+
+    #endregion
+ 
+
+
 
     private void SetAction()
     {
@@ -61,6 +73,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
+    public UnitData.Data GetUnitData() => unitData;
 
     public void GetDamage(float damage)
     {

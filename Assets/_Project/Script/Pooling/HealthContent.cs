@@ -32,7 +32,7 @@ public class HealthContent : MonoBehaviour,IPoolable
 
     private void SetCharmBar(float value)
     {
-        Debug.Log(value);
+       // Debug.Log(value);
         charmBar_value.fillAmount = value;
     }
 

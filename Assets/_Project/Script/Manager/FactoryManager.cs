@@ -11,7 +11,6 @@ public class FactoryManager : MonoBehaviour
      [SerializeField] private Unit playerUnitPrefab,enemyUnitPrefab;
      [Foldout("Testing")]
      public EnemyArrangeSO testSO;
-     public int playerIndex;
      [EndFoldout]
      
      [Foldout("Debugging")]
@@ -37,9 +36,28 @@ public class FactoryManager : MonoBehaviour
      }
 
      /// <summary>
+     /// //TODO **게임 시작 함수**
+     /// </summary>
+     private void GameStart()
+     {
+          ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
+          foreach (var unit in playerUnits)unit.Initalize();
+          foreach (var unit in enemyUnits) unit.Initalize();
+     }
+
+     private void Update()
+     {
+          if (Input.GetKeyDown(KeyCode.P))
+          {
+               TBDLogger.CommandLog(KeyCode.P, this);
+               GameStart();
+          }
+     }
+
+     /// <summary>
      /// id에 기반해 아군 유닛 소환
      /// </summary>
-     public void PlayerSpawn(int id)
+     private void PlayerSpawn(int id)
      {
           var _unit = CreateUnit(id,Team.PlayerTeam);
           playerUnits.Add(_unit);
@@ -52,7 +70,7 @@ public class FactoryManager : MonoBehaviour
      /// <summary>
      /// id에 기반해 적군 유닛 소환
      /// </summary>
-     public void EnemySpawn(EnemyArrangeSO so)
+     private void EnemySpawn(EnemyArrangeSO so)
      {
           foreach (var enemyArrange in so.EnemyArranges)
           {
@@ -74,7 +92,7 @@ public class FactoryManager : MonoBehaviour
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
           var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
           Unit unit = Instantiate(prefab);
-          unit.Init(unitData,Team.EnemyTeam);
+          unit.Init(unitData,team);
           return unit;
      }
 }

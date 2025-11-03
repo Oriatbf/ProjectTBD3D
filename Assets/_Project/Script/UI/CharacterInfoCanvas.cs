@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using SkillData;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -68,14 +69,18 @@ public class CharacterInfoCanvas : MonoBehaviour
                 {
                     var skill = curSkillIcon.GetSkill();
                     var data = skill.GetData();
+                    //범위 선택
                     if(Input.GetMouseButtonDown(0))
                     {
-                        skill.InitTarget(tile);
-                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(Team.PlayerTeam,skill);
+                        var clone = skill.Clone();
+                        clone.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
+                        clone.InitTarget(tile);
+                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(Team.PlayerTeam,clone);
                         isTargeting = false;
                         foreach ( var lastTile in lastTiles)lastTile.UnTarget();
                         lastTiles = new List<Tile>();
                     }
+                    //범위선택 끝
                     if (lastTile == tile) return;
                     lastTile = tile;
                     foreach ( var lastTile in lastTiles)lastTile.UnTarget();

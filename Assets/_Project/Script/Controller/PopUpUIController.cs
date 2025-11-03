@@ -15,11 +15,11 @@ public class PopUpUIController : BaseController
        setting();
     }
 
+    /// <summary>
+    /// DamageNumber 에셋 Prefab 할당
+    /// </summary>
     private async void setting()
     {
-       // damagePopUp = await Addressables.LoadAssetAsync<DamageNumber>(damageUIPath).Task;
-     //   healPopUp = await Addressables.LoadAssetAsync<DamageNumber>(healUIPath).Task;
-        
         var damageUI = await Addressables.LoadAssetAsync<GameObject>(damageUIPath).Task;
         if(damageUI.TryGetComponent<DamageNumber>(out damagePopUp)) damagePopUp = damageUI.GetComponent<DamageNumber>();
         var healUI = await Addressables.LoadAssetAsync<GameObject>(healUIPath).Task;
@@ -27,6 +27,9 @@ public class PopUpUIController : BaseController
          
     }
 
+    /// <summary>
+    /// 데미지/힐을 받았을 때 UI띄우기
+    /// </summary>
     public void SpawnDamagePopUp(float value,Transform target)
     {
         if(value>=0) damagePopUp.Spawn(target.position+new Vector3(0,2f), value);

@@ -28,7 +28,7 @@ namespace SkillData
             
         public void InitTarget(Tile target)=>skillContext.TargetTile = target;
         public void InitSource(Tile owner) => skillContext.SourceTile = owner;
-        
+        public SkillContext GetSkillContext() => skillContext;
         public Data GetData()=>_data;
         
         /// <summary>
@@ -37,6 +37,7 @@ namespace SkillData
         public SkillBase(Data data)
         {
             _data = data;
+            effects = new List<SkillEffect>();
             FindSkillEffects(_data.EffectData);
             skillContext.Init(data.RowCount,data.ColumnCount);
         }

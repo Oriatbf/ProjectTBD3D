@@ -12,6 +12,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
         _modulesByType.Add(typeof(CharacterInfoController), new CharacterInfoController());
         _modulesByType.Add(typeof(PopUpUIController), new PopUpUIController());
+        _modulesByType.Add(typeof(SkillStackController),new SkillStackController());
     }
     private void Start()
     {

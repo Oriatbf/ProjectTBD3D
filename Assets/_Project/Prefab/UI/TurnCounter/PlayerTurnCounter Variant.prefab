@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2034822059139437974, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5717464000086730649, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+      propertyPath: arrowImage
+      value: 
+      objectReference: {fileID: 4464081651955587789}
     - target: {fileID: 6461471924645653192, guid: c3370da3946c7c54e814a47ced721500, type: 3}
       propertyPath: m_Name
       value: PlayerTurnCounter Variant
@@ -97,3 +105,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+--- !u!114 &4464081651955587789 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2034822059139437974, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+  m_PrefabInstance: {fileID: 2436088397543264091}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

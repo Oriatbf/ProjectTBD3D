@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using SkillData;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SheetDataManager : Singleton<SheetDataManager>
@@ -21,10 +22,10 @@ public class SheetDataManager : Singleton<SheetDataManager>
         DIContainer.RegisterService(this);
     }
     public UnitData.Data GetUnitData(int id) => UnitData.Data.DataList.FirstOrDefault(d=>d.Id==id);
-    public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id);
+    public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id).Clone();
 
     public List<SkillBase> GetSkillBaseList(List<int> ids)
-        => skillList.Where(s => ids.Contains(s.GetData().ID)).ToList();
+        => skillList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
     
 
 }

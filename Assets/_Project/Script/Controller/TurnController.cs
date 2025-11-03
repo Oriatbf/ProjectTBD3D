@@ -37,12 +37,12 @@ public class TurnController : BaseController
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            TBDLogger.CommandLog(KeyCode.P, this);
-            ChangeStates(State.Idle,Team.PlayerTeam);
-            ChangeStates(State.Attack,Team.EnemyTeam);
-        }
+    }
+    
+    public void TurnStart()
+    {
+        ChangeStates(State.Idle,Team.PlayerTeam);
+        ChangeStates(State.Attack,Team.EnemyTeam);
     }
 
     /// <summary>

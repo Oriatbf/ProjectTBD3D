@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: 8230bcee566e84a4f96c536dce56cf10
+guid: 2141c08d7cdc3b942b6414d2c6bf6e6d
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -1018388559432157721
-    second: Skillicon7_04_0
-  - first:
-      213: 3375445017345130294
-    second: Skillicon7_04_1
-  - first:
-      213: 4251720736404222813
-    second: Skillicon7_04_2
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -48,7 +39,7 @@ TextureImporter:
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 1
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -104,73 +95,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Skillicon7_04_0
-      rect:
-        serializedVersion: 2
-        x: 5
-        y: 19
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7e579b73005fdd1f0800000000000000
-      internalID: -1018388559432157721
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Skillicon7_04_1
-      rect:
-        serializedVersion: 2
-        x: 10
-        y: 5
-        width: 12
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 63ff7b10c5df7de20800000000000000
-      internalID: 3375445017345130294
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Skillicon7_04_2
-      rect:
-        serializedVersion: 2
-        x: 19
-        y: 19
-        width: 8
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: d533981bb75210b30800000000000000
-      internalID: 4251720736404222813
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     customData: 
     physicsShape: []
@@ -184,10 +109,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Skillicon7_04_0: -1018388559432157721
-      Skillicon7_04_1: 3375445017345130294
-      Skillicon7_04_2: 4251720736404222813
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

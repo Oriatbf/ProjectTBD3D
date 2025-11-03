@@ -14,28 +14,14 @@ public class TileManager : Singleton<TileManager>
     [SerializeField] private float interval; // 타일간의 간격
     [EndFoldout]
     private  Dictionary<Vector2,Tile> Tiles = new Dictionary<Vector2, Tile>();
+    // vector2 에는 x,y형태로 들어감 {열,행} 순
 
     private void Awake()
     {
         DIContainer.RegisterService(this);
         InstanceTile();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            TBDLogger.CommandLog(KeyCode.F3,this,"BombSkillTest");
-            var tiles = GetTiles(GetTile(Vector2.zero),2,2);
-            Debug.Log(tiles.Count);
-            foreach (var tile in tiles)
-            {
-                tile.Target();
-            }
-        }
-      
-        
-    }
+    
 
     /// <summary>
     /// 타일 소환
@@ -75,7 +61,25 @@ public class TileManager : Singleton<TileManager>
     /// </summary>
     public Tile GetPlayerTile(Vector2 vec)=> Tiles[vec];
     public Tile GetEnemyTile(Vector2 vec) => Tiles[new Vector2(halfCount+1,0) + vec];
-    public Tile GetTile(Vector2 vec) => Tiles[vec];
+    public Tile GetTile(Vector2 vec)
+    {
+        
+        return Tiles[vec];
+    }
+
+    public int GetHalfCount() => halfCount;
+    public int GetRowCount() => rowCount;
+
+    public List<Tile> GetTiles(Vector2 targetIndex, int rowCount, int columnCount)
+    {
+        Tile targetTile = GetTile(targetIndex);
+        if (targetTile == null)
+        {
+            Debug.LogError("해당 인덱스의 타일이 없음");
+            return null;
+        }
+        return GetTiles(targetTile,rowCount,columnCount);
+    }
 
     public List<Tile> GetTiles(Tile targetTile, int rowCount, int columnCount)
     {
