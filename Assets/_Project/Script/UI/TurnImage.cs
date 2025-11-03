@@ -31,7 +31,6 @@ public class TurnImage : MonoBehaviour
 
     public  void ArrowAlpha()
     {
-        
         canvasGroup.DOFade(0, 0.2f).AsyncWaitForCompletion();
     }
 

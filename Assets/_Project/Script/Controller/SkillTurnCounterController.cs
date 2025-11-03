@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using SkillData;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class SkillTurnCounterController : BaseController
     private GameObject canvas;
     private Transform parent;
     private float imageMoveDistance = 200;
+    private float imageInterval = 60;
     
     public override void OnInitialize()
     {
@@ -74,11 +76,42 @@ public class SkillTurnCounterController : BaseController
         if (obj.TryGetComponent(out TurnImage turnImage))
         {
             turnImage.SetInfo(skill,team,skill.GetData().Name);
-            turnImageQueue.Enqueue(turnImage);
+            EnqueueSkill(skill,turnImage);
         }
-        turnQueue.Enqueue(skill);
+        RefreshUI();
     }
-    
+
+    private void EnqueueSkill(SkillBase skill,TurnImage turnImage)
+    {
+        var skillList = turnQueue.ToList();
+        var turnImageList = turnImageQueue.ToList();
+        float curSkillReq = skill.GetData().RequireTurn;
+        for (int i = 0; i < skillList.Count; i++)
+        {
+            var skillReq = skillList[i].GetData().RequireTurn;
+            if (curSkillReq < skillReq)
+            {
+                skillList.Insert(i,skill);
+                turnImageList.Insert(i,turnImage);
+                turnQueue = new Queue<SkillBase>(skillList);
+                turnImageQueue = new Queue<TurnImage>(turnImageList);
+                return;
+            }
+        }
+        skillList.Add(skill);
+        turnImageList.Add(turnImage);
+        turnQueue = new Queue<SkillBase>(skillList);
+        turnImageQueue = new Queue<TurnImage>(turnImageList);
+    }
+
+    private void RefreshUI()
+    {
+        var list = turnImageQueue.ToList();
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-imageInterval*i), 0.2f);
+        }
+    }
     
 
     public void Dequeue()
