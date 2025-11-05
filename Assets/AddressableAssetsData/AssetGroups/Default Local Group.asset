@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 4edf8074a3b598b41938bb30811f69b9
   m_SerializeEntries:
+  - m_GUID: 11f1f69c64a2a784cb0ea83e0eee4706
+    m_Address: Assets/_Project/Art/Animator/Samurai.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18f87c6d50cf998459ef462c4df98923
     m_Address: Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab
     m_ReadOnly: 0
@@ -50,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 402948ee01662924da0fcea9a3f56f2a
+    m_Address: Assets/_Project/Art/Animator/Warrior.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4aed078d80f365c4796830a62ca9f8f7
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Heal.png
     m_ReadOnly: 0
@@ -80,8 +90,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f993d05cfa669045a7f5aee1b1d8df0
+    m_Address: Assets/_Project/Art/Animator/Mage.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9a3adca6998be1740b93c1e8a3916264
+    m_Address: Assets/_Project/Art/Animator/Skeleton.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: adbd713a1cc1ad14595a842328aca7b5
     m_Address: Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b36e9ecb90c95d945bb97fe52148c72f
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Bomb.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -97,6 +122,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb9ee628091661043afd18ed5278ebe5
     m_Address: Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ff37decee169bbd48a783a70bf2bcfa5
+    m_Address: Assets/_Project/Art/Animator/Necromancer.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

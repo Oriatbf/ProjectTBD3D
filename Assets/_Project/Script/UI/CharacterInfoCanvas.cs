@@ -7,18 +7,28 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using VInspector;
 
 public class CharacterInfoCanvas : MonoBehaviour
 {
+    [Foldout("Serialize")]
     [SerializeField] private RectTransform backGroundParent;
     [SerializeField] private Transform skillContent;
-    private SkillIcon skillIconPrefab;
     [SerializeField] private Image image;
+    [EndFoldout]
+    private SkillIcon skillIconPrefab;
     private SkillIcon curSkillIcon;
-    private bool isTargeting = false;
     private Tile lastTile;
     private List<Tile> lastTiles = new List<Tile>();
+    private bool isTargeting = false;
+
+    private float maxTurnStack = 0;
+    private float curturnStack = 0;
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
+
+    
+    
+    private Tile testTile;
 
     private async void Awake()
     {
@@ -26,8 +36,14 @@ public class CharacterInfoCanvas : MonoBehaviour
         skillIconPrefab = obj.GetComponent<SkillIcon>();
     }
 
-    public void Init(List<SkillBase> skills)
+    private void Start()
     {
+        testTile = TileManager.Inst.GetTile(new Vector2(2, 0));
+    }
+
+    public void Init(List<SkillStackInfo> skillStackInfos,float maxTurnStack)
+    {
+        this.maxTurnStack = maxTurnStack;
         if (skillContent.childCount > 0)
         {
             foreach (Transform child in skillContent)
@@ -35,10 +51,10 @@ public class CharacterInfoCanvas : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
-        foreach (var skillBase in skills)
+        foreach (var skillStackInfo in skillStackInfos)
         {
             var _skillIcon = Instantiate(skillIconPrefab, skillContent);
-            _skillIcon.Init(skillBase);
+            _skillIcon.Init(skillStackInfo);
         }
     }
 
@@ -74,15 +90,20 @@ public class CharacterInfoCanvas : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent(out Tile tile))
                 {
-                    var skill = curSkillIcon.GetSkill();
+                    var skillStackInfo = curSkillIcon.GetSkillStackInfo();
+                    var skill = skillStackInfo.skill;
                     var data = skill.GetData();
                     //범위 선택
                     if(Input.GetMouseButtonDown(0))
                     {
-                        var clone = skill.Clone();
-                        clone.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
-                        clone.InitTarget(tile);
-                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(Team.PlayerTeam,clone);
+                        if (skillStackInfo.stackTurn + curturnStack > maxTurnStack) return;
+                        skillStackInfo.stackTurn += curturnStack;
+                        curturnStack = skillStackInfo.stackTurn;
+                        
+                        Debug.Log(skillStackInfo.stackTurn);
+                        skill.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
+                        skill.InitTarget(tile);
+                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
                         isTargeting = false;
                         foreach ( var lastTile in lastTiles)lastTile.UnTarget();
                         lastTiles = new List<Tile>();

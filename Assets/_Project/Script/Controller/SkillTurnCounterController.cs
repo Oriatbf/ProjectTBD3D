@@ -13,7 +13,7 @@ public class SkillTurnCounterController : BaseController
     private string enemyTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab";
     private GameObject playerTurnImage,enemyTurnImage;
     
-    private Queue<SkillData.SkillBase> turnQueue = new Queue<SkillData.SkillBase>();
+    private Queue<SkillStackInfo> turnQueue = new Queue<SkillStackInfo>();
     private Queue<TurnImage> turnImageQueue = new Queue<TurnImage>();
     private GameObject canvas;
     private Transform parent;
@@ -57,8 +57,10 @@ public class SkillTurnCounterController : BaseController
                 image.ArrowAlpha();
                 await sequence.Play().AsyncWaitForCompletion();
             }
-            var skill = turnQueue.Dequeue();
+            var skillStackInfo = turnQueue.Dequeue();
+            var skill = skillStackInfo.skill;
             skill.SkillAction();
+            ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
     }
@@ -75,14 +77,14 @@ public class SkillTurnCounterController : BaseController
     /// <summary>
     /// 스킬 등록
     /// </summary>
-    public void Enqueue(Team team,SkillBase skill)
+    public void Enqueue(SkillStackInfo skillStackInfo)
     {
-        var image = team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
+        var image = skillStackInfo.team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
         var obj = GameObject.Instantiate(image, parent);
         if (obj.TryGetComponent(out TurnImage turnImage))
         {
-            turnImage.SetInfo(skill,team,skill.GetData().Name);
-            EnqueueSkill(skill,turnImage);
+            turnImage.SetInfo(skillStackInfo);
+            EnqueueSkill(skillStackInfo,turnImage);
         }
         RefreshUI();
     }
@@ -90,26 +92,28 @@ public class SkillTurnCounterController : BaseController
     /// <summary>
     /// RequireTurn에 따라 데이터 재배치
     /// </summary>
-    private void EnqueueSkill(SkillBase skill,TurnImage turnImage)
+    private void EnqueueSkill(SkillStackInfo skillStackInfo,TurnImage turnImage)
     {
+  
         var skillList = turnQueue.ToList();
         var turnImageList = turnImageQueue.ToList();
-        float curSkillReq = skill.GetData().RequireTurn;
+        var skill = skillStackInfo.skill;
+        float curSkillReq = skillStackInfo.stackTurn;
         for (int i = 0; i < skillList.Count; i++)
         {
-            var skillReq = skillList[i].GetData().RequireTurn;
+            var skillReq = skillList[i].stackTurn;
             if (curSkillReq < skillReq)
             {
-                skillList.Insert(i,skill);
+                skillList.Insert(i,skillStackInfo);
                 turnImageList.Insert(i,turnImage);
-                turnQueue = new Queue<SkillBase>(skillList);
+                turnQueue = new Queue<SkillStackInfo>(skillList);
                 turnImageQueue = new Queue<TurnImage>(turnImageList);
                 return;
             }
         }
-        skillList.Add(skill);
+        skillList.Add(skillStackInfo);
         turnImageList.Add(turnImage);
-        turnQueue = new Queue<SkillBase>(skillList);
+        turnQueue = new Queue<SkillStackInfo>(skillList);
         turnImageQueue = new Queue<TurnImage>(turnImageList);
     }
 

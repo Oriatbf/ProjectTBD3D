@@ -22,11 +22,11 @@ public class TurnImage : MonoBehaviour
 
     public Team GetTeam() => team;
 
-    public void SetInfo(SkillData.SkillBase skill,Team team,string info = "")
+    public void SetInfo(SkillStackInfo skillStackInfo)
     {
-        this.team = team;
-        this.skill = skill;
-        text.text = info + $" turn : {skill.GetData().RequireTurn}";
+        this.team = skillStackInfo.team;
+        this.skill = skillStackInfo.skill;
+        text.text = skill.GetData().Name + $" turn : {skillStackInfo.stackTurn}";
     }
 
     public  void ArrowAlpha()

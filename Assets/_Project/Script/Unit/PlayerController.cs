@@ -10,7 +10,7 @@ public class PlayerController : UnitController
         if (!infoShow)
         {
             ApplicationManager.Inst.GetModule<CharacterInfoController>().Show();
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Init(unitData);
+            ApplicationManager.Inst.GetModule<CharacterInfoController>().Init(unitData,curTile);
             infoShow = true;
         }
         else

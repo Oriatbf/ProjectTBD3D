@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using VInspector;
 
 public enum Team{PlayerTeam,EnemyTeam,neutralityTeam } //neutrality == 중립
@@ -15,7 +16,7 @@ public class Unit : MonoBehaviour
     private UnitData.Data unitData;
     private UnitController unitController;
     private HealthContent healthContent;
-    string animatorPath = "Assets/Art/Animator/";
+    string animatorPath = "Assets/_Project/Art/Animator/";
     
     private static readonly int Idle = Animator.StringToHash("Idle");
     private static readonly int Attack = Animator.StringToHash("Attack");
@@ -32,8 +33,11 @@ public class Unit : MonoBehaviour
 
     #region 생성 시
 
-    public void Init(UnitData.Data unitData, Team team)
+    public async void Init(UnitData.Data unitData, Team team)
     {
+        var animator = await Addressables.LoadAssetAsync<AnimatorOverrideController>
+            (animatorPath+unitData.AnimatorName+".overrideController").Task;
+        this.animator.runtimeAnimatorController = animator;
         _statContainer = new StatContainer(unitData);
         unitController.Init(unitData);
         this.unitData = unitData;
@@ -43,12 +47,13 @@ public class Unit : MonoBehaviour
     public void SetTile(Tile tile)
     {
         this.tile = tile;
+        unitController.Initialize(tile);
     }
     public virtual void Initalize()
     {
         SetHealthContent();
         SetAction();
-        unitController.Initialize(tile);
+        
     }
 
     #endregion

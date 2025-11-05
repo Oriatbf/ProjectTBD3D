@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -9,6 +12,8 @@ public class SkillStackController : BaseController
     private Transform canvas;
     private SkillIcon skillIcon;
     private Camera _camera;
+    private Dictionary<Tile ,Queue<SkillIcon>> stackData = new Dictionary<Tile ,Queue<SkillIcon>>();
+    private float skillIconInterval = 100;
 
     public override void OnInitialize()
     {
@@ -27,11 +32,36 @@ public class SkillStackController : BaseController
         if(_skillIcon.TryGetComponent(out SkillIcon skillIcon))this.skillIcon = skillIcon;
     }
 
-    public void StackSkill(SkillData.SkillBase skill, Vector3 pos)
+    public void StackSkill(SkillStackInfo skillStackInfo)
     {
+        var tile = skillStackInfo.sourceTile;
+        if(tile==null) Debug.LogError("Tile is null");
         var obj = GameObject.Instantiate(skillIcon,canvas);
-        obj.Init(skill);
-        Vector3 screenPos = _camera.WorldToScreenPoint(pos);
-        obj.transform.position = screenPos+new Vector3(0,400);
+        obj.Init(skillStackInfo);
+        
+        if (stackData.ContainsKey(tile)) stackData[tile].Enqueue(obj);
+        else stackData.Add(tile,new Queue<SkillIcon>(new []{obj}));
+        RefreshUI(tile,stackData[tile]);
+        
+    }
+
+    public void UnstackSkill(Tile tile)
+    {
+        if (!stackData.ContainsKey(tile)) return;
+        if(stackData[tile].Count ==0)return;
+        var skillIcon = stackData[tile].Dequeue();
+        GameObject.Destroy(skillIcon.gameObject);
+        RefreshUI(tile,stackData[tile]);
+    }
+
+    private void RefreshUI(Tile tile,Queue<SkillIcon> queue)
+    {
+        var list = queue.ToList();
+        Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());
+        Vector3 originPos = screenPos+new Vector3(0,400);
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i].transform.DOMove(originPos +  new Vector3(0,i*skillIconInterval),0.2f);
+        }
     }
 }

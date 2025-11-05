@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour
         this.curTile = tile;
     }
 
-    public void Init(UnitData.Data unitData)
+    public virtual void Init(UnitData.Data unitData)
     {
         this.unitData = unitData;
     }

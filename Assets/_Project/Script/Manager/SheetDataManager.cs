@@ -5,6 +5,14 @@ using SkillData;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public class SkillStackInfo
+{
+    public float stackTurn;
+    public SkillBase skill;
+    public Tile sourceTile;
+    public Team team;
+}
+
 public class SheetDataManager : Singleton<SheetDataManager>
 {
     private List<SkillData.SkillBase> skillList = new List<SkillData.SkillBase>();

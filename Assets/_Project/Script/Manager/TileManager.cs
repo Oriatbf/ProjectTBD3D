@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using VInspector;
 
 public class TileManager : Singleton<TileManager>
@@ -83,6 +84,7 @@ public class TileManager : Singleton<TileManager>
 
     public List<Tile> GetTiles(Tile targetTile, int rowCount, int columnCount)
     {
+        if(targetTile == null)Debug.LogError("targetTile is null");
         HashSet<Tile> _tiles = new HashSet<Tile>();
         int xPos = (int)targetTile.GetIndex().x;
         int yPos = (int)targetTile.GetIndex().y;

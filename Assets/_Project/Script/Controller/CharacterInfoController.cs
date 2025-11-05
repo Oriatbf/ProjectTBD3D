@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.InputSystem;
@@ -25,11 +26,22 @@ public class CharacterInfoController : BaseController
         }
     }
 
-    public void Init(UnitData.Data unitData)
+    public void Init(UnitData.Data unitData,Tile curTile)
     {
         var skills = SheetDataManager.Inst.GetSkillBaseList(unitData.BringSkill);
-        Debug.Log(skills.Count);
-        _characterInfoCanvas.Init(skills);
+        List<SkillStackInfo> skillStackInfos = new List<SkillStackInfo>();
+        foreach (var skill in skills)
+        {
+            SkillStackInfo skillStackInfo = new SkillStackInfo()
+            {
+                skill = skill.Clone(),
+                stackTurn = skill.GetData().RequireTurn,
+                sourceTile = curTile,
+                team = Team.PlayerTeam
+            };
+            skillStackInfos.Add(skillStackInfo);
+        }
+        _characterInfoCanvas.Init(skillStackInfos,unitData.TurnGauge);
     }
 
     public override void OnUpdate()

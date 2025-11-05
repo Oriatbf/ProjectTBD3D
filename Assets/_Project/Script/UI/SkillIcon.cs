@@ -7,21 +7,22 @@ using UnityEngine.UI;
 public class SkillIcon : MonoBehaviour
 {
     [SerializeField] private Image icon;
-    protected SkillBase skill;
-    private readonly string iconPath = "Assets/_Project/Art/Icons/UsingIcon/Baldo.png";
+    protected SkillStackInfo skillStackInfo;
+    private readonly string iconPath = "Assets/_Project/Art/Icons/UsingIcon/";
     
 
-    public virtual void Init(SkillBase skill)
+    public virtual void Init(SkillStackInfo skillStackInfo)
     {
-        this.skill = skill;
+        this.skillStackInfo = skillStackInfo;
+        var skill = skillStackInfo.skill;
         if (icon != null) SetSprite(skill.GetData().SpriteName);
     }
 
     private async void SetSprite(string spriteName)
     {
-        var sprite = await Addressables.LoadAssetAsync<Sprite>(iconPath).Task;
+        var sprite = await Addressables.LoadAssetAsync<Sprite>(iconPath+spriteName+".png").Task;
         icon.sprite = sprite;
     }
-    public SkillBase GetSkill() => skill;
+    public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
 
 }
