@@ -13,6 +13,7 @@ public class TileManager : Singleton<TileManager>
     [SerializeField] private int rowCount; //행 개수
     [SerializeField] private int halfCount; //열개수 /2
     [SerializeField] private float interval; // 타일간의 간격
+    [SerializeField] private float rowInterval, columnInterval;
     [EndFoldout]
     private  Dictionary<Vector2,Tile> Tiles = new Dictionary<Vector2, Tile>();
     // vector2 에는 x,y형태로 들어감 {열,행} 순
@@ -32,16 +33,16 @@ public class TileManager : Singleton<TileManager>
         for (int j = 0; j < rowCount; j++)
         {
             Vector2 indexVec = Vector2.zero;
-            float z = tileParent.position.z + (j*interval*4);
-            float xInterval = j%2==0?interval:0;
+            float zInterval = tileParent.position.z + (j*rowInterval); //z축 인터벌
+            float startInterval = j%2==0?interval:0; //짝수 홀수 행 인터벌
             for (int i = 0; i < halfCount; i++)
             {
-                var obj = Instantiate(tilePrefab, new Vector3(-(halfCount -i)-(interval*(halfCount -i))+xInterval,tileParent.position.y,z), Quaternion.identity,tileParent);
+                var obj = Instantiate(tilePrefab, new Vector3(-(halfCount -i)-(interval*(halfCount -i))+startInterval+columnInterval*i,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
                 indexVec = new Vector2(i,j);
                 Tiles[indexVec] = obj;
                 obj.SetIndex(indexVec);
             } 
-            var mid =Instantiate(tilePrefab, new Vector3(0+xInterval,tileParent.position.y,z), Quaternion.identity,tileParent);
+            var mid =Instantiate(tilePrefab, new Vector3(0+startInterval+columnInterval*halfCount,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
             indexVec = new Vector2(halfCount,j);
             Tiles[indexVec] = mid;
             mid.SetIndex(indexVec);
@@ -49,7 +50,7 @@ public class TileManager : Singleton<TileManager>
             for (int i = halfCount - 1; i >= 0; i--)
             {
                 indexVec = new Vector2(halfCount*2-i,j);
-                var obj = Instantiate(tilePrefab, new Vector3((halfCount -i)+(interval*(halfCount -i))+xInterval,tileParent.position.y,z), Quaternion.identity,tileParent);
+                var obj = Instantiate(tilePrefab, new Vector3((halfCount -i)+(interval*(halfCount -i)+columnInterval*(halfCount*2-i))+startInterval,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
                 Tiles[indexVec] = obj;
                 obj.SetIndex(indexVec);
             }

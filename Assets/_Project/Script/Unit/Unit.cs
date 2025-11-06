@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VInspector;
@@ -8,6 +9,7 @@ public class Unit : MonoBehaviour
 {
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
+    [SerializeField] private List<int> bringSkills = new List<int>();
     [EndFoldout]
     
     private Team team; 
@@ -75,6 +77,7 @@ public class Unit : MonoBehaviour
       
     }
     
+    public List<int> GetSkillList()=>bringSkills;
     public Team GetTeam() => team;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
