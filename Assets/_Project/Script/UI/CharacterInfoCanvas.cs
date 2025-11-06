@@ -20,19 +20,13 @@ public class CharacterInfoCanvas : MonoBehaviour
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
 
     
-    
-    private Tile testTile;
 
     private async void Awake()
     {
         var obj = await Addressables.LoadAssetAsync<GameObject>(skillIconPath).Task;
         skillIconPrefab = obj.GetComponent<SkillIcon>();
     }
-
-    private void Start()
-    {
-        testTile = TileManager.Inst.GetTile(new Vector2(2, 0));
-    }
+    
 
     public void Init(List<SkillStackInfo> skillStackInfos)
     {

@@ -3,12 +3,17 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VInspector;
 
 public class TurnImage : MonoBehaviour
 {
     [SerializeField] private Button arrowBtn;
     [SerializeField]private Image image;
     [SerializeField]private TextMeshProUGUI text;
+    
+    [Foldout("Debuggingg")]
+    [SerializeField] private float turnGauge;
+    [EndFoldout]
     private SkillData.SkillBase skill;
     private Team team;
     private CanvasGroup canvasGroup;
@@ -24,6 +29,7 @@ public class TurnImage : MonoBehaviour
 
     public void SetInfo(SkillStackInfo skillStackInfo)
     {
+        turnGauge = skillStackInfo.stackTurn;
         this.team = skillStackInfo.team;
         this.skill = skillStackInfo.skill;
         text.text = skill.GetData().Name + $" turn : {skillStackInfo.stackTurn}";

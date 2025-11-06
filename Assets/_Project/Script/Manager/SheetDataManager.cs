@@ -11,6 +11,19 @@ public class SkillStackInfo
     public SkillBase skill;
     public Tile sourceTile;
     public Team team;
+
+    public SkillStackInfo ()
+    {
+
+    }
+    
+    public SkillStackInfo (SkillStackInfo skillStackInfo)
+    {
+        stackTurn = skillStackInfo.stackTurn;
+        skill = skillStackInfo.skill;
+        sourceTile = skillStackInfo.sourceTile;
+        team = skillStackInfo.team;
+    }
 }
 
 public class SheetDataManager : Singleton<SheetDataManager>

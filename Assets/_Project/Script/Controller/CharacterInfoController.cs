@@ -94,6 +94,13 @@ public class CharacterInfoController : BaseController
             }
             
         }
+        
+         if(Input.GetMouseButtonDown(1))
+         {
+             foreach ( var lastTile in lastTiles)lastTile.UnTarget();
+             curSkillIcon = null;
+             isTargeting = false;
+         }
 
         if ( isTargeting)
         {
@@ -102,17 +109,19 @@ public class CharacterInfoController : BaseController
             {
                 if (hit.transform.TryGetComponent(out Tile tile))
                 {
-                    var skillStackInfo = curSkillIcon.GetSkillStackInfo();
+                    var originalSkillStack = curSkillIcon?.GetSkillStackInfo();
+                    var skillStackInfo = new SkillStackInfo(originalSkillStack);
                     var skill = skillStackInfo.skill;
                     var data = skill.GetData();
                     //범위 선택
                     if(Input.GetMouseButtonDown(0))
                     {
-                        if (skillStackInfo.stackTurn + curTurnStack > maxTurnStack) return;
-                        skillStackInfo.stackTurn += curTurnStack;
-                        curTurnStack = skillStackInfo.stackTurn;
+                        var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
+                        if (reqTurn + curTurnStack > maxTurnStack) return;
+                        curTurnStack += reqTurn;
+                        skillStackInfo.stackTurn =curTurnStack;
                         curUnitData.statContainer.turnGauge.SetBaseValue(curTurnStack);
-                        Debug.Log(skillStackInfo.stackTurn);
+                        Debug.Log($"현재 사용턴은 {skillStackInfo.stackTurn} 최대 턴은 {maxTurnStack}");
                         skill.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
                         skill.InitTarget(tile);
                         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
