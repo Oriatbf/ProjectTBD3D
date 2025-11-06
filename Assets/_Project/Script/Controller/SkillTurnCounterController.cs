@@ -32,6 +32,7 @@ public class SkillTurnCounterController : BaseController
         {
             TBDLogger.CommandLog(KeyCode.F4,this);
             ActionSkill();
+            ApplicationManager.Inst.GetModule<TurnController>().Reset();
         }
 
         if (Input.GetKeyDown(KeyCode.F5))
@@ -113,7 +114,6 @@ public class SkillTurnCounterController : BaseController
             var skillReq = skillList[i].stackTurn;
             if (curSkillReq < skillReq)
             {
-                Debug.Log($"삽인 인덱스는 {i} 현재 스킬 요구 턴은 {curSkillReq} target {skillReq}");
                 skillList.Insert(i,skillStackInfo);
                 turnImageList.Insert(i,turnImage);
                 turnQueue = new Queue<SkillStackInfo>(skillList);

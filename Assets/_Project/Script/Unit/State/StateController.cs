@@ -26,8 +26,7 @@ public class StateController<T> : StateControllerBase where T : StateController<
     {
         m_stateMachine.DoOperateUpdate();
     }
-
-
+    
 
 
     /// <summary>

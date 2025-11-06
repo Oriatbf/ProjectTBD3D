@@ -8,6 +8,7 @@ public class TurnController : BaseController
     private readonly string turnEndCanvasPath = "Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab";
     private List<StateControllerBase> players = new List<StateControllerBase>();
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
+    private List<Unit> allUnits = new List<Unit>();
     private Team AttackTurn = Team.EnemyTeam;
 
     public override void OnInitialize()
@@ -39,6 +40,14 @@ public class TurnController : BaseController
         base.OnUpdate();
     }
     
+    public void Reset()
+    {
+        foreach (var unit in allUnits)
+        {
+            unit.Reset();
+        }
+    }
+    
     public void TurnStart()
     {
         ChangeStates(State.Idle,Team.PlayerTeam);
@@ -52,6 +61,7 @@ public class TurnController : BaseController
     {
         foreach (var unit in units)
         {
+            allUnits.Add(unit);
             if (unit.TryGetComponent(out StateControllerBase controllerBase))
             {
                 switch (team)

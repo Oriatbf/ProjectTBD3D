@@ -51,15 +51,25 @@ public class Unit : MonoBehaviour
         this.tile = tile;
         unitController.Initialize(tile);
     }
+    /// <summary>
+    /// 생성시 실행
+    /// </summary>
     public virtual void Initalize()
     {
         SetHealthContent();
         SetAction();
-        
+        Reset();
     }
 
     #endregion
- 
+
+    /// <summary>
+    /// 한 턴이 끝날때마다 리셋
+    /// </summary>
+    public virtual void Reset()
+    {
+        _statContainer.turnGauge.SetBaseValue(0);
+    }
 
 
 
@@ -81,6 +91,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
+    
     public UnitSaveData GetUnitData() => unitData;
 
     public void GetDamage(float damage)

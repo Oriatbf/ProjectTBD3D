@@ -121,7 +121,6 @@ public class CharacterInfoController : BaseController
                         curTurnStack += reqTurn;
                         skillStackInfo.stackTurn =curTurnStack;
                         curUnitData.statContainer.turnGauge.SetBaseValue(curTurnStack);
-                        Debug.Log($"현재 사용턴은 {skillStackInfo.stackTurn} 최대 턴은 {maxTurnStack}");
                         skill.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
                         skill.InitTarget(tile);
                         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
