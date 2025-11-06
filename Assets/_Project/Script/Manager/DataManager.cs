@@ -74,7 +74,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         var unitData = unit.GetUnitData();
         UnitSaveData unitSaveData = new UnitSaveData()
         {
-            id= unitData.Id,
+            id= unitData.id,
             statContainer = unit.GetStatContainer(),
             bringSkills = unit.GetSkillList()
         };

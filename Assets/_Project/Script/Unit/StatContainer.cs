@@ -19,7 +19,7 @@ public class StatContainer
         var data = unitData;
         str = Stat.Create(data.Strength);
         hp = Stat.Create(data.Hp);
-        turnGauge = Stat.Create(data.TurnGauge);
+        turnGauge = Stat.Create(0,data.TurnGauge);
         avoidance = Stat.Create(data.Avoidance);
         intelligence = Stat.Create(data.Intelligence);
         barrier = Stat.Create(0);

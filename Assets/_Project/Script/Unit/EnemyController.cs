@@ -11,10 +11,10 @@ public class EnemyController : UnitController
     private float maxTurn = 0;
     float curTurn = 0;
 
-    public override void Init(Data unitData)
+    public override void Init(UnitSaveData unitData)
     {
         base.Init(unitData);
-        maxTurn = unitData.TurnGauge;
+        maxTurn = unitData.statContainer.turnGauge._maxValue;
         curTurn = 0;
     }
 
@@ -39,7 +39,7 @@ public class EnemyController : UnitController
     private  List<SkillStackInfo>  FindingSkill()
     {
         List<SkillStackInfo> resultSkillStackInfo = new List<SkillStackInfo>();
-        var skillList = sheetDataManager.GetSkillBaseList(unitData.BringSkill);
+        var skillList = sheetDataManager.GetSkillBaseList(unitData.bringSkills);
         float minReqTurn = skillList[0].GetData().RequireTurn;
         //최소 요구 턴 찾기
         foreach (var skillBase in skillList)

@@ -4,7 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using VInspector;
 
-public class FactoryManager : MonoBehaviour
+public class FactoryManager : Singleton<FactoryManager>
 {
      private SheetDataManager sheetDataManager;
      private TileManager tileManager;
@@ -29,8 +29,6 @@ public class FactoryManager : MonoBehaviour
           sheetDataManager=DIContainer.ResolveService<SheetDataManager>();
           tileManager=DIContainer.ResolveService<TileManager>();
           EnemySpawn(testSO);
-          PlayerSpawn(0);
-          ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
           ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
      }
@@ -51,20 +49,21 @@ public class FactoryManager : MonoBehaviour
           {
                TBDLogger.CommandLog(KeyCode.P, this);
                GameStart();
+               ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           }
      }
 
      /// <summary>
      /// id에 기반해 아군 유닛 소환
      /// </summary>
-     private void PlayerSpawn(int id)
+     public void PlayerSpawn(int id,Tile tile)
      {
           var _unit = CreateUnit(id,Team.PlayerTeam);
           playerUnits.Add(_unit);
-          var _tile = tileManager.GetTile(new Vector2(2, 0)); //임시 배치
-          _unit.SetTile(_tile);
-          _tile.SetUnit(_unit);
-          _unit.transform.position = _tile.GetPos();
+          _unit.SetTile(tile);
+          tile.SetUnit(_unit);
+          _unit.transform.position = tile.GetPos();
+         
      }
 
      /// <summary>
@@ -92,7 +91,13 @@ public class FactoryManager : MonoBehaviour
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
           var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
           Unit unit = Instantiate(prefab);
-          unit.Init(unitData,team);
+          UnitSaveData saveData = new UnitSaveData()
+          {
+               id = unitData.Id,
+               bringSkills = unitData.BringSkill,
+               statContainer = new StatContainer(unitData)
+          };
+          unit.Init(saveData,unitData.AnimatorName,team);
           return unit;
      }
 }

@@ -15,7 +15,7 @@ public class Unit : MonoBehaviour
     private Team team; 
     private Tile tile; 
     private Animator animator;
-    private UnitData.Data unitData;
+    private UnitSaveData unitData;
     private UnitController unitController;
     private HealthContent healthContent;
     string animatorPath = "Assets/_Project/Art/Animator/";
@@ -35,12 +35,12 @@ public class Unit : MonoBehaviour
 
     #region 생성 시
 
-    public async void Init(UnitData.Data unitData, Team team)
+    public async void Init(UnitSaveData unitData,string animatorName, Team team)
     {
         var animator = await Addressables.LoadAssetAsync<AnimatorOverrideController>
-            (animatorPath+unitData.AnimatorName+".overrideController").Task;
+            (animatorPath+animatorName+".overrideController").Task;
         this.animator.runtimeAnimatorController = animator;
-        _statContainer = new StatContainer(unitData);
+        _statContainer = unitData.statContainer;
         unitController.Init(unitData);
         this.unitData = unitData;
         this.team = team;
@@ -81,7 +81,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
-    public UnitData.Data GetUnitData() => unitData;
+    public UnitSaveData GetUnitData() => unitData;
 
     public void GetDamage(float damage)
     {

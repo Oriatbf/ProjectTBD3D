@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UnitController : MonoBehaviour
 {
-    protected UnitData.Data unitData;
+    protected UnitSaveData unitData;
     protected SheetDataManager sheetDataManager;
     protected ApplicationManager applicationManager;
     protected Tile curTile;
@@ -17,7 +17,7 @@ public class UnitController : MonoBehaviour
         this.curTile = tile;
     }
 
-    public virtual void Init(UnitData.Data unitData)
+    public virtual void Init(UnitSaveData unitData)
     {
         this.unitData = unitData;
     }

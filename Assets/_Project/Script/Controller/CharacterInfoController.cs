@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class CharacterInfoController : BaseController
@@ -9,6 +10,15 @@ public class CharacterInfoController : BaseController
     private bool isShow = false;
     private static readonly Vector2 InitializePos = new Vector2(0, -400);
     private CharacterInfoCanvas _characterInfoCanvas;
+    
+    private SkillIcon curSkillIcon;
+    private Tile lastTile;
+    private List<Tile> lastTiles = new List<Tile>();
+    private bool isTargeting = false;
+    private UnitSaveData curUnitData;
+
+    private float maxTurnStack = 0;
+    private float curTurnStack = 0;
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -26,9 +36,12 @@ public class CharacterInfoController : BaseController
         }
     }
 
-    public void Init(UnitData.Data unitData,Tile curTile)
+    public void Init(UnitSaveData unitData,Tile curTile)
     {
-        var skills = SheetDataManager.Inst.GetSkillBaseList(unitData.BringSkill);
+        var skills = SheetDataManager.Inst.GetSkillBaseList(unitData.bringSkills);
+        curUnitData = unitData;
+        maxTurnStack = unitData.statContainer.turnGauge._maxValue;
+        curTurnStack = unitData.statContainer.turnGauge._baseValue;
         List<SkillStackInfo> skillStackInfos = new List<SkillStackInfo>();
         foreach (var skill in skills)
         {
@@ -41,7 +54,7 @@ public class CharacterInfoController : BaseController
             };
             skillStackInfos.Add(skillStackInfo);
         }
-        _characterInfoCanvas.Init(skillStackInfos,unitData.TurnGauge);
+        _characterInfoCanvas.Init(skillStackInfos);
     }
 
     public override void OnUpdate()
@@ -57,6 +70,70 @@ public class CharacterInfoController : BaseController
         {
             TBDLogger.CommandLog(KeyCode.F2, this);
             Hide();
+        }
+        
+         if (Input.GetMouseButtonDown(0) && !isTargeting) // 왼쪽 마우스 클릭
+        {
+            // 클릭한 UI 오브젝트 가져오기
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
+
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+            foreach (RaycastResult result in results)
+            {
+                if (result.gameObject.TryGetComponent(out SkillIcon skillIcon))
+                {
+                    curSkillIcon = skillIcon;
+                    isTargeting = true;
+                    break;
+                }
+         
+            }
+            
+        }
+
+        if ( isTargeting)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform.TryGetComponent(out Tile tile))
+                {
+                    var skillStackInfo = curSkillIcon.GetSkillStackInfo();
+                    var skill = skillStackInfo.skill;
+                    var data = skill.GetData();
+                    //범위 선택
+                    if(Input.GetMouseButtonDown(0))
+                    {
+                        if (skillStackInfo.stackTurn + curTurnStack > maxTurnStack) return;
+                        skillStackInfo.stackTurn += curTurnStack;
+                        curTurnStack = skillStackInfo.stackTurn;
+                        curUnitData.statContainer.turnGauge.SetBaseValue(curTurnStack);
+                        Debug.Log(skillStackInfo.stackTurn);
+                        skill.InitSource(TileManager.Inst.GetTile( new Vector2(2,0))); //임시 지정
+                        skill.InitTarget(tile);
+                        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+                        isTargeting = false;
+                        foreach ( var lastTile in lastTiles)lastTile.UnTarget();
+                        lastTiles = new List<Tile>();
+                    }
+                    //범위선택 끝
+                    if (lastTile == tile) return;
+                    lastTile = tile;
+                    foreach ( var lastTile in lastTiles)lastTile.UnTarget();
+                    var targetTiles =  TileManager.Inst.GetTiles(tile,data.RowCount,data.ColumnCount);
+                    lastTiles = new List<Tile>();
+                    lastTiles.AddRange(targetTiles);
+                    foreach (var _tile in targetTiles)
+                    {
+                        _tile.Target();
+                    }
+                    
+                }
+            }
         }
     }
 

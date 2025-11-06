@@ -7,10 +7,10 @@ public class Stat
 {
     public delegate void OnValueChangeDelegate(float value);
     public event OnValueChangeDelegate OnValueChanged;
-    public float _baseValue;
-    public float _originalValue;
-    public float _maxValue;
-    public bool _isInfiniteValue = false;
+    public float _baseValue; //기본 값
+    public float _originalValue; //원본 값
+    public float _maxValue; // 최대값
+    public bool _isInfiniteValue = false; //스탯이 무한정하게 늘어날 수 있는가
     public static Stat Create(float baseValue = 0)
     {
         return Create(baseValue,  true);
@@ -25,11 +25,11 @@ public class Stat
     {
         var stat = new Stat
         {
-            _baseValue = baseValue
+            _baseValue = baseValue,
+            _isInfiniteValue = isInfinite,
+            _originalValue = baseValue,
+            _maxValue = maxValue
         };
-        stat._isInfiniteValue = isInfinite;
-        if(!isInfinite)stat._maxValue = maxValue;
-        stat._originalValue = stat._baseValue;
         return stat;
     }
 
@@ -38,17 +38,19 @@ public class Stat
         _baseValue += value;
         ChangeValueHandler();
     }
-
-    public void SetOriginalValue(float value)
-    {
-        _originalValue = value;
-    }
-
+    
     public void SetBaseValue(float value)
     {
         _baseValue = value;
         ChangeValueHandler();
     }
+    
+
+    public void SetOriginalValue(float value) => _originalValue = value;
+    public void AddOriginalValue(float value)=>  _originalValue += value;
+    public void SetMaxValue(float value) => _maxValue = value;
+    public void AddMaxValue(float value) => _maxValue += value;
+
     
     private void ChangeValueHandler()
     {
