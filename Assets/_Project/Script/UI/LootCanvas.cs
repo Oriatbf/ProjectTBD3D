@@ -9,12 +9,13 @@ public class LootCanvas : MonoBehaviour
     [SerializeField] private Transform lootContent;
     [SerializeField] private Panel panel;
     [SerializeField] private Button closeBtn;
-    private string lootPath = "";
-    LootSkillIcon lootSkillIcon;
+    private string lootPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
+    InventorySkillIcon lootSkillIcon;
     private bool isShow = false;
 
     private void Awake()
     {
+        Hide();
         SetSkillIcon();
         closeBtn.onClick.AddListener(Hide);
     }
@@ -22,7 +23,7 @@ public class LootCanvas : MonoBehaviour
     private async void SetSkillIcon()
     {
         var obj = await Addressables.LoadAssetAsync<GameObject>(lootPath).ToUniTask();
-        lootSkillIcon = obj.GetComponent<LootSkillIcon>();
+        lootSkillIcon = obj.GetComponent<InventorySkillIcon>();
     }
 
     public void Init(EnemyArrangeSO enemyArrangeSo)

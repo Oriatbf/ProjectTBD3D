@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 
 public class LootController : BaseController
 {
-    private string canvasPath = "";
+    private string canvasPath = "Assets/_Project/Prefab/UI/Loot/LootCanvas.prefab";
     LootCanvas lootCanvas;
 
     public override void OnInitialize()

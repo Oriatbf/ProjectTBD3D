@@ -58,6 +58,11 @@ public class FactoryManager : Singleton<FactoryManager>
                }
                ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
           }
+
+          if (enemyUnits.Count == 0)
+          {
+               ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(testSO);
+          }
      }
 
      /// <summary>
