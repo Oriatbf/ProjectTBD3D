@@ -28,11 +28,13 @@ public class TurnController : BaseController
     /// <summary>
     /// playerTurnEnd 버튼에 들어갈 액션
     /// </summary>
-    private void PlayerTurnEndAction()
+    private async void PlayerTurnEndAction()
     {
         if (AttackTurn == Team.EnemyTeam) return;
+        await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill().AsAsyncUnitUniTask();
         ChangeStates(State.Idle, Team.PlayerTeam);
         ChangeStates(State.Attack, Team.EnemyTeam);
+        
     }
 
     public override void OnUpdate()
@@ -59,6 +61,15 @@ public class TurnController : BaseController
     /// </summary>
     public void Add(List<Unit> units, Team team)
     {
+        switch (team)
+        {
+            case Team.PlayerTeam:
+                players.Clear();
+                break;
+            case Team.EnemyTeam:
+                enemys.Clear();
+                break;
+        }
         foreach (var unit in units)
         {
             allUnits.Add(unit);

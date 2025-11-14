@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
 using UnityEngine;
@@ -32,7 +33,6 @@ public class SkillTurnCounterController : BaseController
         {
             TBDLogger.CommandLog(KeyCode.F4,this);
             ActionSkill();
-            ApplicationManager.Inst.GetModule<TurnController>().Reset();
         }
 
         if (Input.GetKeyDown(KeyCode.F5))
@@ -49,7 +49,7 @@ public class SkillTurnCounterController : BaseController
     /// <summary>
     /// 등록된 모든 스킬 사행
     /// </summary>
-    public async void ActionSkill()
+    public async UniTask ActionSkill()
     {
         List<GameObject> destroyObj = new List<GameObject>();
         int _count = turnImageQueue.Count;
@@ -74,6 +74,8 @@ public class SkillTurnCounterController : BaseController
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
+        //한 턴이 끝
+        ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }
 
     private async void SetCanvas()

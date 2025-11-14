@@ -43,12 +43,6 @@ public class CharacterInfoCanvas : MonoBehaviour
             _skillIcon.Init(skillStackInfo);
         }
     }
-
-    private void Update()
-    {
-       
-    }
-
     public void SetPos(Vector2 pos,bool tween = false,float duration = 0.5f,Ease ease = Ease.OutQuad)
     {
         backGroundParent.DOComplete();

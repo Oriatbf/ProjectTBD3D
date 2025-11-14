@@ -114,13 +114,20 @@ public class Unit : MonoBehaviour
     {
         if (value <= 0)
         {
-           //사망
+            OnDispos();
         }
     }
 
     private void OnCostChange(float value)
     {
         if(value<=0)Debug.Log("cost가 0임");
+    }
+
+    private void OnDispos()
+    {
+        FactoryManager.Inst.RegisterDeadUnit(this);
+        PoolManager.Inst.Despawn(healthContent);
+        Destroy(gameObject);
     }
 
 

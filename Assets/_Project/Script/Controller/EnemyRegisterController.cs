@@ -8,6 +8,7 @@ public class EnemyRegisterController : BaseController
 
     public void Add(List<Unit> units)
     {
+        enemies.Clear();
         foreach (var unit in units)
         {
             if (unit.TryGetComponent(out EnemyController enemyController))

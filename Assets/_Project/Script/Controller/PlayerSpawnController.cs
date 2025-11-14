@@ -1,53 +1,138 @@
+using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 
 public class PlayerSpawnController : BaseController
 {
-    private string canvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/PlayerSpawnCanvas.prefab";
-    private Tile lastTile;
-    private int maxcount = 2;
-    private int currentcount = 0;
+    private readonly string canvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/PlayerSpawnCanvas.prefab";
+    private bool isTargeting = false;
 
-    public virtual void OnInitialize()
+    private Camera _camera;
+    private PointerEventData _pointerEventData;
+    private List<RaycastResult> _raycastResults = new List<RaycastResult>();
+    private Tile lastTile;
+    private Dictionary<int ,UnitSaveData> unitSaveDatas = new Dictionary<int ,UnitSaveData>();
+    private Dictionary<int ,UnitSaveData>spawnedUnits = new Dictionary<int ,UnitSaveData>();
+    private CharacterHead curCharacterHead;
+    
+
+    public override void OnInitialize()
     {
-        SetCanvas();
+        base.OnInitialize();
+        _camera = Camera.main;
+        var datas = DataManager.Inst.GetUnits();
+        foreach (var data in datas)
+            unitSaveDatas.Add(data.constId,data);
+        _pointerEventData = new PointerEventData(EventSystem.current);
+        SetCanvas(datas);
     }
 
-    public async void SetCanvas()
+    public async void SetCanvas(List<UnitSaveData> datas)
     {
         var canvas = await Addressables.LoadAssetAsync<GameObject>(canvasPath).ToUniTask();
-        GameObject.Instantiate(canvas);
+        var obj = GameObject.Instantiate(canvas);
+        if (obj.TryGetComponent<PlayerSpawnCanvas>(out var playerSpawnCanvas))
+        {
+            playerSpawnCanvas.Init(datas);
+            playerSpawnCanvas.SetPos(Vector2.zero,true);
+            Action spawnEndAction = null;
+            spawnEndAction += ()=>playerSpawnCanvas.SetPos(new Vector2(0,-300),true);
+            spawnEndAction += () => FactoryManager.Inst.GameStart();
+            playerSpawnCanvas.SetSpawnEndAction(spawnEndAction);
+        }
     }
 
     public override void OnUpdate()
     {
         base.OnUpdate();
+
+        if (isTargeting)
+        {
+            HandleSpawnTargeting();
+        }
+        else
+        {
+            HandleUnitSelection();
+        }
+        
+
+    }
+
+    private void HandleUnitSelection()
+    {
+        if (!Input.GetMouseButtonDown(0)) return;
+        _pointerEventData.position = Input.mousePosition;
+        _raycastResults.Clear();
+        EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+        foreach (var result in _raycastResults)
+        {
+            //부모에 스크립트 존재
+            if (result.gameObject.transform.parent.TryGetComponent(out CharacterHead characterHead))
+            {
+                if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(characterHead.GetUnitData().constId)) return;
+                Debug.Log(characterHead.name);
+                curCharacterHead = characterHead;
+                isTargeting = true;
+                return;
+            }
+        }
+    }
+
+    private void HandleSpawnTargeting()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            CancelTargeting();
+            return;
+        }
+        
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit) && maxcount > currentcount)
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
             if (hit.transform.TryGetComponent(out Tile tile))
             {
                 if(Input.GetMouseButtonDown(0))
                 {
-                   FactoryManager.Inst.PlayerSpawn(0,tile);
-                   currentcount++;
-                   tile.UnTarget();
+                    FactoryManager.Inst.PlayerSpawn(curCharacterHead.GetUnitData().id,tile);
+                    RegisterUnit(curCharacterHead.GetUnitData().constId);
+                    CancelTargeting();
+                }
+                else
+                {
+                    if (lastTile == tile) return;
+                    if (lastTile != null)ClearTiles();
+                    tile.Target();
+                    lastTile = tile;
                 }
 
-                if (lastTile == tile) return;
-                if (lastTile != null)lastTile.UnTarget();
-                tile.Target();
-                lastTile = tile;
+               
             }
         }
+    }
 
-        if (maxcount < currentcount && lastTile != null)
+    private void RegisterUnit(int constId)
+    {
+        foreach (var data in unitSaveDatas)
         {
-            lastTile.UnTarget();
-            lastTile = null;
+            if(data.Key == constId)
+                spawnedUnits.Add(constId,data.Value);
         }
+    }
 
+    private void CancelTargeting()
+    {
+        curCharacterHead = null;
+        isTargeting = false;
+        ClearTiles();
+    }
+
+    private void ClearTiles()
+    {
+        lastTile.UnTarget();
+        lastTile = null;
     }
 }

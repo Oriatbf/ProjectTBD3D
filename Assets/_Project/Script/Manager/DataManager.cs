@@ -6,6 +6,7 @@ using UnityEngine;
 [Serializable]
 public class UnitSaveData
 {
+    public int constId;
     public int id;
     public List<int> bringSkills = new List<int>();
     public StatContainer statContainer;
@@ -34,7 +35,11 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.F4))Reset();
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            TBDLogger.CommandLog(KeyCode.F5,this);
+            Reset();
+        }
     }
 
 
@@ -43,6 +48,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         if (!File.Exists(path))
         {
             Data = new GameData();
+            Data.units.Add(new UnitSaveData()
+            {
+                constId = 0,
+                id = 0,
+                bringSkills = UnitData.Data.DataList[0].BringSkill,
+                statContainer = new StatContainer(UnitData.Data.DataList[0])
+            });
             JsonSave();
         }
         else
@@ -68,6 +80,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         // 새 데이터로 초기화
         Data = new GameData();
     }
+
+    public List<UnitSaveData> GetUnits() => Data.units;
 
     public void SaveUnit(Unit unit)
     {

@@ -29,16 +29,49 @@ public class FactoryManager : Singleton<FactoryManager>
           sheetDataManager=DIContainer.ResolveService<SheetDataManager>();
           tileManager=DIContainer.ResolveService<TileManager>();
           EnemySpawn(testSO);
-          ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
-          ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
+     }
+
+     public void RegisterDeadUnit(Unit _unit)
+     {
+          Team team = _unit.GetTeam();
+          int targetId = _unit.GetUnitData().constId;
+          if (team == Team.PlayerTeam)
+          {
+               foreach (var unit in playerUnits)
+               {
+                    if (unit.GetUnitData().constId == targetId)
+                    {
+                         playerUnits.Remove(unit);
+                         break;
+                    }
+               }
+          }
+          else
+          {
+               foreach (var unit in enemyUnits)
+               {
+                    if (unit.GetUnitData().constId == targetId)
+                    {
+                         enemyUnits.Remove(unit);
+                         break;
+                    }
+               }
+               ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
+          }
      }
 
      /// <summary>
      /// //TODO **게임 시작 함수**
      /// </summary>
-     private void GameStart()
+     public void GameStart()
      {
+          ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
+          ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
+          ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
+          
           ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
+          
+          
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
      }
@@ -49,7 +82,6 @@ public class FactoryManager : Singleton<FactoryManager>
           {
                TBDLogger.CommandLog(KeyCode.P, this);
                GameStart();
-               ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           }
      }
 

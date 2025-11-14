@@ -105,6 +105,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a5f43e0144e8dea408a9c95c97818f7d
+    m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterHead.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: adbd713a1cc1ad14595a842328aca7b5
     m_Address: Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab
     m_ReadOnly: 0
