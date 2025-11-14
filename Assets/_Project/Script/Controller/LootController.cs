@@ -4,10 +4,8 @@ using UnityEngine.AddressableAssets;
 
 public class LootController : BaseController
 {
-    private string canvasPath = "";
-    private string lootPath = "";
+    private string canvasPath = "Assets/_Project/Prefab/UI/Loot/LootCanvas.prefab";
     LootCanvas lootCanvas;
-    LootSkillIcon lootSkillIcon;
 
     public override void OnInitialize()
     {
@@ -17,10 +15,7 @@ public class LootController : BaseController
 
     public void InitEnemyArrange(EnemyArrangeSO enemyArrangeSo)
     {
-        foreach (var lootData in enemyArrangeSo.lootDatas)
-        {
-            
-        }
+        lootCanvas.Init(enemyArrangeSo);
     }
 
     private async void SetCanvas()
@@ -32,4 +27,6 @@ public class LootController : BaseController
             this.lootCanvas = lootCanvas;
         }
     }
+
+
 }
