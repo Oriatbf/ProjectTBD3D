@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 using VInspector;
 using Random = UnityEngine.Random;
 
@@ -15,7 +15,8 @@ namespace Map
         StrongEnemy,
         Shop,
         Event,
-        Boss
+        Boss,
+        None
     }
     [Serializable]
     public class StageData
@@ -46,12 +47,12 @@ namespace Map
         [SerializeField] private int curStageIndex;
         [EndFoldout] [SerializeField] private List<MapState> finalStageTypes;
 
-        private void Start()
+        private void Awake()
         {
             stageDatas = stageDatas.OrderByDescending(s => s.priority).ToList(); //우선순위로 정렬
             CheckPercent(stageDatas); //지정한 확률 체크
         }
-
+        
         public  List<MapState> GetStageState(int stageCount)
         {
             this.stageCount = stageCount;
@@ -60,31 +61,25 @@ namespace Map
         }
 
 
-        private void StartStage()
+        //스테이지의 이벤트
+        public void StageEvent(MapState mapState)
         {
-            var stageData = stageDatas.FirstOrDefault(s => s.mapState == curMapState);
-            stageData?.triggerEvent?.Invoke();
-        }
-
-
-        //적 스테이지의 이벤트
-        public void MonsterStageEvent(MapState mapState)
-        {
+            Action action = null;
             switch (mapState)
             {
                 case MapState.Enemy:
+                    action += ()=>SceneManager.LoadScene("GameScene");
                     break;
                 case MapState.StrongEnemy:
+                    action += ()=>SceneManager.LoadScene("GameScene");
                     break;
                 case MapState.Boss:
+                    action += ()=>SceneManager.LoadScene("GameScene");
                     break;
             }
+            action?.Invoke();
         }
-
-        public void EventStageEvent()
-        {
-
-        }
+        
 
 
         #region 스테이지 설정 알고리즘
@@ -131,6 +126,7 @@ namespace Map
         private void SetStage()
         {
             finalStageTypes = new List<MapState>();
+            finalStageTypes.Add(MapState.None);
             finalStageTypes.Add(MapState.Enemy);
             for (int i = 1; i < stageCount - 1; i++)
             {
@@ -153,6 +149,7 @@ namespace Map
         {
             int random = Random.Range(1, 100 + 1);
             StageData stage = _stageDatas.FirstOrDefault(s => s.range >= random);
+            if(stage == null)Debug.LogError("stage is null");
             return stage;
         }
 
@@ -180,6 +177,7 @@ namespace Map
         /// </summary>
         private int CountConsecutiveSame(StageData targetStageData)
         {
+            if(targetStageData ==null)Debug.LogError("targetStageData is null");
             int count = 0;
             for (int i = finalStageTypes.Count - 1; i >= 0 && finalStageTypes[i] == targetStageData.mapState; i--)
                 count += 1;
