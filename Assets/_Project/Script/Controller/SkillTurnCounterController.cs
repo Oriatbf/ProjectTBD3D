@@ -29,11 +29,6 @@ public class SkillTurnCounterController : BaseController
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            TBDLogger.CommandLog(KeyCode.F4,this);
-            ActionSkill();
-        }
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
@@ -53,6 +48,8 @@ public class SkillTurnCounterController : BaseController
     {
         List<GameObject> destroyObj = new List<GameObject>();
         int _count = turnImageQueue.Count;
+        
+        //TurnCounterUI이미지 삭제
         for (int i = 0; i < _count; i++)
         {
             RectTransform _rect = null;
@@ -63,16 +60,21 @@ public class SkillTurnCounterController : BaseController
             if (_rect != null)
             {
                 int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
+                //UI이미지 이동 + 투명화
                 Sequence sequence = DOTween.Sequence();
                 sequence.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion* imageMoveDistance, 0), 0.2f));
                 image.ArrowAlpha();
                 await sequence.Play().AsyncWaitForCompletion();
             }
+            //실행할(삭제될) 스킬 받기
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
             skill.SkillAction();
+            await UniTask.WaitForSeconds(0.5f); //한 턴 한 턴을 보여주기 위해 딜레이
+            //몬스터 위에 스킬 스택되어있던거 삭제
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
+        //한 턴에 해당하는 UI gameObject 삭제
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
@@ -142,8 +144,21 @@ public class SkillTurnCounterController : BaseController
     }
     
 
-    public void Dequeue()
+    public void DequeueByTile(Tile sourceTile)
     {
-        turnQueue.Dequeue();
+        var list = turnQueue.ToList();
+        var imageList = turnImageQueue.ToList();
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i].sourceTile == sourceTile)
+            {
+                list.RemoveAt(i);
+                imageList.RemoveAt(i);
+            }
+        }
+        turnQueue = new Queue<SkillStackInfo>(list);
+        turnImageQueue = new Queue<TurnImage>(imageList);
+        RefreshUI();
+        
     }
 }

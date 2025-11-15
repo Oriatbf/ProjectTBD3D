@@ -20,7 +20,7 @@ public class SkillStackInfo
     public SkillStackInfo (SkillStackInfo skillStackInfo)
     {
         stackTurn = skillStackInfo.stackTurn;
-        skill = skillStackInfo.skill;
+        skill = skillStackInfo.skill.Clone();
         sourceTile = skillStackInfo.sourceTile;
         team = skillStackInfo.team;
     }

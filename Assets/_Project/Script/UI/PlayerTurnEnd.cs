@@ -1,18 +1,40 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PlayerTurnEnd : MonoBehaviour
 {
-    [SerializeField] Button btn;
+    [SerializeField] Button turnEndBtn, nextStageBtn;
 
-    public void SetAction( Action action )
+    private void Start()
+    {
+        nextStageBtn.gameObject.SetActive(false);
+        turnEndBtn.gameObject.SetActive(true);
+    }
+
+    public void SetTurnEndAction( Action action )
     {
         if (action != null)
         {
-            btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(action.Invoke);
+            turnEndBtn.onClick.RemoveAllListeners();
+            turnEndBtn.onClick.AddListener(action.Invoke);
         }
        
+    }
+
+    public void SetNextStageAction(Action action)
+    {
+        if (action != null)
+        {
+            nextStageBtn.onClick.RemoveAllListeners();
+            nextStageBtn.onClick.AddListener(action.Invoke);
+        }
+    }
+
+    public void NextStageActive()
+    {
+        nextStageBtn.gameObject.SetActive(true);
+        turnEndBtn.gameObject.SetActive(false);
     }
 }

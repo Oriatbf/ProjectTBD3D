@@ -31,6 +31,9 @@ public class CharacterInfoController : BaseController
         SetCanvas();
     }
 
+    /// <summary>
+    /// CharaterInfoCanvas 소환
+    /// </summary>
     private async void SetCanvas()
     {
         var canvas =  await Addressables.LoadAssetAsync<GameObject>(CanvasPath).Task;
@@ -42,6 +45,9 @@ public class CharacterInfoController : BaseController
         }
     }
 
+    /// <summary>
+    /// 클릭한 캐릭터의 데이터와 타일정보를 받음
+    /// </summary>
     public void Init(UnitSaveData unitData,Tile curTile)
     {
         curUnitData = unitData;
@@ -80,7 +86,9 @@ public class CharacterInfoController : BaseController
         
     }
     
-    //스킬 선택
+    /// <summary>
+    /// 스킬을 클릭하여 선택
+    /// </summary>
     private void HandleSkillSelection()
     {
         if (!Input.GetMouseButtonDown(0)) return;
@@ -98,8 +106,13 @@ public class CharacterInfoController : BaseController
             }
         }
     }
+    
+    /// <summary>
+    /// 선택한 스킬을 타겟팅하고 클릭한 위치에 스킬을 등록
+    /// </summary>
     private void HandleSkillTargeting()
     {
+        //우클릭으로 타켓팅 취소
         if (Input.GetMouseButtonDown(1))
         {
             CancelTargeting();
@@ -157,7 +170,9 @@ public class CharacterInfoController : BaseController
         curUnitData.statContainer.turnGauge.SetBaseValue(curTurnStack);
 
         var skill = skillStackInfo.skill;
-        skill.InitSource(TileManager.Inst.GetTile(new Vector2(2, 0))); // 임시 지정
+        
+        //시전자와 타겟의 위치를 입력
+        skill.InitSource(skillStackInfo.sourceTile);
         skill.InitTarget(targetTile);
 
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.SceneManagement;
 
 public class TurnController : BaseController
 {
@@ -10,6 +11,7 @@ public class TurnController : BaseController
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
     private List<Unit> allUnits = new List<Unit>();
     private Team AttackTurn = Team.EnemyTeam;
+    PlayerTurnEnd playerTurnEnd;
 
     public override void OnInitialize()
     {
@@ -21,8 +23,9 @@ public class TurnController : BaseController
     {
         var canvas = await Addressables.LoadAssetAsync<GameObject>(turnEndCanvasPath).Task;
         var obj = GameObject.Instantiate(canvas);
-        if(obj.TryGetComponent(out PlayerTurnEnd playerTurnEnd))
-            playerTurnEnd.SetAction(PlayerTurnEndAction);
+        if (obj.TryGetComponent(out PlayerTurnEnd playerTurnEnd)) this.playerTurnEnd = playerTurnEnd;
+        playerTurnEnd.SetTurnEndAction(PlayerTurnEndAction);
+        playerTurnEnd.SetNextStageAction(() => SceneManager.LoadScene("MapScene"));
     }
 
     /// <summary>
@@ -31,11 +34,18 @@ public class TurnController : BaseController
     private async void PlayerTurnEndAction()
     {
         if (AttackTurn == Team.EnemyTeam) return;
+        ApplicationManager.Inst.GetModule<CharacterInfoController>().Hide();
         await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill().AsAsyncUnitUniTask();
+        
         ChangeStates(State.Idle, Team.PlayerTeam);
         ChangeStates(State.Attack, Team.EnemyTeam);
         
     }
+
+    /// <summary>
+    /// 맵 선택창으로 이동
+    /// </summary>
+    public void MapStage() => playerTurnEnd.NextStageActive();
 
     public override void OnUpdate()
     {

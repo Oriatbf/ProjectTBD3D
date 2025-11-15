@@ -97,7 +97,7 @@ public class PlayerSpawnController : BaseController
             {
                 if(Input.GetMouseButtonDown(0))
                 {
-                    FactoryManager.Inst.PlayerSpawn(curCharacterHead.GetUnitData().id,tile);
+                    FactoryManager.Inst.PlayerSpawn(curCharacterHead.GetUnitData(),tile);
                     RegisterUnit(curCharacterHead.GetUnitData().constId);
                     CancelTargeting();
                 }
