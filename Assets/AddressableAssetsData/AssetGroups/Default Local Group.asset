@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 174569cc378fb1a42884a58923549611
+    m_Address: Assets/_Project/Prefab/UI/Loot/LootCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 18f87c6d50cf998459ef462c4df98923
     m_Address: Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab
     m_ReadOnly: 0

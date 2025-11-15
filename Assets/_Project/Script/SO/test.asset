@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: test
   m_EditorClassIdentifier: 
   appearAct: 0
-  lootDatas: []
+  lootDatas:
+  - lootType: 0
+    value: 0
+  - lootType: 1
+    value: 0
   EnemyArranges:
   - unitIndex: 1
     posIndex: {x: 0, y: 1}
-  - unitIndex: 2
-    posIndex: {x: 0, y: 0}
-  - unitIndex: 1
-    posIndex: {x: 1, y: 1}
   - unitIndex: 2
     posIndex: {x: 1, y: 0}

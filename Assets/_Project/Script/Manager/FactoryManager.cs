@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 using VInspector;
 
@@ -62,6 +60,11 @@ public class FactoryManager : Singleton<FactoryManager>
           if (enemyUnits.Count == 0)
           {
                ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(testSO);
+               ApplicationManager.Inst.GetModule<TurnController>().MapStage();
+               foreach (var unit in playerUnits)
+               {
+                    DataManager.Inst.SaveUnit(unit);
+               }
           }
      }
 
@@ -93,9 +96,9 @@ public class FactoryManager : Singleton<FactoryManager>
      /// <summary>
      /// id에 기반해 아군 유닛 소환
      /// </summary>
-     public void PlayerSpawn(int id,Tile tile)
+     public void PlayerSpawn(UnitSaveData unitData,Tile tile)
      {
-          var _unit = CreateUnit(id,Team.PlayerTeam);
+          var _unit = CreateDataBasedUnit(unitData,Team.PlayerTeam);
           playerUnits.Add(_unit);
           _unit.SetTile(tile);
           tile.SetUnit(_unit);
@@ -128,13 +131,21 @@ public class FactoryManager : Singleton<FactoryManager>
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
           var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
           Unit unit = Instantiate(prefab);
-          UnitSaveData saveData = new UnitSaveData()
-          {
-               id = unitData.Id,
-               bringSkills = unitData.BringSkill,
-               statContainer = new StatContainer(unitData)
-          };
+          UnitSaveData saveData = new UnitSaveData(unitData);
           unit.Init(saveData,unitData.AnimatorName,team);
           return unit;
      }
+     
+     /// <summary>
+     /// 이미 데이터가 존재하는 유닛 생성
+     /// </summary>
+     private Unit CreateDataBasedUnit(UnitSaveData unitData,Team team)
+     {
+          var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
+          Unit unit = Instantiate(prefab);
+          var animatorName = SheetDataManager.Inst.GetUnitData(unitData.id).AnimatorName;
+          unit.Init(unitData,animatorName,team);
+          return unit;
+     }
 }
+

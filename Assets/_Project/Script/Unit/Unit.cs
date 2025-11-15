@@ -20,6 +20,8 @@ public class Unit : MonoBehaviour
     private HealthContent healthContent;
     string animatorPath = "Assets/_Project/Art/Animator/";
     
+    private bool isDead = false;
+    
     private static readonly int Idle = Animator.StringToHash("Idle");
     private static readonly int Attack = Animator.StringToHash("Attack");
     private void Awake()
@@ -41,6 +43,7 @@ public class Unit : MonoBehaviour
             (animatorPath+animatorName+".overrideController").Task;
         this.animator.runtimeAnimatorController = animator;
         _statContainer = unitData.statContainer;
+        bringSkills = unitData.bringSkills;
         unitController.Init(unitData);
         this.unitData = unitData;
         this.team = team;
@@ -96,6 +99,7 @@ public class Unit : MonoBehaviour
 
     public void GetDamage(float damage)
     {
+        if(isDead) return;
         Debug.Log($"{damage} 만큼 데미지를 받음");
         if (damage > 0)
         {
@@ -114,6 +118,7 @@ public class Unit : MonoBehaviour
     {
         if (value <= 0)
         {
+            isDead = true;
             OnDispos();
         }
     }
@@ -127,10 +132,7 @@ public class Unit : MonoBehaviour
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
         PoolManager.Inst.Despawn(healthContent);
+        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
         Destroy(gameObject);
     }
-
-
-
- 
 }

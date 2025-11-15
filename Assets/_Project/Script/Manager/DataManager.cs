@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Map;
 using UnityEngine;
 
 [Serializable]
@@ -10,12 +11,30 @@ public class UnitSaveData
     public int id;
     public List<int> bringSkills = new List<int>();
     public StatContainer statContainer;
+
+    public UnitSaveData() { }
+    public UnitSaveData(UnitData.Data unitData)
+    {
+        constId = RandomID.GetConstID();
+        id = unitData.Id;
+        bringSkills = unitData.BringSkill;
+        statContainer = new StatContainer(unitData);
+    }
+}
+
+[Serializable]
+public class MapData
+{
+    public List<MapState> stageStates = new List<MapState>();
+    public bool isMapGenerated = false;
+    public int stageIndex=0;
 }
 
 [Serializable]
 public class GameData
 {
     public List<UnitSaveData> units = new List<UnitSaveData>();
+    public MapData mapData = new MapData();
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -42,7 +61,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         }
     }
 
-
+    #region 데이터 저장 관련
     private void JsonLoad()
     {
         if (!File.Exists(path))
@@ -50,7 +69,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             Data = new GameData();
             Data.units.Add(new UnitSaveData()
             {
-                constId = 0,
+                constId = RandomID.GetConstID(),
                 id = 0,
                 bringSkills = UnitData.Data.DataList[0].BringSkill,
                 statContainer = new StatContainer(UnitData.Data.DataList[0])
@@ -80,18 +99,42 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         // 새 데이터로 초기화
         Data = new GameData();
     }
-
+    #endregion
     public List<UnitSaveData> GetUnits() => Data.units;
 
+    /// <summary>
+    /// 살아남은 플레이어 유닛 저장
+    /// </summary>
+    /// <param name="unit"></param>
     public void SaveUnit(Unit unit)
     {
         var unitData = unit.GetUnitData();
-        UnitSaveData unitSaveData = new UnitSaveData()
+        UnitSaveData newUnitSaveData = new UnitSaveData()
         {
+            constId = unitData.constId,
             id= unitData.id,
             statContainer = unit.GetStatContainer(),
             bringSkills = unit.GetSkillList()
         };
-        Data.units.Add(unitSaveData);
+        foreach(var savedUnits in Data.units)
+        {
+            if (savedUnits.constId == unitData.constId)
+            {
+                savedUnits.bringSkills = newUnitSaveData.bringSkills;
+                savedUnits.statContainer = newUnitSaveData.statContainer;
+                return;
+            }
+        }
+        
+        Data.units.Add(newUnitSaveData);
     }
+
+    public void SaveStageStates(List<MapState> states)
+    {
+        Data.mapData.stageStates = states;
+        Data.mapData.isMapGenerated = true;
+        JsonSave();
+    }
+    public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
+    public MapData GetMapData() => Data.mapData;
 }

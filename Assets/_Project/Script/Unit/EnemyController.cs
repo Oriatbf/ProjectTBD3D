@@ -26,6 +26,8 @@ public class EnemyController : UnitController
         var _skillStackInfoList = FindingSkill();
         foreach (var skillStackInfo in _skillStackInfoList)
         {
+            var skill = skillStackInfo.skill;
+            skill.InitSource(curTile);
             FindingTargetTile(skillStackInfo.skill);
             applicationManager.GetModule<SkillStackController>().StackSkill(skillStackInfo);
             applicationManager.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
