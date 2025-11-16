@@ -109,13 +109,17 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void SaveUnit(Unit unit)
     {
         var unitData = unit.GetUnitData();
+        var originalData = SheetDataManager.Inst.GetUnitData(unitData.id);
+        var originalStatContainer = new StatContainer(originalData);
         UnitSaveData newUnitSaveData = new UnitSaveData()
         {
             constId = unitData.constId,
             id= unitData.id,
-            statContainer = unit.GetStatContainer(),
+            statContainer = originalStatContainer,
             bringSkills = unit.GetSkillList()
         };
+        newUnitSaveData.statContainer.hp.SetBaseValue(unitData.statContainer.hp._baseValue);
+        
         foreach(var savedUnits in Data.units)
         {
             if (savedUnits.constId == unitData.constId)

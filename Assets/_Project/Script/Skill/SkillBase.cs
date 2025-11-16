@@ -26,8 +26,8 @@ namespace SkillData
         private List<SkillEffect> effects = new List<SkillEffect>();
         string effectInfor = "";
             
-        public void InitTarget(Tile target)=>skillContext.TargetTile = target;
-        public void InitSource(Tile owner) => skillContext.SourceTile = owner;
+        public void InitTarget(Tile target)=>skillContext.InitTargetTile(target);
+        public void InitSource(Tile owner) => skillContext.InitSourceTile(owner);
         public SkillContext GetSkillContext() => skillContext;
         public Data GetData()=>_data;
         
@@ -82,6 +82,8 @@ namespace SkillData
             {
                 effect.Apply(skillContext);
             }
+            skillContext.SkillAction?.Invoke();
+            skillContext.unSubscribe?.Invoke();
         }
 
         public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());

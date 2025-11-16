@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
@@ -7,7 +8,14 @@ public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        skillContext.DamageToTarget(values[0]);
+        Action action=null;
+        foreach (var targetTile in skillContext.GetTargetTiles())
+        {
+            action+=()=>targetTile.GetUnit()?.GetDamage(values[0]);
+        }
+        
+        skillContext.SkillAction+=action;
+        skillContext.unSubscribe+= skillContext.SkillAction - action;
     }
 
     public override string ReturnInformation()
@@ -44,7 +52,9 @@ public class Heal : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-       // skillContext.SourceTile.GetDamage(-values[0]);
+        Action action = () => skillContext.SourceTile.GetUnit()?.GetDamage(-values[0]);
+        skillContext.SkillAction+=action;
+        skillContext.unSubscribe+=action;
     }
 
     public override string ReturnInformation()
@@ -57,7 +67,7 @@ public class Barrier : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-      // skillContext.SourceTile.GetStatContainer().barrier.AddBaseValue(values[0]);
+       skillContext.SourceTile.GetUnit()?.GetStatContainer().barrier.AddBaseValue(values[0]);
     }
 
     public override string ReturnInformation()
