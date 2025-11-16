@@ -12,7 +12,8 @@ public static class EffectTypeFactory
         Posion,
         StrDebuff,
         Friendly,
-        InCreaseCharm
+        InCreaseCharm,
+        BloodSuck
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -27,6 +28,7 @@ public static class EffectTypeFactory
             EffectType.StrDebuff => new StrDebuff(),
             EffectType.Friendly => new Friendly(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
+            EffectType.BloodSuck => new BloodSuck(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

@@ -8,14 +8,19 @@ public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        Action action=null;
+   
+        
+        skillContext.SkillAction+=Action;
+        //skillContext.unSubscribe+= skillContext.SkillAction - Action;
+    }
+
+    private void Action(SkillContext skillContext)
+    {
         foreach (var targetTile in skillContext.GetTargetTiles())
         {
-            action+=()=>targetTile.GetUnit()?.GetDamage(values[0]);
+            targetTile.GetUnit()?.GetDamage(values[0]);
+            skillContext.HandleDamage?.Invoke(values[0],skillContext.SourceUnit);
         }
-        
-        skillContext.SkillAction+=action;
-        skillContext.unSubscribe+= skillContext.SkillAction - action;
     }
 
     public override string ReturnInformation()
@@ -29,6 +34,24 @@ public class Damage : SkillEffect
         else attribute = GetTextColor(TxtColorType.Intelligence) +"마법</color>";
         return $"{colorStart}{values[0]}</color> + {attribute}계수의 데미지를 줍니다";
         */
+        return "";
+    }
+}
+
+public class BloodSuck : SkillEffect
+{
+    public override void Apply(SkillContext skillContext)
+    {
+        skillContext.HandleDamage += Action;
+    }
+
+    private void Action(float value,Unit unit)
+    {
+        unit.GetDamage(-value);
+    }
+
+    public override string ReturnInformation()
+    {
         return "";
     }
 }
@@ -52,9 +75,13 @@ public class Heal : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        Action action = () => skillContext.SourceTile.GetUnit()?.GetDamage(-values[0]);
-        skillContext.SkillAction+=action;
-        skillContext.unSubscribe+=action;
+        skillContext.SkillAction+=Action;
+       // skillContext.unSubscribe+=action;
+    }
+
+    private void Action(SkillContext skillContext)
+    {
+        skillContext.SourceTile.GetUnit()?.GetDamage(-values[0]);
     }
 
     public override string ReturnInformation()

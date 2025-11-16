@@ -53,11 +53,13 @@ namespace SkillData
                 string[] split = part.Split(':');
                 var effectType = Enum.Parse<EffectTypeFactory.EffectType>(split[0]);
                 var skillEffect = EffectTypeFactory.CreateInstance(effectType);
-                
-                string[] v = split[1].Split(',');
                 List<int> values = new List<int>();
-                for (int i = 0; i < v.Length; i++)
-                    values.Add(int.Parse(v[i]));
+                if (split.Length > 1)
+                {
+                    string[] v = split[1].Split(',');
+                    for (int i = 0; i < v.Length; i++)
+                        values.Add(int.Parse(v[i]));
+                }
                 
                 skillEffect.Init(this, values);
                 effects.Add(skillEffect);
@@ -82,7 +84,7 @@ namespace SkillData
             {
                 effect.Apply(skillContext);
             }
-            skillContext.SkillAction?.Invoke();
+            skillContext.SkillAction?.Invoke(skillContext);
             skillContext.unSubscribe?.Invoke();
         }
 
