@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dea69d41f90c6ea4fa55c27c1d60c145, type: 3}
-  m_Name: AddressableAssetGroupSortSettings
+  m_Script: {fileID: 11500000, guid: 04854441d06be174bafa8a776337e1ca, type: 3}
+  m_Name: test 1
   m_EditorClassIdentifier: 
-  sortOrder:
-  - 0ad36f5b3fae41c42bd90399a0c71b49
-  - 0dab0557e1844894fa4ca90a6ec8224f
-  - 4edf8074a3b598b41938bb30811f69b9
+  appearAct: 0
+  lootDatas:
+  - lootType: 1
+    value: 0
+  EnemyArranges:
+  - unitIndex: 1
+    posIndex: {x: 2, y: 1}

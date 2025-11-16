@@ -68,13 +68,13 @@ namespace Map
             switch (mapState)
             {
                 case MapState.Enemy:
-                    action += ()=>SceneManager.LoadScene("GameScene");
+                    action += () => FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
                     break;
                 case MapState.StrongEnemy:
-                    action += ()=>SceneManager.LoadScene("GameScene");
+                    action += ()=>FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
                     break;
                 case MapState.Boss:
-                    action += ()=>SceneManager.LoadScene("GameScene");
+                    action += ()=>FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
                     break;
             }
             action?.Invoke();

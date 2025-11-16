@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class FadeInFadeOutManager : MonoBehaviour
+public class FadeInFadeOutManager : SingletonDontDestroyOnLoad<FadeInFadeOutManager>
 {
     [SerializeField] private Image fadeImage;
 
@@ -14,12 +14,14 @@ public class FadeInFadeOutManager : MonoBehaviour
         FadeIn();
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => FadeIn(true,0.5f);
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) => FadeIn(true);
 
     //검은색 화면 해제
     public void FadeIn(bool useDotween = false, float dotweenTime = 0.2f, Action action = null)
     {
+        fadeImage.gameObject.SetActive(true);
         fadeImage.DOComplete();
+        fadeImage.DOFade(1, 0);
         if (!useDotween)
         {
             fadeImage.DOFade(0, 0);
