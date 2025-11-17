@@ -23,8 +23,7 @@ public static class EffectTypeFactory
             EffectType.Barrier => new Barrier(),
             EffectType.SelfPDamage => new SelfPDamage(),
             EffectType.Fire => new Fire(),
-            EffectType.Posion => new Posion(),
-            EffectType.StrDebuff => new StrDebuff(),
+            EffectType.Posion => new Poison(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
             EffectType.BloodSuck => new BloodSuck(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)

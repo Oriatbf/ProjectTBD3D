@@ -29,7 +29,7 @@ public class Fire : SkillEffect
         return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 턴이 시작될 때 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 데미지를 입힙니다";
     }
 }
-public class Posion : SkillEffect
+public class Poison : SkillEffect
 {
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
@@ -73,35 +73,3 @@ public class Posion : SkillEffect
     }
 }
 
-public class StrDebuff : SkillEffect
-{
-    public override void Apply(SkillContext skillContext)
-    {
-        /*
-        BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile), ()=>RemoveDebuff(skillContext.TargetTile),
-            values[0],false
-        );*/
-      //  skillContext.TargetTile.AddBuffDebuff(debuff);
-    }
-
-    protected override void SkillAction(SkillContext skillContext)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    private void Action(Tile target)
-    {
-       // target.GetStatContainer().str.AddBaseValue(-values[1]);
-    }
-
-    private void RemoveDebuff(Tile target)
-    {
-       // target.GetStatContainer().str.AddBaseValue(values[1]);
-    }
-
-    public override string ReturnInformation()
-    {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 스탯공격력을 감소시킵니다.";
-    }
-}
