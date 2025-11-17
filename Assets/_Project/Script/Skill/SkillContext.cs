@@ -32,8 +32,20 @@ namespace SkillData
             this.TargetTile = targetTile;
             TargetUnit = targetTile.GetUnit();
         }
+        
+        public void ForEachTarget(Action<Unit> action)
+        {
+            foreach (var targetTile in GetTargetTiles())
+            {
+                var targetUnit = targetTile.GetUnit();
+                if (targetUnit != null)
+                {
+                    action?.Invoke(targetUnit);
+                }
+            }
+        }
 
-        public List<Tile> GetTargetTiles()
+        private List<Tile> GetTargetTiles()
         {
             var tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
             return tiles;

@@ -67,13 +67,18 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         if (!File.Exists(path))
         {
             Data = new GameData();
-            Data.units.Add(new UnitSaveData()
+            for (int i = 0; i < 2; i++)
             {
-                constId = RandomID.GetConstID(),
-                id = 0,
-                bringSkills = UnitData.Data.DataList[0].BringSkill,
-                statContainer = new StatContainer(UnitData.Data.DataList[0])
-            });
+                Data.units.Add(new UnitSaveData()
+                {
+                    constId = RandomID.GetConstID(),
+                    id = 0,
+                    bringSkills = UnitData.Data.DataList[0].BringSkill,
+                    statContainer = new StatContainer(UnitData.Data.DataList[0])
+                });
+            }
+        
+            
             JsonSave();
         }
         else

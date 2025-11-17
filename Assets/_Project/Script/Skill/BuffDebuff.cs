@@ -33,8 +33,10 @@ public class BuffDebuff
         if(turnCount <=0 || stackCount <= 0)DeActivate();
     }
 
-    private void DeActivate()
+    public void DeActivate()
     {
+        stackCount=0;
+        turnCount=0;
         isExist = false;
         deActiveAction?.Invoke();
     }

@@ -4,6 +4,7 @@ using SkillData;
 using UnityEngine;
 using static IColorText;
 
+
 public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
@@ -14,11 +15,11 @@ public class Damage : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        foreach (var targetTile in skillContext.GetTargetTiles())
+        skillContext.ForEachTarget(unit =>
         {
-            targetTile.GetUnit()?.GetDamage(values[0]);
-            skillContext.HandleDamage?.Invoke(values[0],skillContext);
-        }
+            unit.GetDamage(values[0]);;
+        });
+        skillContext.HandleDamage?.Invoke(values[0],skillContext);
     }
 
     public override string ReturnInformation()
@@ -86,7 +87,10 @@ public class Heal : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.SourceTile.GetUnit()?.GetDamage(-values[0]);
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(-values[0]);
+        });
     }
 
     public override string ReturnInformation()
@@ -95,7 +99,7 @@ public class Heal : SkillEffect
     }
 }
 
-public class Barrier : SkillEffect
+public class BarrierToTarget : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
@@ -104,7 +108,28 @@ public class Barrier : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.SourceTile.GetUnit()?.GetStatContainer().barrier.AddBaseValue(values[0]);
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().barrier.AddBaseValue(values[0]);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 줍니다";
+    }
+}
+
+public class BarrierToSource : SkillEffect
+{
+    public override void Apply(SkillContext skillContext)
+    {
+        skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.GetStatContainer().barrier.AddBaseValue(values[0]);
     }
 
     public override string ReturnInformation()
@@ -122,7 +147,10 @@ public class InCreaseCharm : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.TargetTile?.GetUnit().GetStatContainer().charmResist.AddBaseValue(values[0]);
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().charmResist.AddBaseValue(values[0]);
+        });
     }
 
     public override string ReturnInformation()
@@ -130,5 +158,6 @@ public class InCreaseCharm : SkillEffect
         return $"적에게 {GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 매혹도를 줍니다";
     }
 }
+
 
 

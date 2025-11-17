@@ -12,11 +12,15 @@ public class Fire : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        BuffDebuff debuff = new BuffDebuff(
-            skillContext.TargetUnit,values[0],false,values[1]
-        );
-        debuff.AddBuffAction(Action);
-        skillContext.TargetUnit.AddBuff(debuff);
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,values[0],false,values[1]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff(debuff);
+        });
+       
     }
 
     private void Action(BuffDebuff buffDebuff)
@@ -38,11 +42,15 @@ public class Poison : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        BuffDebuff debuff = new BuffDebuff(
-            skillContext.TargetUnit,values[1],true,values[1]
-        );
-        debuff.AddBuffAction(Action);
-        skillContext.TargetUnit.AddBuff(debuff);
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,values[1],true,values[1]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff(debuff);
+        });
+       
     }
 
     private void Action(BuffDebuff buffDebuff)
@@ -73,3 +81,36 @@ public class Poison : SkillEffect
     }
 }
 
+public class Ice : SkillEffect
+{
+    public override void Apply(SkillContext skillContext)
+    {
+        skillContext.SkillAction+=SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,values[0],true,values[0]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff(debuff);
+        });
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        if (buffDebuff.stackCount >= 3)
+        {
+            Debug.Log("빙결");
+            buffDebuff.DeActivate();
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return "";
+    }
+}
