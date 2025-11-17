@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private List<int> bringSkills = new List<int>();
+    [SerializeField] private List<BuffDebuff> buffDebuffs = new List<BuffDebuff>();
     [EndFoldout]
     
     private Team team; 
@@ -72,6 +73,10 @@ public class Unit : MonoBehaviour
     public virtual void Reset()
     {
         _statContainer.turnGauge.SetBaseValue(0);
+        foreach (var buff in buffDebuffs)
+        {
+            buff.Execute();
+        }
     }
 
 
@@ -97,6 +102,10 @@ public class Unit : MonoBehaviour
     
     public UnitSaveData GetUnitData() => unitData;
 
+    public void AddBuff(BuffDebuff buffDebuff)
+    {
+        buffDebuffs.Add(buffDebuff);
+    }
     public void GetDamage(float damage)
     {
         if(isDead) return;

@@ -22,6 +22,7 @@ public abstract class SkillEffect
     /// 스킬 구현 코드
     /// </summary>
     public abstract void Apply(SkillContext skillContext); 
+    protected abstract void SkillAction(SkillContext skillContext);
     
     /// <summary>
     /// 각 스킬별 설명을 적어서 리턴하는 코드

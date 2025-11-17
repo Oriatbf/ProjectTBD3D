@@ -8,18 +8,16 @@ public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-   
-        
-        skillContext.SkillAction+=Action;
+        skillContext.SkillAction+=SkillAction;
         //skillContext.unSubscribe+= skillContext.SkillAction - Action;
     }
 
-    private void Action(SkillContext skillContext)
+    protected override void SkillAction(SkillContext skillContext)
     {
         foreach (var targetTile in skillContext.GetTargetTiles())
         {
             targetTile.GetUnit()?.GetDamage(values[0]);
-            skillContext.HandleDamage?.Invoke(values[0],skillContext.SourceUnit);
+            skillContext.HandleDamage?.Invoke(values[0],skillContext);
         }
     }
 
@@ -45,9 +43,11 @@ public class BloodSuck : SkillEffect
         skillContext.HandleDamage += Action;
     }
 
-    private void Action(float value,Unit unit)
+    protected override void SkillAction(SkillContext skillContext) { }
+
+    private void Action(float value,SkillContext skillContext)
     {
-        unit.GetDamage(-value);
+        skillContext.SourceUnit.GetDamage(-value);
     }
 
     public override string ReturnInformation()
@@ -60,9 +60,14 @@ public class SelfPDamage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        //float casterHp = skillContext.SourceTile.GetStatContainer().hp._baseValue;
-       // float damage =(int)(casterHp *( (float)values[0]/100f));
-      //  skillContext.SourceTile.GetDamage(damage);
+        skillContext.SkillAction+=SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
+        float damage =(int)(casterHp *( (float)values[0]/100f));
+        skillContext.SourceUnit.GetDamage(damage);
     }
 
     public override string ReturnInformation()
@@ -75,11 +80,11 @@ public class Heal : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        skillContext.SkillAction+=Action;
+        skillContext.SkillAction+=SkillAction;
        // skillContext.unSubscribe+=action;
     }
 
-    private void Action(SkillContext skillContext)
+    protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.SourceTile.GetUnit()?.GetDamage(-values[0]);
     }
@@ -94,7 +99,12 @@ public class Barrier : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-       skillContext.SourceTile.GetUnit()?.GetStatContainer().barrier.AddBaseValue(values[0]);
+       skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceTile.GetUnit()?.GetStatContainer().barrier.AddBaseValue(values[0]);
     }
 
     public override string ReturnInformation()
@@ -107,7 +117,12 @@ public class InCreaseCharm : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        //skillContext.Target.GetStatContainer().charmResist.AddBaseValue(values[0]);
+        skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.TargetTile?.GetUnit().GetStatContainer().charmResist.AddBaseValue(values[0]);
     }
 
     public override string ReturnInformation()
@@ -116,17 +131,4 @@ public class InCreaseCharm : SkillEffect
     }
 }
 
-public class Friendly : SkillEffect
-{
-    public override void Apply(SkillContext skillContext)
-    {
-        //DataManager.Inst.SaveUnit(skillContext.Target, true);
-        //skillContext.Target.GetDamage(9999);
-    }
-
-    public override string ReturnInformation()
-    {
-        return "적군을 아군의 팀으로 편성시킵니다. 다음 라운드부터 적용됩니다.";
-    }
-}
 

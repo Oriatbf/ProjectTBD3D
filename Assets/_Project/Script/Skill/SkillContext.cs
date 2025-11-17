@@ -12,7 +12,7 @@ namespace SkillData
         public Unit TargetUnit { get; set; }
         public Action<SkillContext> SkillAction { get; set; }
         public Action unSubscribe;
-        public Action<float,Unit> HandleDamage { get; set; }
+        public Action<float,SkillContext> HandleDamage { get; set; }
         public int rowCount=0,columnCount=0;
 
         public void Init(int rowCount, int columnCount)

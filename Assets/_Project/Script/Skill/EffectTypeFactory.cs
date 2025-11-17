@@ -11,7 +11,6 @@ public static class EffectTypeFactory
         Fire,
         Posion,
         StrDebuff,
-        Friendly,
         InCreaseCharm,
         BloodSuck
     }
@@ -26,7 +25,6 @@ public static class EffectTypeFactory
             EffectType.Fire => new Fire(),
             EffectType.Posion => new Posion(),
             EffectType.StrDebuff => new StrDebuff(),
-            EffectType.Friendly => new Friendly(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
             EffectType.BloodSuck => new BloodSuck(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)

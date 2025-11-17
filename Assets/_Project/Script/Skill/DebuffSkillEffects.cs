@@ -7,16 +7,21 @@ public class Fire : SkillEffect
 {
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
-        BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile),null,
-            values[0],false
-        );
-      //  skillContext.TargetTile.AddBuffDebuff(debuff);
+        skillContext.SkillAction+=SkillAction;
     }
 
-    private void Action(Tile target)
+    protected override void SkillAction(SkillContext skillContext)
     {
-        //target.GetDamage(values[1]);
+        BuffDebuff debuff = new BuffDebuff(
+            skillContext.TargetUnit,values[0],false,values[1]
+        );
+        debuff.AddBuffAction(Action);
+        skillContext.TargetUnit.AddBuff(debuff);
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
     }
 
     public override string ReturnInformation()
@@ -28,13 +33,21 @@ public class Posion : SkillEffect
 {
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
+        skillContext.SkillAction+=SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
         BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile),null,
-            values[0],
-            true,
-            values[1]
+            skillContext.TargetUnit,values[1],true,values[1]
         );
-        //skillContext.TargetTile.AddBuffDebuff(debuff);
+        debuff.AddBuffAction(Action);
+        skillContext.TargetUnit.AddBuff(debuff);
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
     }
 
     private void Action(Tile target)
@@ -64,13 +77,19 @@ public class StrDebuff : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
+        /*
         BuffDebuff debuff = new BuffDebuff(
             () => Action(skillContext.TargetTile), ()=>RemoveDebuff(skillContext.TargetTile),
             values[0],false
-        );
+        );*/
       //  skillContext.TargetTile.AddBuffDebuff(debuff);
     }
-    
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        throw new System.NotImplementedException();
+    }
+
     private void Action(Tile target)
     {
        // target.GetStatContainer().str.AddBaseValue(-values[1]);
