@@ -2,9 +2,10 @@ using SkillData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillIcon : MonoBehaviour
+public class SkillIcon : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
 {
     [SerializeField] private Image icon;
     protected SkillStackInfo skillStackInfo;
@@ -24,5 +25,23 @@ public class SkillIcon : MonoBehaviour
         icon.sprite = sprite;
     }
     public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
+    
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        //if(skill ==null) return;
+        ApplicationManager.Inst.GetModule<SkillInformationController>().InitData(skillStackInfo,Input.mousePosition);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //if(skill ==null) return;
+        ApplicationManager.Inst.GetModule<SkillInformationController>().Hide();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //if(skill ==null) return;
+        ApplicationManager.Inst.GetModule<SkillInformationController>().Show();
+    }
 
 }
