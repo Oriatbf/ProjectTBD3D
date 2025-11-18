@@ -30,7 +30,7 @@ public class Fire : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 턴이 시작될 때 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 데미지를 입힙니다";
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>의 화상을 부여합니다";
     }
 }
 public class Poison : SkillEffect
@@ -45,7 +45,7 @@ public class Poison : SkillEffect
         skillContext.ForEachTarget(unit =>
         {
             BuffDebuff debuff = new BuffDebuff(
-                unit,values[1],true,values[1]
+                unit,values[0],true,values[0]
             );
             debuff.AddBuffAction(Action);
             unit.AddBuff(debuff);
@@ -77,7 +77,7 @@ public class Poison : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 턴이 시작될 때 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 데미지를 입힙니다";
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 독을 부여합니다";
     }
 }
 

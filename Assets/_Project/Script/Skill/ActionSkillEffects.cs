@@ -33,7 +33,7 @@ public class Damage : SkillEffect
         else attribute = GetTextColor(TxtColorType.Intelligence) +"마법</color>";
         return $"{colorStart}{values[0]}</color> + {attribute}계수의 데미지를 줍니다";
         */
-        return "";
+        return $"{GetTextColor(TxtColorType.Str)}{values[0]}</color>의 데미지를 줍니다";
     }
 }
 
@@ -48,12 +48,13 @@ public class BloodSuck : SkillEffect
 
     private void Action(float value,SkillContext skillContext)
     {
-        skillContext.SourceUnit.GetDamage(-value);
+        int finalValue = (int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
+        skillContext.SourceUnit.GetDamage(-finalValue);
     }
 
     public override string ReturnInformation()
     {
-        return "";
+        return $"타격 후 {GetTextColor(TxtColorType.Health)}10%</color>만큼 회복합니다";
     }
 }
 
@@ -95,7 +96,7 @@ public class Heal : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"<color=green>{values[0]}</color>의 힐을 줍니다";
+        return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
     }
 }
 
@@ -134,7 +135,7 @@ public class BarrierToSource : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 줍니다";
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 받습니다";
     }
 }
 

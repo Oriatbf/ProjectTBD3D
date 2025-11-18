@@ -98,7 +98,7 @@ public class CharacterInfoController : BaseController
 
         foreach (var result in _raycastResults)
         {
-            if (result.gameObject.TryGetComponent(out SkillIcon skillIcon))
+            if (result.gameObject.TryGetComponent(out InventorySkillIcon skillIcon))
             {
                 curSkillIcon = skillIcon;
                 isTargeting = true;

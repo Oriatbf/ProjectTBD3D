@@ -15,6 +15,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(SkillStackController),new SkillStackController());
         _modulesByType.Add(typeof(PlayerSpawnController),new PlayerSpawnController());
         _modulesByType.Add(typeof(LootController), new LootController());
+        _modulesByType.Add(typeof(SkillInformationController), new SkillInformationController());
     }
     private void Start()
     {

@@ -60,6 +60,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3a566a81a4050694b899130d63710c9a
+    m_Address: Assets/_Project/Prefab/UI/Skill/SkillInfomationCard.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b18aaab9d650434eb633d2b5b598565
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Gold.png
     m_ReadOnly: 0
@@ -100,6 +105,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 89bd655f6c0acf74dab4b1116172c967
+    m_Address: Assets/_Project/Prefab/UI/Skill/ActiveSkillIcon Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f993d05cfa669045a7f5aee1b1d8df0
     m_Address: Assets/_Project/Art/Animator/Mage.overrideController
     m_ReadOnly: 0
@@ -137,6 +147,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: eb9ee628091661043afd18ed5278ebe5
     m_Address: Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed42a63e9dfeae34abaf3c034807e33e
+    m_Address: Assets/_Project/Prefab/UI/Skill/SkillInfoCanvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
