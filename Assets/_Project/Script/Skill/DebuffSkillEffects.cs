@@ -15,10 +15,10 @@ public class Fire : SkillEffect
         skillContext.ForEachTarget(unit =>
         {
             BuffDebuff debuff = new BuffDebuff(
-                unit,values[0],false,values[1]
+                unit,"Fire",values[0],DecreaseType.OnlyTurn,values[1]
             );
             debuff.AddBuffAction(Action);
-            unit.AddBuff(debuff);
+            unit.AddBuff("Fire",debuff);
         });
        
     }
@@ -45,10 +45,10 @@ public class Poison : SkillEffect
         skillContext.ForEachTarget(unit =>
         {
             BuffDebuff debuff = new BuffDebuff(
-                unit,values[0],true,values[0]
+                unit,"Poison",values[0],DecreaseType.OnlyStack,values[0]
             );
             debuff.AddBuffAction(Action);
-            unit.AddBuff(debuff);
+            unit.AddBuff("Poison",debuff);
         });
        
     }
@@ -93,10 +93,10 @@ public class Ice : SkillEffect
         skillContext.ForEachTarget(unit =>
         {
             BuffDebuff debuff = new BuffDebuff(
-                unit,values[0],true,values[0]
+                unit,"Ice",values[0],DecreaseType.None,values[0]
             );
             debuff.AddBuffAction(Action);
-            unit.AddBuff(debuff);
+            unit.AddBuff("Ice",debuff);
         });
     }
 

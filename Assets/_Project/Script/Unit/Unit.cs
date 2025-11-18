@@ -10,8 +10,10 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private List<int> bringSkills = new List<int>();
-    [SerializeField] private List<BuffDebuff> buffDebuffs = new List<BuffDebuff>();
+  
     [EndFoldout]
+    
+    private Dictionary<string,BuffDebuff> buffDebuffs = new Dictionary<string,BuffDebuff>();
     
     private Team team; 
     private Tile tile; 
@@ -73,7 +75,7 @@ public class Unit : MonoBehaviour
     public virtual void Reset()
     {
         _statContainer.turnGauge.SetBaseValue(0);
-        foreach (var buff in buffDebuffs)
+        foreach (var buff in buffDebuffs.Values)
         {
             buff.Execute();
         }
@@ -102,9 +104,16 @@ public class Unit : MonoBehaviour
     
     public UnitSaveData GetUnitData() => unitData;
 
-    public void AddBuff(BuffDebuff buffDebuff)
+    public void AddBuff(string key,BuffDebuff buffDebuff)
     {
-        buffDebuffs.Add(buffDebuff);
+        if (buffDebuffs.ContainsKey(key))
+        {
+            buffDebuffs[key].InitExtraData( buffDebuff);
+        }
+        else
+        {
+            buffDebuffs[buffDebuff.id]=buffDebuff;   
+        }
     }
     public void GetDamage(float damage)
     {

@@ -11,6 +11,8 @@ public class CharacterInfoController : BaseController
     
     private CharacterInfoCanvas _characterInfoCanvas;
     private SkillIcon curSkillIcon;
+    private TargetType curTargetType;
+    
     private Tile lastTile;
     private List<Tile> lastTiles = new List<Tile>();
     private UnitSaveData curUnitData;
@@ -101,6 +103,7 @@ public class CharacterInfoController : BaseController
             if (result.gameObject.TryGetComponent(out InventorySkillIcon skillIcon))
             {
                 curSkillIcon = skillIcon;
+                curTargetType = skillIcon.GetSkillStackInfo().skill.GetData().TargetType;
                 isTargeting = true;
                 return;
             }
@@ -119,14 +122,21 @@ public class CharacterInfoController : BaseController
             return;
         }
 
-        var ray = _camera.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-        if (!hit.transform.TryGetComponent(out Tile tile)) return;
+        Tile _tile = null;
+        
+        if (curTargetType == TargetType.Area)
+        {
+            var ray = _camera.ScreenPointToRay(Input.mousePosition);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (!hit.transform.TryGetComponent(out Tile tile)) return;
+            else _tile = tile;
+        }
+      
 
         // 타일 선택 확정
         if (Input.GetMouseButtonDown(0))
         {
-            if (TryExecuteSkill(tile))
+            if (TryExecuteSkill(_tile))
             {
                 ClearTargetTiles();
                 isTargeting = false;
@@ -135,9 +145,9 @@ public class CharacterInfoController : BaseController
         }
 
         // 타일 하이라이트 업데이트
-        if (lastTile != tile)
+        if (lastTile != _tile)
         {
-            UpdateTargetHighlight(tile);
+            UpdateTargetHighlight(_tile);
         }
     }
     private void UpdateTargetHighlight(Tile tile)
@@ -173,7 +183,7 @@ public class CharacterInfoController : BaseController
         
         //시전자와 타겟의 위치를 입력
         skill.InitSource(skillStackInfo.sourceTile);
-        skill.InitTarget(targetTile);
+        if(targetTile!=null) skill.InitTarget(targetTile);
 
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
         

@@ -12,10 +12,7 @@ public class SkillStackInfo
     public Tile sourceTile;
     public Team team;
 
-    public SkillStackInfo ()
-    {
-
-    }
+    public SkillStackInfo () { }
     
     public SkillStackInfo (SkillStackInfo skillStackInfo)
     {

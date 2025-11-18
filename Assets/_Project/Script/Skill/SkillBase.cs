@@ -12,7 +12,7 @@ public enum SkillAttribute
 [UGS(typeof(TargetType))]
 public enum TargetType
 {
-    Target,NoneTarget
+    Area,Source,All
 }
 
 namespace SkillData
@@ -39,7 +39,7 @@ namespace SkillData
             _data = data;
             effects = new List<SkillEffect>();
             FindSkillEffects(_data.EffectData);
-            skillContext.Init(data.RowCount,data.ColumnCount);
+            skillContext.Init(data.TargetType,data.RowCount,data.ColumnCount);
         }
 
         /// <summary>

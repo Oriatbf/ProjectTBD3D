@@ -14,9 +14,11 @@ namespace SkillData
         public Action unSubscribe;
         public Action<float,SkillContext> HandleDamage { get; set; }
         public int rowCount=0,columnCount=0;
+        public TargetType targetType { get; set; }
 
-        public void Init(int rowCount, int columnCount)
+        public void Init(TargetType targetType,int rowCount, int columnCount)
         {
+            this.targetType = targetType;
             this.rowCount = rowCount;
             this.columnCount = columnCount;
         }
@@ -47,8 +49,20 @@ namespace SkillData
 
         private List<Tile> GetTargetTiles()
         {
-            var tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
-            return tiles;
+            List<Tile> _tiles = new List<Tile>();
+            switch (targetType)
+            {
+                case TargetType.Area:
+                    _tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
+                    break;
+                case TargetType.Source:
+                    break;
+                case TargetType.All:
+                    _tiles = TileManager.Inst.GetAllTiles();
+                    break;
+            }
+            
+            return _tiles;
         }
         
     }
