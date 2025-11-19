@@ -52,6 +52,7 @@ public class BuffStackController : BaseController
     public void UnStackBuff(Tile targetTile,string id)
     {
         if(targetTile==null) Debug.LogError("Tile is null");
+        if(!stackData.ContainsKey(targetTile)||stackData[targetTile].Count == 0) return;
         foreach (var _buffIcon in stackData[targetTile])
         {
             if (_buffIcon.GetBuffDebuff().id == id)
@@ -67,6 +68,7 @@ public class BuffStackController : BaseController
     public void UnstackAllBuffs(Tile targetTile)
     {
         if(targetTile==null) Debug.LogError("Tile is null");
+        if(!stackData.ContainsKey(targetTile)||stackData[targetTile].Count == 0) return;
         foreach (var _buffIcon in stackData[targetTile])
         {
             GameObject.Destroy(_buffIcon.gameObject);
