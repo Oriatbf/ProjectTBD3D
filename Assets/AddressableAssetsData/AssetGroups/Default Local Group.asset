@@ -40,6 +40,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2351ca9604e499749857dca32821a38f
+    m_Address: Assets/_Project/Prefab/UI/Buff/BuffStackCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24b2a44d47b807e4887ddb400535d0fb
     m_Address: Assets/_Project/Prefab/UI/PopUp/DamagePopUp.prefab
     m_ReadOnly: 0
@@ -67,6 +72,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b18aaab9d650434eb633d2b5b598565
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Gold.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ebe15f6a5c2b6a4aa857e40039305d5
+    m_Address: Assets/_Project/Prefab/UI/Buff/BuffInfoCanvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -140,8 +150,23 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7cf7dbc2c652744f87f1bfe035c86fc
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Fire.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d186cad33bb3df64a9591f166f6e7b74
+    m_Address: Assets/_Project/Prefab/UI/Buff/BuffIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d8fa101f330c4d8458c79465fb66d704
     m_Address: Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd48b19d60b33fe448f31096f965d98f
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Poison.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -152,6 +177,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed42a63e9dfeae34abaf3c034807e33e
     m_Address: Assets/_Project/Prefab/UI/Skill/SkillInfoCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fd94cb483cfb96a4faa32a66dffc4bf0
+    m_Address: Assets/_Project/Prefab/UI/Buff/BuffInfoUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

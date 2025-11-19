@@ -12,6 +12,7 @@ public class BuffDebuff
     public Action<BuffDebuff> buffAction;
     public Action deActiveAction;
     public Unit targetUnit;
+    public Tile TargetTile;
     public string id;
     public int turnCount;
     public int stackCount = 1;
@@ -22,6 +23,7 @@ public class BuffDebuff
     {
         this.id = id;
         this.targetUnit = targetUnit;
+        TargetTile = targetUnit.GetTile();
         this.turnCount = turnCount;
         this.stackCount = stackCount;
         this.decreaseType = decreaseType;
@@ -48,6 +50,25 @@ public class BuffDebuff
         if( isStackAble())stackCount-=1;
         if(isTurnAble())turnCount-=1;
         if((isTurnAble() &&turnCount <=0) || (isStackAble()&&stackCount <= 0))DeActivate();
+    }
+    
+    public string GetStatusString()
+    {
+        switch (decreaseType)
+        {
+            case DecreaseType.OnlyStack:
+                return $"{stackCount}스택";
+            
+            case DecreaseType.OnlyTurn:
+                return $"{turnCount}턴 {stackCount}스택";
+            
+            case DecreaseType.TurnAndStack:
+                return $"{turnCount}턴 {stackCount}스택";
+            
+            case DecreaseType.None:
+            default:
+                return "";
+        }
     }
 
     /// <summary>

@@ -44,6 +44,8 @@ public class SheetDataManager : Singleton<SheetDataManager>
 
     public List<SkillBase> GetSkillBaseList(List<int> ids)
         => skillList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
-    
+
+    public List<SkillBase> GetRandomSkillBaseList(int count) => skillList.NonDupRandomT(count);
+
 
 }

@@ -9,8 +9,8 @@ public class SkillStackController : BaseController
 {
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab";
     private readonly string SkillStackCanvasPath = "Assets/_Project/Prefab/UI/SkillStackCanvas.prefab";
-    private Transform canvas;
-    private SkillIcon skillIcon;
+    private Transform content;
+    private SkillIcon skillIconPrefab;
     private Camera _camera;
     private Dictionary<Tile ,Queue<SkillIcon>> stackData = new Dictionary<Tile ,Queue<SkillIcon>>();
     private float skillIconInterval = 100;
@@ -26,17 +26,17 @@ public class SkillStackController : BaseController
     {
         var _canvas = await Addressables.LoadAssetAsync<GameObject>(SkillStackCanvasPath).ToUniTask();
         var obj = GameObject.Instantiate(_canvas);
-        this.canvas = obj.transform.GetChild(0).transform;
+        this.content = obj.transform.GetChild(0).transform;
         
         var _skillIcon = await Addressables.LoadAssetAsync<GameObject>(skillIconPath).ToUniTask();
-        if(_skillIcon.TryGetComponent(out SkillIcon skillIcon))this.skillIcon = skillIcon;
+        if(_skillIcon.TryGetComponent(out SkillIcon skillIcon))this.skillIconPrefab = skillIcon;
     }
 
     public void StackSkill(SkillStackInfo skillStackInfo)
     {
         var tile = skillStackInfo.sourceTile;
         if(tile==null) Debug.LogError("Tile is null");
-        var obj = GameObject.Instantiate(skillIcon,canvas);
+        var obj = GameObject.Instantiate(skillIconPrefab,content);
         obj.Init(skillStackInfo);
         
         if (stackData.ContainsKey(tile)) stackData[tile].Enqueue(obj);

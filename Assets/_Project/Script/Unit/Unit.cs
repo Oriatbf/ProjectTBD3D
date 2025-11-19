@@ -99,6 +99,7 @@ public class Unit : MonoBehaviour
     
     public List<int> GetSkillList()=>bringSkills;
     public Team GetTeam() => team;
+    public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
     
@@ -113,7 +114,9 @@ public class Unit : MonoBehaviour
         else
         {
             buffDebuffs[buffDebuff.id]=buffDebuff;   
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackBuff(buffDebuff);
         }
+       
     }
     public void GetDamage(float damage)
     {
