@@ -49,6 +49,31 @@ public class BuffStackController : BaseController
         
     }
 
+    public void UnStackBuff(Tile targetTile,string id)
+    {
+        if(targetTile==null) Debug.LogError("Tile is null");
+        foreach (var _buffIcon in stackData[targetTile])
+        {
+            if (_buffIcon.GetBuffDebuff().id == id)
+            {
+                stackData[targetTile].Remove(_buffIcon);
+                GameObject.Destroy(_buffIcon.gameObject);
+                break;
+            }
+        }
+
+    }
+
+    public void UnstackAllBuffs(Tile targetTile)
+    {
+        if(targetTile==null) Debug.LogError("Tile is null");
+        foreach (var _buffIcon in stackData[targetTile])
+        {
+            GameObject.Destroy(_buffIcon.gameObject);
+        }
+        stackData.Remove(targetTile);
+    }
+
     private void RefreshUI(Tile tile,List<BuffIcon> list)
     {
         Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());

@@ -75,9 +75,18 @@ public class Unit : MonoBehaviour
     public virtual void Reset()
     {
         _statContainer.turnGauge.SetBaseValue(0);
+        List<string> removeList = new List<string>();
+
         foreach (var buff in buffDebuffs.Values)
         {
             buff.Execute();
+            if (!buff.isExist)
+                removeList.Add(buff.id);
+        }
+
+        foreach (var id in removeList)
+        {
+            buffDebuffs.Remove(id);
         }
     }
 
@@ -154,6 +163,7 @@ public class Unit : MonoBehaviour
         FactoryManager.Inst.RegisterDeadUnit(this);
         PoolManager.Inst.Despawn(healthContent);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
+        ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllBuffs(tile);
         Destroy(gameObject);
     }
 }

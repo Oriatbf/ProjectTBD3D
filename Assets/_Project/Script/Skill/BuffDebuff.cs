@@ -104,6 +104,7 @@ public class BuffDebuff
         stackCount=0;
         turnCount=0;
         isExist = false;
+        ApplicationManager.Inst.GetModule<BuffStackController>().UnStackBuff(TargetTile,id);
         deActiveAction?.Invoke();
     }
     
