@@ -85,6 +85,8 @@ public class TileManager : Singleton<TileManager>
 
     public List<Tile> GetTiles(Tile targetTile, int rowCount, int columnCount)
     {
+        rowCount = Mathf.Clamp(rowCount,1,rowCount);
+        columnCount = Mathf.Clamp(columnCount,1,columnCount);
         if(targetTile == null)Debug.LogError("targetTile is null");
         HashSet<Tile> _tiles = new HashSet<Tile>();
         int xPos = (int)targetTile.GetIndex().x;
@@ -99,5 +101,15 @@ public class TileManager : Singleton<TileManager>
         }
         
         return _tiles.ToList();
+    }
+
+    public List<Tile> GetAllTiles()
+    {
+        List<Tile> _tiles = new List<Tile>();
+        foreach (var tile in Tiles.Values)
+        {
+            _tiles.Add(tile);
+        }
+        return _tiles;
     }
 }

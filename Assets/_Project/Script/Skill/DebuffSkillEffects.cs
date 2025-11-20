@@ -7,34 +7,55 @@ public class Fire : SkillEffect
 {
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
-        BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile),null,
-            values[0],false
-        );
-      //  skillContext.TargetTile.AddBuffDebuff(debuff);
+        skillContext.SkillAction+=SkillAction;
     }
 
-    private void Action(Tile target)
+    protected override void SkillAction(SkillContext skillContext)
     {
-        //target.GetDamage(values[1]);
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,"Fire",values[0],DecreaseType.OnlyTurn,values[1]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff("Fire",debuff);
+        });
+       
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
     }
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 턴이 시작될 때 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 데미지를 입힙니다";
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>의 화상을 부여합니다";
     }
 }
-public class Posion : SkillEffect
+public class Poison : SkillEffect
 {
     public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
     {
-        BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile),null,
-            values[0],
-            true,
-            values[1]
-        );
-        //skillContext.TargetTile.AddBuffDebuff(debuff);
+        skillContext.SkillAction+=SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,"Poison",values[0],DecreaseType.OnlyStack,values[0]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff("Poison",debuff);
+        });
+       
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
     }
 
     private void Action(Tile target)
@@ -56,33 +77,40 @@ public class Posion : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>턴 동안 턴이 시작될 때 {GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 데미지를 입힙니다";
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 독을 부여합니다";
     }
 }
 
-public class StrDebuff : SkillEffect
+public class Ice : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        BuffDebuff debuff = new BuffDebuff(
-            () => Action(skillContext.TargetTile), ()=>RemoveDebuff(skillContext.TargetTile),
-            values[0],false
-        );
-      //  skillContext.TargetTile.AddBuffDebuff(debuff);
-    }
-    
-    private void Action(Tile target)
-    {
-       // target.GetStatContainer().str.AddBaseValue(-values[1]);
+        skillContext.SkillAction+=SkillAction;
     }
 
-    private void RemoveDebuff(Tile target)
+    protected override void SkillAction(SkillContext skillContext)
     {
-       // target.GetStatContainer().str.AddBaseValue(values[1]);
+        skillContext.ForEachTarget(unit =>
+        {
+            BuffDebuff debuff = new BuffDebuff(
+                unit,"Ice",values[0],DecreaseType.None,values[0]
+            );
+            debuff.AddBuffAction(Action);
+            unit.AddBuff("Ice",debuff);
+        });
+    }
+
+    private void Action(BuffDebuff buffDebuff)
+    {
+        if (buffDebuff.stackCount >= 3)
+        {
+            Debug.Log("빙결");
+            buffDebuff.DeActivate();
+        }
     }
 
     public override string ReturnInformation()
     {
-        return $"{GetTextColor(TxtColorType.Intelligence)}{values[1]}</color>만큼 스탯공격력을 감소시킵니다.";
+        return "";
     }
 }

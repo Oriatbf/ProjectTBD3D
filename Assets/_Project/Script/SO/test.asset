@@ -15,9 +15,9 @@ MonoBehaviour:
   appearAct: 0
   lootDatas:
   - lootType: 0
-    value: 0
+    value: 2
   - lootType: 1
-    value: 0
+    value: 350
   EnemyArranges:
   - unitIndex: 1
     posIndex: {x: 0, y: 1}

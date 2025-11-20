@@ -35,6 +35,7 @@ public class GameData
 {
     public List<UnitSaveData> units = new List<UnitSaveData>();
     public MapData mapData = new MapData();
+    public int gold;
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -67,13 +68,18 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         if (!File.Exists(path))
         {
             Data = new GameData();
-            Data.units.Add(new UnitSaveData()
+            for (int i = 0; i < 2; i++)
             {
-                constId = RandomID.GetConstID(),
-                id = 0,
-                bringSkills = UnitData.Data.DataList[0].BringSkill,
-                statContainer = new StatContainer(UnitData.Data.DataList[0])
-            });
+                Data.units.Add(new UnitSaveData()
+                {
+                    constId = RandomID.GetConstID(),
+                    id = 0,
+                    bringSkills = UnitData.Data.DataList[0].BringSkill,
+                    statContainer = new StatContainer(UnitData.Data.DataList[0])
+                });
+            }
+        
+            
             JsonSave();
         }
         else
@@ -109,13 +115,17 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void SaveUnit(Unit unit)
     {
         var unitData = unit.GetUnitData();
+        var originalData = SheetDataManager.Inst.GetUnitData(unitData.id);
+        var originalStatContainer = new StatContainer(originalData);
         UnitSaveData newUnitSaveData = new UnitSaveData()
         {
             constId = unitData.constId,
             id= unitData.id,
-            statContainer = unit.GetStatContainer(),
+            statContainer = originalStatContainer,
             bringSkills = unit.GetSkillList()
         };
+        newUnitSaveData.statContainer.hp.SetBaseValue(unitData.statContainer.hp._baseValue);
+        
         foreach(var savedUnits in Data.units)
         {
             if (savedUnits.constId == unitData.constId)
@@ -137,4 +147,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     }
     public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
     public MapData GetMapData() => Data.mapData;
+    
+    public void SetGold(int value)=>Data.gold = value;
 }

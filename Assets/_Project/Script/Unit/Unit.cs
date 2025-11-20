@@ -10,7 +10,10 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private List<int> bringSkills = new List<int>();
+  
     [EndFoldout]
+    
+    private Dictionary<string,BuffDebuff> buffDebuffs = new Dictionary<string,BuffDebuff>();
     
     private Team team; 
     private Tile tile; 
@@ -72,6 +75,19 @@ public class Unit : MonoBehaviour
     public virtual void Reset()
     {
         _statContainer.turnGauge.SetBaseValue(0);
+        List<string> removeList = new List<string>();
+
+        foreach (var buff in buffDebuffs.Values)
+        {
+            buff.Execute();
+            if (!buff.isExist)
+                removeList.Add(buff.id);
+        }
+
+        foreach (var id in removeList)
+        {
+            buffDebuffs.Remove(id);
+        }
     }
 
 
@@ -92,11 +108,25 @@ public class Unit : MonoBehaviour
     
     public List<int> GetSkillList()=>bringSkills;
     public Team GetTeam() => team;
+    public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
     public Animator GetAnimator() => animator;
     
     public UnitSaveData GetUnitData() => unitData;
 
+    public void AddBuff(string key,BuffDebuff buffDebuff)
+    {
+        if (buffDebuffs.ContainsKey(key))
+        {
+            buffDebuffs[key].InitExtraData( buffDebuff);
+        }
+        else
+        {
+            buffDebuffs[buffDebuff.id]=buffDebuff;   
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackBuff(buffDebuff);
+        }
+       
+    }
     public void GetDamage(float damage)
     {
         if(isDead) return;
@@ -133,6 +163,7 @@ public class Unit : MonoBehaviour
         FactoryManager.Inst.RegisterDeadUnit(this);
         PoolManager.Inst.Despawn(healthContent);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
+        ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllBuffs(tile);
         Destroy(gameObject);
     }
 }

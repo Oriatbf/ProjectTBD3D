@@ -6,13 +6,14 @@ public static class EffectTypeFactory
     {
         Damage,
         Heal,
-        Barrier,
+        BarrierToTarget,
+        BarrierToSource,
         SelfPDamage,
         Fire,
         Posion,
-        StrDebuff,
-        Friendly,
-        InCreaseCharm
+        InCreaseCharm,
+        BloodSuck,
+        Ice
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -20,13 +21,14 @@ public static class EffectTypeFactory
         {
             EffectType.Damage => new Damage(),
             EffectType.Heal => new Heal(),
-            EffectType.Barrier => new Barrier(),
+            EffectType.BarrierToTarget => new BarrierToTarget(),
+            EffectType.BarrierToSource => new BarrierToSource(),
             EffectType.SelfPDamage => new SelfPDamage(),
             EffectType.Fire => new Fire(),
-            EffectType.Posion => new Posion(),
-            EffectType.StrDebuff => new StrDebuff(),
-            EffectType.Friendly => new Friendly(),
+            EffectType.Posion => new Poison(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
+            EffectType.BloodSuck => new BloodSuck(),
+            EffectType.Ice => new Ice(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

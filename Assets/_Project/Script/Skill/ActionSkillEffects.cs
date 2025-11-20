@@ -1,13 +1,25 @@
+using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
 using static IColorText;
 
+
 public class Damage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        skillContext.DamageToTarget(values[0]);
+        skillContext.SkillAction+=SkillAction;
+        //skillContext.unSubscribe+= skillContext.SkillAction - Action;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(values[0]);;
+        });
+        skillContext.HandleDamage?.Invoke(values[0],skillContext);
     }
 
     public override string ReturnInformation()
@@ -21,7 +33,28 @@ public class Damage : SkillEffect
         else attribute = GetTextColor(TxtColorType.Intelligence) +"마법</color>";
         return $"{colorStart}{values[0]}</color> + {attribute}계수의 데미지를 줍니다";
         */
-        return "";
+        return $"{GetTextColor(TxtColorType.Str)}{values[0]}</color>의 데미지를 줍니다";
+    }
+}
+
+public class BloodSuck : SkillEffect
+{
+    public override void Apply(SkillContext skillContext)
+    {
+        skillContext.HandleDamage += Action;
+    }
+
+    protected override void SkillAction(SkillContext skillContext) { }
+
+    private void Action(float value,SkillContext skillContext)
+    {
+        int finalValue = (int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
+        skillContext.SourceUnit.GetDamage(-finalValue);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"타격 후 {GetTextColor(TxtColorType.Health)}10%</color>만큼 회복합니다";
     }
 }
 
@@ -29,9 +62,14 @@ public class SelfPDamage : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        //float casterHp = skillContext.SourceTile.GetStatContainer().hp._baseValue;
-       // float damage =(int)(casterHp *( (float)values[0]/100f));
-      //  skillContext.SourceTile.GetDamage(damage);
+        skillContext.SkillAction+=SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
+        float damage =(int)(casterHp *( (float)values[0]/100f));
+        skillContext.SourceUnit.GetDamage(damage);
     }
 
     public override string ReturnInformation()
@@ -44,20 +82,37 @@ public class Heal : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-       // skillContext.SourceTile.GetDamage(-values[0]);
+        skillContext.SkillAction+=SkillAction;
+       // skillContext.unSubscribe+=action;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(-values[0]);
+        });
     }
 
     public override string ReturnInformation()
     {
-        return $"<color=green>{values[0]}</color>의 힐을 줍니다";
+        return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
     }
 }
 
-public class Barrier : SkillEffect
+public class BarrierToTarget : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-      // skillContext.SourceTile.GetStatContainer().barrier.AddBaseValue(values[0]);
+       skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().barrier.AddBaseValue(values[0]);
+        });
     }
 
     public override string ReturnInformation()
@@ -66,11 +121,37 @@ public class Barrier : SkillEffect
     }
 }
 
+public class BarrierToSource : SkillEffect
+{
+    public override void Apply(SkillContext skillContext)
+    {
+        skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.GetStatContainer().barrier.AddBaseValue(values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 받습니다";
+    }
+}
+
 public class InCreaseCharm : SkillEffect
 {
     public override void Apply(SkillContext skillContext)
     {
-        //skillContext.Target.GetStatContainer().charmResist.AddBaseValue(values[0]);
+        skillContext.SkillAction += SkillAction;
+    }
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().charmResist.AddBaseValue(values[0]);
+        });
     }
 
     public override string ReturnInformation()
@@ -79,17 +160,5 @@ public class InCreaseCharm : SkillEffect
     }
 }
 
-public class Friendly : SkillEffect
-{
-    public override void Apply(SkillContext skillContext)
-    {
-        //DataManager.Inst.SaveUnit(skillContext.Target, true);
-        //skillContext.Target.GetDamage(9999);
-    }
 
-    public override string ReturnInformation()
-    {
-        return "적군을 아군의 팀으로 편성시킵니다. 다음 라운드부터 적용됩니다.";
-    }
-}
 

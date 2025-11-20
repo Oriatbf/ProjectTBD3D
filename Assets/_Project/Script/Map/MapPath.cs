@@ -40,7 +40,6 @@ namespace Map
         private List<RaycastResult> _raycastResults = new List<RaycastResult>();
         private StagePoint lastStagePoint;
         private int curInterval = 0;
-        private bool isTargeting = false;
         
         private void Awake()
         {
@@ -73,7 +72,6 @@ namespace Map
 
         private void Update()
         {
-
             HandleSpawnTargeting();
         }
         
@@ -115,7 +113,6 @@ namespace Map
         {
             lastStagePoint.UnTargeting();
             lastStagePoint = null;
-            isTargeting = false;
         }
 
 
@@ -143,7 +140,6 @@ namespace Map
         //MainPoint간 사이이 거리에 StagePoint소환
         private void PathPointLoading()
         {
-            StagePoint _stagePoint;
             var startPos = mainPos[0].position;
             startPos.x -= startPosInterval;
             InstanceStagePoint(startPos);

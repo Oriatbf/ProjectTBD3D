@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using VInspector;
 
 public class FactoryManager : Singleton<FactoryManager>
@@ -7,14 +9,15 @@ public class FactoryManager : Singleton<FactoryManager>
      private SheetDataManager sheetDataManager;
      private TileManager tileManager;
      [SerializeField] private Unit playerUnitPrefab,enemyUnitPrefab;
-     [Foldout("Testing")]
-     public EnemyArrangeSO testSO;
-     [EndFoldout]
      
      [Foldout("Debugging")]
      [SerializeField] List<Unit> playerUnits = new List<Unit>();
      [SerializeField] List<Unit> enemyUnits = new List<Unit>();
-     [EndFoldout]
+     [SerializeField] private List<EnemyArrangeSO> enemyArrangeSOs = new List<EnemyArrangeSO>();
+     [EndFoldout] 
+     private EnemyArrangeSO curEnemyArrange;
+     
+     private readonly string SOLabel = "EnemySO";
     
 
      private void Awake()
@@ -22,11 +25,32 @@ public class FactoryManager : Singleton<FactoryManager>
           DIContainer.RegisterService(this);
      }
 
-     private void Start()
+     private async void Start()
      {
           sheetDataManager=DIContainer.ResolveService<SheetDataManager>();
           tileManager=DIContainer.ResolveService<TileManager>();
-          EnemySpawn(testSO);
+          await LoadAllScriptableObjects();
+          var random = Random.Range(0,enemyArrangeSOs.Count);
+          curEnemyArrange = enemyArrangeSOs[random];
+          EnemySpawn(curEnemyArrange);
+     }
+     
+     /// <summary>
+     /// EnemyArrageSO 어드레서블로 불러오기
+     /// </summary>
+     private async UniTask LoadAllScriptableObjects()
+     {
+          try
+          {
+               // 라벨로 모든 ScriptableObject 로드
+               var handle = Addressables.LoadAssetsAsync<EnemyArrangeSO>(SOLabel);
+               var objects = await handle.Task;
+               enemyArrangeSOs.AddRange(objects);
+          }
+          catch (System.Exception e)
+          {
+               Debug.LogError($"ScriptableObject 로드 실패: {e.Message}");
+          }
      }
 
      public void RegisterDeadUnit(Unit _unit)
@@ -59,7 +83,7 @@ public class FactoryManager : Singleton<FactoryManager>
 
           if (enemyUnits.Count == 0)
           {
-               ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(testSO);
+               ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(curEnemyArrange);
                ApplicationManager.Inst.GetModule<TurnController>().MapStage();
                foreach (var unit in playerUnits)
                {

@@ -12,10 +12,7 @@ public class SkillStackInfo
     public Tile sourceTile;
     public Team team;
 
-    public SkillStackInfo ()
-    {
-
-    }
+    public SkillStackInfo () { }
     
     public SkillStackInfo (SkillStackInfo skillStackInfo)
     {
@@ -47,6 +44,8 @@ public class SheetDataManager : Singleton<SheetDataManager>
 
     public List<SkillBase> GetSkillBaseList(List<int> ids)
         => skillList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
-    
+
+    public List<SkillBase> GetRandomSkillBaseList(int count) => skillList.NonDupRandomT(count);
+
 
 }

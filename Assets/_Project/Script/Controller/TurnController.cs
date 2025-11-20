@@ -25,7 +25,7 @@ public class TurnController : BaseController
         var obj = GameObject.Instantiate(canvas);
         if (obj.TryGetComponent(out PlayerTurnEnd playerTurnEnd)) this.playerTurnEnd = playerTurnEnd;
         playerTurnEnd.SetTurnEndAction(PlayerTurnEndAction);
-        playerTurnEnd.SetNextStageAction(() => SceneManager.LoadScene("MapScene"));
+        playerTurnEnd.SetNextStageAction(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
     }
 
     /// <summary>
