@@ -51,19 +51,20 @@ public class LootCanvas : MonoBehaviour
     
     private  void CreateSkillLoot(SkillData.SkillBase skill)
     {
-        Action action;
+        Action action=null;
         var _lootIcon =  Instantiate(lootIcon, lootContent);
-        action = () => Destroy(_lootIcon.gameObject);
-        _lootIcon.Init(skill);
+        action += () => Destroy(_lootIcon.gameObject);
+        //스킬 바꾸는 액션 추가해야함
+        _lootIcon.Init(skill,action);
     }
     
     private void CreateGoldLoot(int goldAmount,string spriteName)
     {
-        Action action;
+        Action action=null;
         var _lootIcon =  Instantiate(lootIcon, lootContent);
-        action = () => Destroy(lootIcon.gameObject);
-        //action += () => infoBarController.AddGold(goldAmount);
-        _lootIcon.Init(spriteName,goldAmount.ToString());
+        action += () => Destroy(_lootIcon.gameObject);
+        action += () => ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(goldAmount);
+        _lootIcon.Init(spriteName,goldAmount.ToString(),action);
     }
 
 

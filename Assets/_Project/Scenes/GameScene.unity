@@ -4583,6 +4583,7 @@ MonoBehaviour:
       stageStates: 
       isMapGenerated: 0
       stageIndex: 0
+    gold: 0
 --- !u!4 &2015289808
 Transform:
   m_ObjectHideFlags: 0

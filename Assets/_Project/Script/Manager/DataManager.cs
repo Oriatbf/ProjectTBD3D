@@ -35,6 +35,7 @@ public class GameData
 {
     public List<UnitSaveData> units = new List<UnitSaveData>();
     public MapData mapData = new MapData();
+    public int gold;
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -146,4 +147,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     }
     public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
     public MapData GetMapData() => Data.mapData;
+    
+    public void SetGold(int value)=>Data.gold = value;
 }

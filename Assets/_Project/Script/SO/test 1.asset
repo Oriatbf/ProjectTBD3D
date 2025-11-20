@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appearAct: 0
   lootDatas:
+  - lootType: 0
+    value: 1
   - lootType: 1
-    value: 0
+    value: 200
   EnemyArranges:
   - unitIndex: 1
     posIndex: {x: 2, y: 1}
