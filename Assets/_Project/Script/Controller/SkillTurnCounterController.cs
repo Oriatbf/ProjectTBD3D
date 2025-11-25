@@ -30,13 +30,13 @@ public class SkillTurnCounterController : BaseController
     {
         base.OnUpdate();
 
-        if (Input.GetKeyDown(KeyCode.F5))
+        if (Input.GetKeyDown(KeyCode.F6))
         {
-            TBDLogger.CommandLog(KeyCode.F5,this);
-            var skillList = turnQueue.ToList();
-            for (int i = 0; i < skillList.Count; i++)
+            TBDLogger.CommandLog(KeyCode.F6,this);
+            var list = turnImageQueue.ToList();
+            for (int i = 0; i < list.Count; i++)
             {
-                Debug.Log($"{skillList[i].skill.GetData().Name} {skillList[i].stackTurn}");
+                Debug.Log($"{list[i]}");
             }
         }
     }
@@ -48,7 +48,8 @@ public class SkillTurnCounterController : BaseController
     {
         List<GameObject> destroyObj = new List<GameObject>();
         int _count = turnImageQueue.Count;
-        
+        int textCount = turnQueue.Count;
+        if(_count != textCount)Debug.LogWarning("turnqueue개수가 서로 맞지 않음");        
         //TurnCounterUI이미지 삭제
         for (int i = 0; i < _count; i++)
         {
@@ -153,6 +154,7 @@ public class SkillTurnCounterController : BaseController
             if (list[i].sourceTile == sourceTile)
             {
                 list.RemoveAt(i);
+                GameObject.Destroy(imageList[i].gameObject);
                 imageList.RemoveAt(i);
             }
         }

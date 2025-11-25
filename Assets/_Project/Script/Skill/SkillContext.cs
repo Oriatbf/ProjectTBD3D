@@ -10,9 +10,7 @@ namespace SkillData
         public Unit SourceUnit { get; set; }
         public Tile TargetTile { get; set; }
         public Unit TargetUnit { get; set; }
-        public Action<SkillContext> SkillAction { get; set; }
-        public Action unSubscribe;
-        public Action<float,SkillContext> HandleDamage { get; set; }
+        
         public int rowCount=0,columnCount=0;
         public TargetType targetType { get; set; }
 

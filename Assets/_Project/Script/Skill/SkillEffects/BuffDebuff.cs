@@ -9,7 +9,8 @@ public enum DecreaseType
 
 public class BuffDebuff
 {
-    public Action<BuffDebuff> buffAction;
+    public Action<BuffDebuff,SkillContext> buffAction;
+    public SkillContext skillContext;
     public Action deActiveAction;
     public Unit targetUnit;
     public Tile TargetTile;
@@ -29,8 +30,9 @@ public class BuffDebuff
         this.decreaseType = decreaseType;
     }
 
-    public void AddBuffAction(Action<BuffDebuff> buffAction)
+    public void AddBuffAction(Action<BuffDebuff,SkillContext> buffAction,SkillContext skillContext)
     {
+        this.skillContext = skillContext;
         this.buffAction += buffAction;
     }
 
@@ -46,7 +48,7 @@ public class BuffDebuff
     /// </summary>
     public void Execute()
     {
-        if(isExist)buffAction?.Invoke(this);
+        if(isExist)buffAction?.Invoke(this,skillContext);
         if( isStackAble())stackCount-=1;
         if(isTurnAble())turnCount-=1;
         if((isTurnAble() &&turnCount <=0) || (isStackAble()&&stackCount <= 0))DeActivate();

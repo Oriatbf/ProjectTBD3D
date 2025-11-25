@@ -150,6 +150,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: baac153ac28d3d34ebae206dc0d552c7
+    m_Address: Assets/_Project/Prefab/UI/Loot/SkillChangeUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c5baa87c1b0bb3a4a8890abedb849bee
     m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterInfoCanvas.prefab
     m_ReadOnly: 0
@@ -177,6 +182,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e7fad9e6470e3d842b519cbb9dd71144
+    m_Address: Assets/_Project/Prefab/UI/Loot/SkillChangeInventory.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

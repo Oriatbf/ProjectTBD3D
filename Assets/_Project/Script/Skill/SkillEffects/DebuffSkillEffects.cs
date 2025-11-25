@@ -1,14 +1,11 @@
+using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
-using static IColorText;
+using static ColorText;
 
 public class Fire : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
-    {
-        skillContext.SkillAction+=SkillAction;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -17,15 +14,15 @@ public class Fire : SkillEffect
             BuffDebuff debuff = new BuffDebuff(
                 unit,"Fire",values[0],DecreaseType.OnlyTurn,values[1]
             );
-            debuff.AddBuffAction(Action);
+            debuff.AddBuffAction(Action,skillContext);
             unit.AddBuff("Fire",debuff);
         });
        
     }
 
-    private void Action(BuffDebuff buffDebuff)
+    private void Action(BuffDebuff buffDebuff, SkillContext skillContext)
     {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext);
     }
 
     public override string ReturnInformation()
@@ -35,11 +32,6 @@ public class Fire : SkillEffect
 }
 public class Poison : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)// 대상별로 독립적인 delegate
-    {
-        skillContext.SkillAction+=SkillAction;
-    }
-
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
@@ -47,15 +39,15 @@ public class Poison : SkillEffect
             BuffDebuff debuff = new BuffDebuff(
                 unit,"Poison",values[0],DecreaseType.OnlyStack,values[0]
             );
-            debuff.AddBuffAction(Action);
+            debuff.AddBuffAction(Action,skillContext);
             unit.AddBuff("Poison",debuff);
         });
        
     }
 
-    private void Action(BuffDebuff buffDebuff)
+    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
     {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount);
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext);
     }
 
     private void Action(Tile target)
@@ -83,11 +75,6 @@ public class Poison : SkillEffect
 
 public class Ice : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction+=SkillAction;
-    }
-
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
@@ -95,12 +82,12 @@ public class Ice : SkillEffect
             BuffDebuff debuff = new BuffDebuff(
                 unit,"Ice",values[0],DecreaseType.None,values[0]
             );
-            debuff.AddBuffAction(Action);
+            debuff.AddBuffAction(Action,skillContext);
             unit.AddBuff("Ice",debuff);
         });
     }
 
-    private void Action(BuffDebuff buffDebuff)
+    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
     {
         if (buffDebuff.stackCount >= 3)
         {

@@ -43,6 +43,6 @@ public class TurnImage : MonoBehaviour
     private void ClickAction()
     {
         var skillContext = skill.GetSkillContext();
-        Debug.Log($"{skillContext.SourceTile.GetUnit().GetUnitData().id}-> {skillContext.TargetTile.GetUnit().GetUnitData().id}");
+        Debug.Log($"{skillContext.SourceTile.GetUnit().GetUnitData().id}");
     }
 }

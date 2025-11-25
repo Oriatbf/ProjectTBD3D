@@ -19,7 +19,7 @@ public class SkillZone : MonoBehaviour
         var list = SheetDataManager.Inst.GetRandomSkillBaseList(skillIcons.Count);
         for (int i = 0; i < list.Count; i++)
         {
-            //skillIcons[i].Init(list[i]);
+            //skillIcons[i].InitUnitSkill(list[i]);
         }
     }
 }

@@ -80,12 +80,12 @@ namespace SkillData
         /// </summary>
         public void SkillAction()
         {
+            Action<SkillContext> skillAction=null;
             foreach (SkillEffect effect in effects)
             {
-                effect.Apply(skillContext);
+                effect.Apply(ref skillAction);
             }
-            skillContext.SkillAction?.Invoke(skillContext);
-            skillContext.unSubscribe?.Invoke();
+            skillAction?.Invoke(skillContext);
         }
 
         public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());

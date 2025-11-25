@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
@@ -17,11 +18,14 @@ public abstract class SkillEffect
     {
         this.values = values;
     }
-    
+
     /// <summary>
     /// 스킬 구현 코드
     /// </summary>
-    public abstract void Apply(SkillContext skillContext); 
+    public virtual void Apply(ref Action<SkillContext> skillAction)
+    {
+        skillAction += SkillAction;
+    }
     protected abstract void SkillAction(SkillContext skillContext);
     
     /// <summary>
@@ -42,7 +46,7 @@ public enum TxtColorType
 /// <summary>
 /// 리치 텍스트 색 받는 코드
 /// </summary>
-public static class IColorText
+public static class ColorText
 {
     public static string GetTextColor(TxtColorType type)
     {

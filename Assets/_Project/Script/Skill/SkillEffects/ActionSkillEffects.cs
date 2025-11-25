@@ -2,24 +2,18 @@ using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
-using static IColorText;
+using static ColorText;
 
 
 public class Damage : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction+=SkillAction;
-        //skillContext.unSubscribe+= skillContext.SkillAction - Action;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
-            unit.GetDamage(values[0]);;
+            unit.GetDamage(values[0],skillContext);
         });
-        skillContext.HandleDamage?.Invoke(values[0],skillContext);
     }
 
     public override string ReturnInformation()
@@ -39,37 +33,31 @@ public class Damage : SkillEffect
 
 public class BloodSuck : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
+    protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.HandleDamage += Action;
+        skillContext.SourceUnit.GetActionContainer().attackAction += Action;
     }
 
-    protected override void SkillAction(SkillContext skillContext) { }
-
-    private void Action(float value,SkillContext skillContext)
+    private void Action(SkillContext skillContext)
     {
-        int finalValue = (int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
-        skillContext.SourceUnit.GetDamage(-finalValue);
+        int finalValue = 1;//(int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
+        skillContext.SourceUnit.GetDamage(-finalValue,skillContext);
     }
 
     public override string ReturnInformation()
     {
-        return $"타격 후 {GetTextColor(TxtColorType.Health)}10%</color>만큼 회복합니다";
+        return $"타격 후 {GetTextColor(TxtColorType.Health)}1</color>만큼 회복합니다";
     }
 }
 
 public class SelfPDamage : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction+=SkillAction;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
         float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
         float damage =(int)(casterHp *( (float)values[0]/100f));
-        skillContext.SourceUnit.GetDamage(damage);
+        skillContext.SourceUnit.GetDamage(damage,skillContext);
     }
 
     public override string ReturnInformation()
@@ -80,17 +68,12 @@ public class SelfPDamage : SkillEffect
 
 public class Heal : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction+=SkillAction;
-       // skillContext.unSubscribe+=action;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
-            unit.GetDamage(-values[0]);
+            unit.GetDamage(-values[0],skillContext);
         });
     }
 
@@ -102,10 +85,6 @@ public class Heal : SkillEffect
 
 public class BarrierToTarget : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-       skillContext.SkillAction += SkillAction;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -123,10 +102,6 @@ public class BarrierToTarget : SkillEffect
 
 public class BarrierToSource : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction += SkillAction;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -141,10 +116,6 @@ public class BarrierToSource : SkillEffect
 
 public class InCreaseCharm : SkillEffect
 {
-    public override void Apply(SkillContext skillContext)
-    {
-        skillContext.SkillAction += SkillAction;
-    }
 
     protected override void SkillAction(SkillContext skillContext)
     {

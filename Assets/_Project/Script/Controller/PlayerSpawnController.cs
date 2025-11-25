@@ -24,7 +24,7 @@ public class PlayerSpawnController : BaseController
     {
         base.OnInitialize();
         _camera = Camera.main;
-        var datas = DataManager.Inst.GetUnits();
+        var datas = DataManager.Inst.GetAllUnits();
         foreach (var data in datas)
             unitSaveDatas.Add(data.constId,data);
         _pointerEventData = new PointerEventData(EventSystem.current);

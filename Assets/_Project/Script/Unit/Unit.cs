@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VInspector;
@@ -18,6 +19,7 @@ public class Unit : MonoBehaviour
     private Team team; 
     private Tile tile; 
     private Animator animator;
+    private ActionContainer actionContainer;
     private UnitSaveData unitData;
     private UnitController unitController;
     private HealthContent healthContent;
@@ -30,6 +32,7 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        actionContainer = new ActionContainer();
         unitController = GetComponent<UnitController>();
     }
     private void Start()
@@ -110,6 +113,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
+    public ActionContainer GetActionContainer() => actionContainer;
     public Animator GetAnimator() => animator;
     
     public UnitSaveData GetUnitData() => unitData;
@@ -127,7 +131,7 @@ public class Unit : MonoBehaviour
         }
        
     }
-    public void GetDamage(float damage)
+    public void GetDamage(float damage,SkillContext skillContext)
     {
         if(isDead) return;
         Debug.Log($"{damage} 만큼 데미지를 받음");
@@ -137,10 +141,13 @@ public class Unit : MonoBehaviour
             _statContainer.barrier.AddBaseValue(-damage);
             if(remainDamage > 0)
                 _statContainer.hp.AddBaseValue( -remainDamage);
+            skillContext.SourceUnit.GetActionContainer().attackAction?.Invoke(skillContext);
+            actionContainer.hurtAction?.Invoke(skillContext);
         }
         else
         {
             _statContainer.hp.AddBaseValue( -damage);
+            actionContainer.healAction?.Invoke(skillContext);
         }
         ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }
@@ -164,6 +171,7 @@ public class Unit : MonoBehaviour
         PoolManager.Inst.Despawn(healthContent);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
         ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllBuffs(tile);
+        DataManager.Inst.DeleteUnit(unitData.constId);
         Destroy(gameObject);
     }
 }

@@ -13,7 +13,8 @@ public static class EffectTypeFactory
         Posion,
         InCreaseCharm,
         BloodSuck,
-        Ice
+        Ice,
+        Counter
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -29,6 +30,7 @@ public static class EffectTypeFactory
             EffectType.InCreaseCharm => new InCreaseCharm(),
             EffectType.BloodSuck => new BloodSuck(),
             EffectType.Ice => new Ice(),
+            EffectType.Counter => new Counter(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

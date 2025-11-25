@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Map;
 using UnityEngine;
 
@@ -106,7 +107,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data = new GameData();
     }
     #endregion
-    public List<UnitSaveData> GetUnits() => Data.units;
+    public List<UnitSaveData> GetAllUnits() => Data.units;
+    public UnitSaveData GetUnit(int constID)=>Data.units.FirstOrDefault(u => u.constId == constID);
 
     /// <summary>
     /// 살아남은 플레이어 유닛 저장
@@ -139,14 +141,35 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data.units.Add(newUnitSaveData);
     }
 
+    public void DeleteUnit(int constID)
+    {
+        var unit = Data.units.FirstOrDefault(u => u.constId == constID);
+        if (unit != null)
+        {
+            Data.units.Remove(unit);
+        }
+    }
+
     public void SaveStageStates(List<MapState> states)
     {
         Data.mapData.stageStates = states;
         Data.mapData.isMapGenerated = true;
         JsonSave();
     }
+
+    public void SaveUnitSkills(int constID,List<int> skillList)
+    {
+        var unit = Data.units.FirstOrDefault(u=>u.constId==constID);
+        unit.bringSkills = skillList;
+        JsonSave();
+    }
+    
     public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
     public MapData GetMapData() => Data.mapData;
     
-    public void SetGold(int value)=>Data.gold = value;
+    public void SetGold(int value)
+    {
+        Data.gold = value;
+        JsonSave();
+    }
 }

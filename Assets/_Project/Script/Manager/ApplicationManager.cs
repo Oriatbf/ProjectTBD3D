@@ -20,6 +20,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(BuffStackController), new BuffStackController());
         _modulesByType.Add(typeof(BuffInfoController), new BuffInfoController());
         _modulesByType.Add(typeof(TopInfoController), new TopInfoController());
+        _modulesByType.Add(typeof(SkillChangeController), new SkillChangeController());
     }
     private void Start()
     {

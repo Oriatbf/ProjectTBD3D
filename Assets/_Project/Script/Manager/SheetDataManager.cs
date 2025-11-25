@@ -21,6 +21,14 @@ public class SkillStackInfo
         sourceTile = skillStackInfo.sourceTile;
         team = skillStackInfo.team;
     }
+
+    public SkillStackInfo(SkillBase skillBase)
+    {
+        skill = skillBase.Clone();
+        stackTurn = skill.GetData().RequireTurn;
+        sourceTile = null;
+        team = Team.PlayerTeam;
+    }
 }
 
 public class SheetDataManager : Singleton<SheetDataManager>

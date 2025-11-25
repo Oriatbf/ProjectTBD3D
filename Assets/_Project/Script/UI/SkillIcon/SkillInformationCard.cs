@@ -21,7 +21,7 @@ public class SkillInformationCard : MonoBehaviour
         var skill = skillStackInfo.skill;
          nameTxt.text = skill.GetData().Name;
        // string attribute = skillBase._data.SkillAttribute == SkillAttribute.Physical 
-           // ? IColorText.GetTextColor(TxtColorType.Str) +"물리" :  IColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
+           // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
       //  arrtibuteTxt.text = attribute;
         descriptionTxt.text = skill.GetSkillDescription();
         SetPos(targetPos);
