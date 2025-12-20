@@ -11,17 +11,18 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private List<int> bringSkills = new List<int>();
-  
     [EndFoldout]
     
     private Dictionary<string,BuffDebuff> buffDebuffs = new Dictionary<string,BuffDebuff>();
     
     private Team team; 
     private Tile tile; 
+    
     private Animator animator;
     private ActionContainer actionContainer;
     private UnitSaveData unitData;
     private UnitController unitController;
+    
     private HealthContent healthContent;
     string animatorPath = "Assets/_Project/Art/Animator/";
     
@@ -50,7 +51,6 @@ public class Unit : MonoBehaviour
         this.animator.runtimeAnimatorController = animator;
         _statContainer = unitData.statContainer;
         bringSkills = unitData.bringSkills;
-        unitController.Init(unitData);
         this.unitData = unitData;
         this.team = team;
     }
@@ -109,7 +109,12 @@ public class Unit : MonoBehaviour
       
     }
     
-    public List<int> GetSkillList()=>bringSkills;
+    public List<int> GetSkillList()
+    {
+        if(bringSkills.Count <= 0 || bringSkills==null)Debug.LogError("NoSkills In Unit");
+        return bringSkills;
+    }
+
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
@@ -117,6 +122,12 @@ public class Unit : MonoBehaviour
     public Animator GetAnimator() => animator;
     
     public UnitSaveData GetUnitData() => unitData;
+
+    public void SetBringSkills(List<int> skills)
+    {
+        bringSkills = skills;
+       // unitController.OverWriteBringSkills(bringSkills);
+    }
 
     public void AddBuff(string key,BuffDebuff buffDebuff)
     {

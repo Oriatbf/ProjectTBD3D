@@ -1,7 +1,7 @@
 using SkillData;
 using UnityEngine;
 
-public class ChangeSkillIcon : SkillIconBase
+public class ChangeIcon : IconBase
 {
     private SkillBase _skillBase;
     public void Init(SkillBase skillBase)

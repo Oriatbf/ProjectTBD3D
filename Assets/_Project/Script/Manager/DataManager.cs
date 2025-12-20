@@ -74,9 +74,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
                 Data.units.Add(new UnitSaveData()
                 {
                     constId = RandomID.GetConstID(),
-                    id = 0,
-                    bringSkills = UnitData.Data.DataList[0].BringSkill,
-                    statContainer = new StatContainer(UnitData.Data.DataList[0])
+                    id = 1,
+                    bringSkills = UnitData.Data.DataList[1].BringSkill,
+                    statContainer = new StatContainer(UnitData.Data.DataList[1])
                 });
             }
         
@@ -107,8 +107,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data = new GameData();
     }
     #endregion
-    public List<UnitSaveData> GetAllUnits() => Data.units;
-    public UnitSaveData GetUnit(int constID)=>Data.units.FirstOrDefault(u => u.constId == constID);
+    public List<UnitSaveData> GetAllSavedUnits() => Data.units;
+    public UnitSaveData GetSavedUnit(int constID)=>Data.units.FirstOrDefault(u => u.constId == constID);
 
     /// <summary>
     /// 살아남은 플레이어 유닛 저장
@@ -141,6 +141,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data.units.Add(newUnitSaveData);
     }
 
+    /// <summary>
+    /// 저장된 유닛 삭제
+    /// </summary>
     public void DeleteUnit(int constID)
     {
         var unit = Data.units.FirstOrDefault(u => u.constId == constID);
@@ -149,7 +152,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             Data.units.Remove(unit);
         }
     }
-
+    /// <summary>
+    /// 맵 상태 저장
+    /// </summary>
     public void SaveStageStates(List<MapState> states)
     {
         Data.mapData.stageStates = states;
@@ -157,6 +162,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         JsonSave();
     }
 
+    /// <summary>
+    /// 유닛 스킬 덮어쓰기
+    /// </summary>
     public void SaveUnitSkills(int constID,List<int> skillList)
     {
         var unit = Data.units.FirstOrDefault(u=>u.constId==constID);

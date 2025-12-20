@@ -3,12 +3,14 @@ using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class SkillInformationController : BaseController
+public class InformationController : BaseController
 {
     private readonly string CanvasPath = "Assets/_Project/Prefab/UI/Skill/SkillInfoCanvas.prefab";
-    private readonly string CardPath = "Assets/_Project/Prefab/UI/Skill/SkillInfomationCard.prefab";
+    private readonly string SkillCardPath = "Assets/_Project/Prefab/UI/Skill/SkillInfomationCard.prefab";
+    private readonly string UnitCardPath = "Assets/_Project/Prefab/UI/Skill/UnitInfomationCard.prefab";
     private Panel panel;
-    private SkillInformationCard cardInfo;
+    private SkillInformationCard skillCardInfo;
+    private UnitInformationCard unitCardInfo;
     private bool isShow = false;
     public override void OnInitialize()
     {
@@ -24,20 +26,31 @@ public class SkillInformationController : BaseController
         if (_panel != null)
         {
             panel = _panel;
-            var card = await Addressables.LoadAssetAsync<GameObject>(CardPath);
+            var card = await Addressables.LoadAssetAsync<GameObject>(SkillCardPath);
             var cardTrans =  GameObject.Instantiate(card,_panel.transform).transform;
-            if (cardTrans.TryGetComponent(out SkillInformationCard cardInfo))
+            if (cardTrans.TryGetComponent(out SkillInformationCard skillCardInfo))
             {
-                this.cardInfo = cardInfo;
+                this.skillCardInfo = skillCardInfo;
             }
+            
+            var unitCard = await Addressables.LoadAssetAsync<GameObject>(UnitCardPath);
+            var unitCardTrans = GameObject.Instantiate(unitCard,_panel.transform).transform;
+            if(unitCardTrans.TryGetComponent(out UnitInformationCard unitCardInfo))
+                this.unitCardInfo = unitCardInfo;
         }
 
     }
 
-    public void InitData(SkillBase skillBase,Vector3 targetPos)
+    public void InitSkillData(SkillBase skillBase,Vector3 targetPos)
     {
-        cardInfo.InitData(skillBase, targetPos);
+        skillCardInfo.InitData(skillBase, targetPos);
         Show();
+    }
+
+    public void InitUnitData(UnitData.Data unitData, Vector3 targetPos)
+    {
+        unitCardInfo.InitData(unitData, targetPos);
+        //Show();
     }
     
     public void Show()

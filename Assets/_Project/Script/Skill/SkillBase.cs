@@ -30,17 +30,27 @@ namespace SkillData
         public void InitSource(Tile owner) => skillContext.InitSourceTile(owner);
         public SkillContext GetSkillContext() => skillContext;
         public Data GetData()=>_data;
-        
+
         /// <summary>
         /// Data를 통해서 SkillBase 생성
         /// </summary>
-        public SkillBase(Data data)
+        public SkillBase(SkillData.Data data)
         {
             _data = data;
             effects = new List<SkillEffect>();
             FindSkillEffects(_data.EffectData);
-            skillContext.Init(data.TargetType,data.RowCount,data.ColumnCount);
+            skillContext.Init(data.TargetType, data.RowCount, data.ColumnCount);
         }
+
+        public SkillBase(SkillBase originalSkillBase)
+        {
+            _data = originalSkillBase._data;
+            effects = new List<SkillEffect>();
+            FindSkillEffects(_data.EffectData);
+            skillContext = new SkillContext(originalSkillBase.skillContext);
+        }
+        
+        
 
         /// <summary>
         /// EffectData split해서 리스트에 저장
@@ -95,7 +105,7 @@ namespace SkillData
         /// </summary>
         public SkillBase Clone()
         {
-            SkillBase clone = new SkillBase(_data);
+            SkillBase clone = new SkillBase(this);
             return clone;
         }
 

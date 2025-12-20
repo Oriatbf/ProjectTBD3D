@@ -5,7 +5,8 @@ public static class EffectTypeFactory
     public enum EffectType
     {
         Damage,
-        Heal,
+        HealToTarget,
+        HealToSource,
         BarrierToTarget,
         BarrierToSource,
         SelfPDamage,
@@ -14,14 +15,16 @@ public static class EffectTypeFactory
         InCreaseCharm,
         BloodSuck,
         Ice,
-        Counter
+        Counter,
+        SkillChange
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
         return effectType switch
         {
             EffectType.Damage => new Damage(),
-            EffectType.Heal => new Heal(),
+            EffectType.HealToTarget => new HealToTarget(),
+            EffectType.HealToSource => new HealToSource(),
             EffectType.BarrierToTarget => new BarrierToTarget(),
             EffectType.BarrierToSource => new BarrierToSource(),
             EffectType.SelfPDamage => new SelfPDamage(),
@@ -31,6 +34,7 @@ public static class EffectTypeFactory
             EffectType.BloodSuck => new BloodSuck(),
             EffectType.Ice => new Ice(),
             EffectType.Counter => new Counter(),
+            EffectType.SkillChange => new SkillChange(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

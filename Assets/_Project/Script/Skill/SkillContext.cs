@@ -21,10 +21,25 @@ namespace SkillData
             this.columnCount = columnCount;
         }
 
+        public SkillContext() { }
+
+        public SkillContext(SkillContext originalSkillContext)
+        {
+            SourceTile = originalSkillContext.SourceTile;
+            SourceUnit = originalSkillContext.SourceUnit;
+            TargetTile = originalSkillContext.TargetTile;
+            TargetUnit = originalSkillContext.TargetUnit;
+            rowCount = originalSkillContext.rowCount;
+            columnCount = originalSkillContext.columnCount;
+            targetType = originalSkillContext.targetType;
+        }
+
         public void InitSourceTile(Tile sourceTile)
         {
             this.SourceTile = sourceTile;
+            if(sourceTile.GetUnit() == null)Debug.LogError("sourceUnit is null");
             SourceUnit = sourceTile.GetUnit();
+            
         }
 
         public void InitTargetTile(Tile targetTile)

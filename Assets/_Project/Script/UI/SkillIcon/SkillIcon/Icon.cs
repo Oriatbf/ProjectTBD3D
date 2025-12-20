@@ -5,44 +5,38 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SkillIcon : SkillIconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
+public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
 {
-    protected SkillStackInfo skillStackInfo;
+    protected SkillBase skillBase;
    
     
 
-    public virtual void Init(SkillStackInfo skillStackInfo)
+    public virtual void Init(SkillBase skillBase)
     {
-        this.skillStackInfo = skillStackInfo;
-        var skill = skillStackInfo.skill;
-        if (icon != null) SetSprite(skill.GetData().SpriteName);
+        this.skillBase = skillBase;
+        if (icon != null) SetSprite(skillBase.GetData().SpriteName);
     }
-
-    public void Init(SkillBase skillBase)
-    {
-        var skill = skillStackInfo.skill;
-        if (icon != null) SetSprite(skill.GetData().SpriteName);
-    }
+    
 
   
-    public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
+    public SkillBase GetSkillBase() => skillBase;
     
     public void OnPointerMove(PointerEventData eventData)
     {
         //if(skill ==null) return;
-        ApplicationManager.Inst.GetModule<SkillInformationController>().InitData(skillStackInfo,Input.mousePosition);
+        ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(skillBase,Input.mousePosition);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         //if(skill ==null) return;
-        ApplicationManager.Inst.GetModule<SkillInformationController>().Hide();
+        ApplicationManager.Inst.GetModule<InformationController>().Hide();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //if(skill ==null) return;
-        ApplicationManager.Inst.GetModule<SkillInformationController>().Show();
+        ApplicationManager.Inst.GetModule<InformationController>().Show();
     }
 
 }

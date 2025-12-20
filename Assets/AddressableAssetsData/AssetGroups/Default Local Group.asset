@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1cb6dc90bfb4eff4b9bddf8e1a2ec16d
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Samurai.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e7faa63a5c481842b65ecb547b4a549
     m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/PlayerSpawnCanvas.prefab
     m_ReadOnly: 0
@@ -75,6 +80,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3c441914941430c478ef1b68328615d5
+    m_Address: Assets/_Project/Prefab/UI/Skill/UnitInfomationCard.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ebe15f6a5c2b6a4aa857e40039305d5
     m_Address: Assets/_Project/Prefab/UI/Buff/BuffInfoCanvas.prefab
     m_ReadOnly: 0
@@ -102,6 +112,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 66a414e70e19195448ce89948a125b3d
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Barrior.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 69f4b9dad9e40c94eae90004d488d234
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Skeleton.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -137,6 +152,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: adbd713a1cc1ad14595a842328aca7b5
     m_Address: Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b106b9dccccc66f4b845a7777dfbec29
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Warrior.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

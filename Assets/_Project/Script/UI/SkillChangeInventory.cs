@@ -7,7 +7,7 @@ public class SkillChangeInventory : MonoBehaviour
 {
     [SerializeField] private Transform skillContent;
     [SerializeField] private Panel panel;
-    [SerializeField] private List<ChangeSkillIcon> skillIcons = new List<ChangeSkillIcon>();
+    [SerializeField] private List<ChangeIcon> skillIcons = new List<ChangeIcon>();
     private List<int> curSkillIds = new List<int>();
     
     private PointerEventData _pointerEventData;
@@ -16,14 +16,14 @@ public class SkillChangeInventory : MonoBehaviour
     private int constId;
     private bool isTargeting = false;
     private bool isActive = false;
-    private ChangeSkillIcon curSkillIcon,targetSkillIcon;
+    private ChangeIcon curIcon,targetIcon;
     
     private void Awake()
     {
         _pointerEventData = new PointerEventData(EventSystem.current);
         foreach (Transform icon in skillContent)
         {
-            skillIcons.Add(icon.GetComponent<ChangeSkillIcon>());
+            skillIcons.Add(icon.GetComponent<ChangeIcon>());
         }
     }
 
@@ -65,9 +65,9 @@ public class SkillChangeInventory : MonoBehaviour
 
         foreach (var result in _raycastResults)
         {
-            if (result.gameObject.TryGetComponent(out ChangeSkillIcon skillIcon))
+            if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
             {
-                curSkillIcon = skillIcon;
+                curIcon = skillIcon;
                 isTargeting = true;
                 return;
             }
@@ -93,9 +93,9 @@ public class SkillChangeInventory : MonoBehaviour
 
             foreach (var result in _raycastResults)
             {
-                if (result.gameObject.TryGetComponent(out ChangeSkillIcon skillIcon))
+                if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
                 {
-                    targetSkillIcon = skillIcon;
+                    targetIcon = skillIcon;
                     ChangeSkill();
                     isTargeting = false;
                     return;
@@ -107,10 +107,10 @@ public class SkillChangeInventory : MonoBehaviour
 
     private void ChangeSkill()
     {
-        var curSkillBase = curSkillIcon.GetSkillBase();
-        var targetSkillBase = targetSkillIcon.GetSkillBase();
-        targetSkillIcon.Init(curSkillBase);
-        curSkillIcon.Init(targetSkillBase);
+        var curSkillBase = curIcon.GetSkillBase();
+        var targetSkillBase = targetIcon.GetSkillBase();
+        targetIcon.Init(curSkillBase);
+        curIcon.Init(targetSkillBase);
         SaveUnitSkills();
         
         

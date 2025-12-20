@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/MapScene.unity
     guid: 5b78684087612ca49bd2a2fd172d2763
+  - enabled: 1
+    path: Assets/_Project/Scenes/SkillTest.unity
+    guid: 90e3d573c47dbc34dab1be006d5b623e
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: b96ca63849a1638489855399f7f2d1ef, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

@@ -1,0 +1,56 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+public class CameraController : BaseController
+{
+    private Camera _camera;
+    private Vector3 originalPos;
+    private Quaternion originalRot;
+
+    private readonly float clampRotY = 2.5f;
+    private readonly float dur = 0.35f;
+    public override void OnInitialize()
+    {
+        base.OnInitialize();
+        _camera = Camera.main;
+        originalPos = _camera.transform.position;
+        originalRot = _camera.transform.rotation;
+    }
+
+    public async  UniTask TargetLook(Unit unit)
+    {
+        _camera.DOKill();
+       
+        Vector3 direction = unit.transform.position - originalPos;
+        direction.y = 0;
+        
+        float targetYAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        
+        float originalYAngle = Mathf.DeltaAngle(0, originalRot.eulerAngles.y);
+        
+        float deltaY = Mathf.DeltaAngle(originalYAngle, targetYAngle);
+        // deltaY의 절댓값을 0~1로 정규화 (예: 최대 8도 기준)
+        float normalizedDelta = Mathf.Clamp01(Mathf.Abs(deltaY) / 8f);
+        float cRot = Mathf.Lerp(0, clampRotY, normalizedDelta);
+    
+        deltaY = Mathf.Clamp(deltaY, -cRot, cRot);
+
+        Vector3 euler = originalRot.eulerAngles;
+        euler.y = originalYAngle + deltaY;
+
+         await _camera.transform.DORotate(euler, dur).SetEase(Ease.OutQuad).ToUniTask();
+         await UniTask.WaitForSeconds(.8f);
+    }
+
+    public void OriginLook()
+    {
+        _camera.transform.DORotateQuaternion(originalRot, dur);
+    }
+
+    private void Rotate()
+    {
+        
+    }
+}

@@ -4,13 +4,13 @@ using UnityEngine;
 public class SkillZone : MonoBehaviour
 { 
     [SerializeField] private Transform content;
-    private List<SkillIcon> skillIcons = new List<SkillIcon>();
+    private List<Icon> skillIcons = new List<Icon>();
 
     private void Awake()
     {
         foreach (Transform child in content)
         {
-            skillIcons.Add(child.GetComponent<SkillIcon>());
+            skillIcons.Add(child.GetComponent<Icon>());
         }
     }
 

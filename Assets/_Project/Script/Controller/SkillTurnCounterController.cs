@@ -71,12 +71,14 @@ public class SkillTurnCounterController : BaseController
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
             skill.SkillAction();
-            await UniTask.WaitForSeconds(0.5f); //한 턴 한 턴을 보여주기 위해 딜레이
+            Debug.Log(skill.GetSkillContext().SourceUnit);
+            await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
             //몬스터 위에 스킬 스택되어있던거 삭제
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
         //한 턴에 해당하는 UI gameObject 삭제
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
+        ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }

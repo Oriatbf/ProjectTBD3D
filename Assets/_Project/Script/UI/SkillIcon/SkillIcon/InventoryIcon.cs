@@ -3,16 +3,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class InventorySkillIcon : SkillIcon
+public class InventoryIcon : Icon
 {
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI turnTxt;
 
-    public override void Init(SkillStackInfo skillStackInfo)
+    public void Init(SkillBase skillBase)
     {
-        base.Init(skillStackInfo);
-        var skill = skillStackInfo.skill;
-        nameTxt.text = skill.GetData().Name;
-        turnTxt.text = "필요턴 : "+skill.GetData().RequireTurn;
+        base.Init(skillBase);
+        
+        nameTxt.text = skillBase.GetData().Name;
+        turnTxt.text = "필요턴 : "+skillBase.GetData().RequireTurn;
     }
 }

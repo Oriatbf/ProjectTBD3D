@@ -14,11 +14,9 @@ public class SkillInformationCard : MonoBehaviour
     [SerializeField] private Image icon;
     
 
-    public void InitData(SkillStackInfo skillStackInfo,Vector3 targetPos)
+    public void InitData(SkillBase skillBase,Vector3 targetPos)
     {
-        if(skillStackInfo == null)return;
-        if(skillStackInfo.skill==null)return;
-        var skill = skillStackInfo.skill;
+        var skill = skillBase;
          nameTxt.text = skill.GetData().Name;
        // string attribute = skillBase._data.SkillAttribute == SkillAttribute.Physical 
            // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";

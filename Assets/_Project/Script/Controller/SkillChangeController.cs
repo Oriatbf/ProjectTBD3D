@@ -31,7 +31,7 @@ public class SkillChangeController : BaseController
 
     public void InitUnitSkill(int constId)
     {
-        var targetUnit = DataManager.Inst.GetAllUnits().FirstOrDefault(u=>u.constId == constId);
+        var targetUnit = DataManager.Inst.GetAllSavedUnits().FirstOrDefault(u=>u.constId == constId);
         skillChangeInventory.Init(constId,targetUnit.bringSkills);
         skillChangeInventory.Show();
     }

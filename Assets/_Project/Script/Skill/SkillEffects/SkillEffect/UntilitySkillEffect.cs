@@ -22,3 +22,16 @@ public class Counter : SkillEffect
         return $"반격자세를 취합니다. 피격 시 {ColorText.GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 고정 피해를 입힙니다";
     }
 }
+
+public class SkillChange : SkillEffect
+{
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.SetBringSkills(values);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"체인소모드로 변경합니다.";
+    }
+}

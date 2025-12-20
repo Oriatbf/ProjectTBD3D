@@ -6,8 +6,6 @@ using VInspector;
 
 public class FactoryManager : Singleton<FactoryManager>
 {
-     private SheetDataManager sheetDataManager;
-     private TileManager tileManager;
      [SerializeField] private Unit playerUnitPrefab,enemyUnitPrefab;
      
      [Foldout("Debugging")]
@@ -18,17 +16,10 @@ public class FactoryManager : Singleton<FactoryManager>
      private EnemyArrangeSO curEnemyArrange;
      
      private readonly string SOLabel = "EnemySO";
-    
-
-     private void Awake()
-     {
-          DIContainer.RegisterService(this);
-     }
+     
 
      private async void Start()
      {
-          sheetDataManager=DIContainer.ResolveService<SheetDataManager>();
-          tileManager=DIContainer.ResolveService<TileManager>();
           await LoadAllScriptableObjects();
           var random = Random.Range(0,enemyArrangeSOs.Count);
           curEnemyArrange = enemyArrangeSOs[random];
@@ -107,16 +98,7 @@ public class FactoryManager : Singleton<FactoryManager>
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
      }
-
-     private void Update()
-     {
-          if (Input.GetKeyDown(KeyCode.P))
-          {
-               TBDLogger.CommandLog(KeyCode.P, this);
-               GameStart();
-          }
-     }
-
+     
      /// <summary>
      /// id에 기반해 아군 유닛 소환
      /// </summary>
@@ -139,7 +121,7 @@ public class FactoryManager : Singleton<FactoryManager>
           {
                var _unit = CreateUnit(enemyArrange.unitIndex,Team.EnemyTeam);
                enemyUnits.Add(_unit);
-               var _tile = tileManager.GetEnemyTile(enemyArrange.posIndex);
+               var _tile = TileManager.Inst.GetEnemyTile(enemyArrange.posIndex);
                _unit.SetTile(_tile);
                _tile.SetUnit(_unit);
                _unit.transform.position = _tile.GetPos();
@@ -151,7 +133,7 @@ public class FactoryManager : Singleton<FactoryManager>
      /// </summary>
      private Unit CreateUnit(int id,Team team)
      {
-          var unitData = sheetDataManager.GetUnitData(id);
+          var unitData = SheetDataManager.Inst.GetUnitData(id);
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
           var prefab = team == Team.PlayerTeam ? playerUnitPrefab : enemyUnitPrefab;
           Unit unit = Instantiate(prefab);
@@ -171,5 +153,7 @@ public class FactoryManager : Singleton<FactoryManager>
           unit.Init(unitData,animatorName,team);
           return unit;
      }
+     
+     public List<Unit> GetPlayerUnits()=>playerUnits;
 }
 

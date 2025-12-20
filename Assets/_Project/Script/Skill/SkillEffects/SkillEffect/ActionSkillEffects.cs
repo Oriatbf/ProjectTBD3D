@@ -66,7 +66,7 @@ public class SelfPDamage : SkillEffect
     }
 }
 
-public class Heal : SkillEffect
+public class HealToTarget : SkillEffect
 {
 
     protected override void SkillAction(SkillContext skillContext)
@@ -82,6 +82,20 @@ public class Heal : SkillEffect
         return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
     }
 }
+public class HealToSource : SkillEffect
+{
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+         skillContext.SourceUnit.GetDamage(-values[0],skillContext);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
+    }
+}
+
 
 public class BarrierToTarget : SkillEffect
 {

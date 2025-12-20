@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 7542563963628649874}
   - component: {fileID: 3346132368871562389}
   m_Layer: 0
-  m_Name: ItemZone
+  m_Name: UnitZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1199,7 +1199,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4154676409603693985}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1207,9 +1207,9 @@ RectTransform:
   - {fileID: 5297640178004397857}
   - {fileID: 4991174461344508943}
   - {fileID: 5396358881819944003}
+  - {fileID: 5888426267294426088}
   - {fileID: 2351497127320968539}
   - {fileID: 3428808839726092691}
-  - {fileID: 5888426267294426088}
   - {fileID: 4137731611310407789}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1321,7 +1321,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC544\uC774\uD15C"
+  m_text: "\uC720\uB2DB"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8718c8bffe21e9f43a8f2d23557a77bc, type: 2}
   m_sharedMaterial: {fileID: -5058080568250043072, guid: 8718c8bffe21e9f43a8f2d23557a77bc, type: 2}
@@ -1513,12 +1513,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2351497127320968539}
   m_Layer: 0
-  m_Name: ItemZone
+  m_Name: UnitZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2351497127320968539
 RectTransform:
   m_ObjectHideFlags: 0

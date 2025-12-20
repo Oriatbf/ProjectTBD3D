@@ -8,29 +8,23 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : UnitController
 {
-    private float maxTurn = 0;
+    private float maxTurn = .5f;
     float curTurn = 0;
-
-    public override void Init(UnitSaveData unitData)
-    {
-        base.Init(unitData);
-        maxTurn = unitData.statContainer.turnGauge._maxValue;
-        curTurn = 0;
-    }
-
+    
     /// <summary>
     /// 스킬 등록
     /// </summary>
     public async UniTask  RegisterSKill()
     {
+        Debug.Log("RegisterSKill");
         var _skillStackInfoList = FindingSkill();
         foreach (var skillStackInfo in _skillStackInfoList)
         {
             var skill = skillStackInfo.skill;
             skill.InitSource(curTile);
             FindingTargetTile(skillStackInfo.skill);
-            applicationManager.GetModule<SkillStackController>().StackSkill(skillStackInfo);
-            applicationManager.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+            ApplicationManager.Inst.GetModule<SkillStackController>().StackSkill(skillStackInfo);
+            ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
         }
         
@@ -41,7 +35,8 @@ public class EnemyController : UnitController
     private  List<SkillStackInfo>  FindingSkill()
     {
         List<SkillStackInfo> resultSkillStackInfo = new List<SkillStackInfo>();
-        var skillList = sheetDataManager.GetSkillBaseList(unitData.bringSkills);
+        if(SheetDataManager.Inst == null ||_unit.GetSkillList()==null )Debug.LogError("no");
+        var skillList = SheetDataManager.Inst.GetSkillBaseList(_unit.GetSkillList());
         float minReqTurn = skillList[0].GetData().RequireTurn;
         //최소 요구 턴 찾기
         foreach (var skillBase in skillList)

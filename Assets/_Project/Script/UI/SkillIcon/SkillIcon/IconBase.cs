@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-public class SkillIconBase : MonoBehaviour
+public class IconBase : MonoBehaviour
 {
     [SerializeField] protected Image icon;
     private readonly string iconPath = "Assets/_Project/Art/Icons/UsingIcon/";

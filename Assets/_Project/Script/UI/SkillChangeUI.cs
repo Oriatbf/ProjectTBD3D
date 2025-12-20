@@ -1,15 +1,16 @@
 using SkillData;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class SkillChangeUI : MonoBehaviour
 {
     [SerializeField] private Panel panel;
-    [SerializeField] private ChangeSkillIcon changeSkillIcon;
+    [FormerlySerializedAs("changeSkillIcon")] [SerializeField] private ChangeIcon changeIcon;
     private bool isShow = false;
     
     public void Init(SkillBase skillBase)
     {
-        changeSkillIcon.Init(skillBase);
+        changeIcon.Init(skillBase);
     }
 
     public void Show()
