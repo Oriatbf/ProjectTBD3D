@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -33,9 +34,9 @@ public class SkillInformationController : BaseController
 
     }
 
-    public void InitData(SkillStackInfo skillStackInfo,Vector3 targetPos)
+    public void InitData(SkillBase skillBase,Vector3 targetPos)
     {
-        cardInfo.InitData(skillStackInfo, targetPos);
+        cardInfo.InitData(skillBase, targetPos);
         Show();
     }
     
