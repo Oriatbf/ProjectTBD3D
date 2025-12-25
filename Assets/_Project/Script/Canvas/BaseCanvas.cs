@@ -16,6 +16,8 @@ public class BaseCanvas : MonoBehaviour
     {
         canvas = GetComponent<Canvas>();
         canvasGroup = GetComponent<CanvasGroup>();
+        if(canvasGroup == null )Debug.LogError("canvasGroup is null");
+        if(canvas == null )Debug.LogError("canvas is null");
         ChangeState(false);
     }
 

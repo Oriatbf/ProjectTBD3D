@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,6 +8,9 @@ public class Stat
 {
     public delegate void OnValueChangeDelegate(float value);
     public event OnValueChangeDelegate OnValueChanged;
+    public StatModifierCollection _addModifiers;
+    public StatModifierCollection _multiplyModifiers;
+    
     public float _baseValue; //기본 값
     public float _originalValue; //원본 값
     public float _maxValue; // 최대값
@@ -28,7 +32,9 @@ public class Stat
             _baseValue = baseValue,
             _isInfiniteValue = isInfinite,
             _originalValue = baseValue,
-            _maxValue = maxValue
+            _maxValue = maxValue,
+            _addModifiers = new StatModifierCollection(4),
+            _multiplyModifiers = new StatModifierCollection(4)
         };
         return stat;
     }
@@ -42,6 +48,29 @@ public class Stat
     public void SetBaseValue(float value)
     {
         _baseValue = value;
+        ChangeValueHandler();
+    }
+    
+    public float FinalValue()
+    {
+        float _finalValue = _baseValue;
+        _finalValue += _addModifiers.GetSum();
+       // _finalValue *= _multiplyModifiers.GetMultiplicationFactor();
+        return _finalValue;
+    }
+    
+    public void AddModifier(StatModifier modifier)
+    {
+        switch (modifier.ModifierType)
+        {
+            case EStatModifier.Add:
+                _addModifiers.Add( modifier.Value);
+                break;
+            case EStatModifier.Multiply:
+                _multiplyModifiers.Add( modifier.Value);
+                break;
+        }
+     
         ChangeValueHandler();
     }
     

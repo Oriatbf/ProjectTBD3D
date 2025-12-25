@@ -125,6 +125,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6faaf0995581ef1459a7c75cc07bc331
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Blood.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 80902250a613d194eaef69caea2daf10
     m_Address: Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab
     m_ReadOnly: 0
@@ -157,6 +162,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b106b9dccccc66f4b845a7777dfbec29
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Warrior.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2be9e2b679c5f34cb9dd32ae59b18de
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/DamageBuff.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

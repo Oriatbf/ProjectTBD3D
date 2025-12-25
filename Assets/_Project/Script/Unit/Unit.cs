@@ -118,6 +118,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
+    public BuffDebuff GetBuffDebuff(string id) => buffDebuffs[id];
     public ActionContainer GetActionContainer() => actionContainer;
     public Animator GetAnimator() => animator;
     
@@ -142,7 +143,7 @@ public class Unit : MonoBehaviour
         }
        
     }
-    public void GetDamage(float damage,SkillContext skillContext)
+    public void GetDamage(float damage,SkillContext skillContext,SkillType skillType)
     {
         if(isDead) return;
         Debug.Log($"{damage} 만큼 데미지를 받음");
@@ -153,7 +154,8 @@ public class Unit : MonoBehaviour
             if(remainDamage > 0)
                 _statContainer.hp.AddBaseValue( -remainDamage);
             skillContext.SourceUnit.GetActionContainer().attackAction?.Invoke(skillContext);
-            actionContainer.hurtAction?.Invoke(skillContext);
+            
+            actionContainer.hurtAction?.Invoke(skillContext,skillType);
         }
         else
         {
@@ -162,6 +164,7 @@ public class Unit : MonoBehaviour
         }
         ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }
+    
     private void OnHpChange(float value)
     {
         if (value <= 0)

@@ -6,6 +6,7 @@ using static ColorText;
 
 public class Fire : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Buff;
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -22,7 +23,7 @@ public class Fire : SkillEffect
 
     private void Action(BuffDebuff buffDebuff, SkillContext skillContext)
     {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext);
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext,SkillType);
     }
 
     public override string ReturnInformation()
@@ -32,6 +33,8 @@ public class Fire : SkillEffect
 }
 public class Poison : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Buff;
+
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
@@ -47,25 +50,9 @@ public class Poison : SkillEffect
 
     private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
     {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext);
+        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext,SkillType);
     }
-
-    private void Action(Tile target)
-    {
-        /*
-        // 현재 독 스택 수만큼 데미지
-        var poisonDebuff = target.GetBuffContainer().Find(x => 
-            x.skillBase._data.ID == skillBase._data.ID && 
-            x.isStackable);
-        
-        if (poisonDebuff != null)
-        {
-            float damage = poisonDebuff.stackCount;
-            target.GetDamage(damage);
-            
-            Debug.Log($"{target.name}이 독으로 {damage} 데미지를 받았습니다. (남은 독 스택: {poisonDebuff.stackCount - 1})");
-        }*/
-    }
+    
 
     public override string ReturnInformation()
     {
@@ -75,6 +62,8 @@ public class Poison : SkillEffect
 
 public class Ice : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Buff;
+
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
@@ -98,6 +87,45 @@ public class Ice : SkillEffect
 
     public override string ReturnInformation()
     {
-        return "";
+        return $"{values[0]}의 빙결을 부여합니다";
+    }
+}
+
+public class DamageBuff : SkillEffect
+{
+    protected override SkillType SkillType=> SkillType.Buff;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{values[0]}만큼 공격력버프를 획득합니다.";
+    }
+}
+
+public class BloodBuff : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Buff;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        var unit = skillContext.SourceUnit;
+        BuffDebuff debuff = new BuffDebuff(
+            unit,"Blood",999,DecreaseType.None,values[0]
+        );
+        debuff.AddBuffAction(null,skillContext);
+        unit.AddBuff("Blood",debuff);
+    }
+
+    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
+    {
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"보유한 피버프를 {values[0]}만큼 획득합니다.";
     }
 }

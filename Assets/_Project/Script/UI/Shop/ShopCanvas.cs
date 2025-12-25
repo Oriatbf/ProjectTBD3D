@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShopCanvas : MonoBehaviour
+public class ShopCanvas :  BaseCanvas
 {
     [SerializeField] private Transform skillContent,unitContent;
     private List<Icon> skillIcons = new List<Icon>();
     private List<UnitIcon> unitIcons = new List<UnitIcon>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         foreach (Transform child in skillContent)
             if(child.TryGetComponent(out Icon skillIcon))
                 skillIcons.Add(skillIcon);
@@ -19,11 +20,7 @@ public class ShopCanvas : MonoBehaviour
                 unitIcons.Add(unitIcon);
       
     }
-
-    private void Start()
-    {
-        Refresh();
-    }
+    
 
     public void Refresh()
     {

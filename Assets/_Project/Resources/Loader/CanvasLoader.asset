@@ -16,3 +16,6 @@ MonoBehaviour:
   - Key: SkillCheatCanvas
     Prefab: {fileID: 597888929260669894, guid: b4f39c14f54c60f4eb068df91b512d45, type: 3}
     SceneName: SkillTest
+  - Key: ShopCanvas
+    Prefab: {fileID: 7626600485559309776, guid: 8b6b803b6677b1c458242bbfcbdd2c36, type: 3}
+    SceneName: MapScene

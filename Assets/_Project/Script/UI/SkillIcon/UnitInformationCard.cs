@@ -29,7 +29,7 @@ public class UnitInformationCard : MonoBehaviour
     {
         var _unitData = unitData;
         nameTxt.text = _unitData.Name;
-        // string attribute = skillBase._data.SkillAttribute == SkillAttribute.Physical 
+        // string attribute = skillBase._data.SkillType == SkillType.Physical 
         // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
         //  arrtibuteTxt.text = attribute;
         descriptionTxt.text = _unitData.Infor;

@@ -3,11 +3,6 @@ using System.Collections.Generic;
 using GoogleSheet.Core.Type;
 using UnityEngine;
 
-[UGS(typeof(SkillAttribute))]
-public enum SkillAttribute
-{
-    Physical,Mage,Charm,All
-}
 
 [UGS(typeof(TargetType))]
 public enum TargetType
@@ -98,7 +93,7 @@ namespace SkillData
             skillAction?.Invoke(skillContext);
         }
 
-        public float GetFinalDamage(int value) => 1;//_data.SkillAttribute.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());
+        public float GetFinalDamage(int value) => 1;//_data.SkillType.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());
 
         /// <summary>
         /// SkillBase 깊은 복사

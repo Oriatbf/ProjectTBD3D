@@ -7,6 +7,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
     private Dictionary<Type, BaseController> _modulesByType = new Dictionary<Type, BaseController>();
     private void Awake()
     {
+        _modulesByType.Add(typeof(CanvasController), new CanvasController());
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
@@ -22,7 +23,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(TopInfoController), new TopInfoController());
         _modulesByType.Add(typeof(SkillChangeController), new SkillChangeController());
         _modulesByType.Add(typeof(CameraController), new CameraController());
-        _modulesByType.Add(typeof(CanvasController), new CanvasController());
+
     }
     private void Start()
     {

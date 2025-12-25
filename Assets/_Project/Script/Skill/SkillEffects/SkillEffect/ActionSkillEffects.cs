@@ -7,12 +7,14 @@ using static ColorText;
 
 public class Damage : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Attack;
 
     protected override void SkillAction(SkillContext skillContext)
     {
+        int finalValue = (int)skillContext.SourceUnit.GetStatContainer().str.FinalValue() + values[0];
         skillContext.ForEachTarget(unit =>
         {
-            unit.GetDamage(values[0],skillContext);
+            unit.GetDamage(finalValue,skillContext,SkillType);
         });
     }
 
@@ -20,10 +22,10 @@ public class Damage : SkillEffect
     {
         /*
         string attribute = "";
-        string colorStart = skillBase._data.SkillAttribute == SkillAttribute.Physical ? 
+        string colorStart = skillBase._data.SkillType == SkillType.Physical ? 
             GetTextColor(TxtColorType.Str) : GetTextColor(TxtColorType.Intelligence);
         
-        if (skillBase._data.SkillAttribute == SkillAttribute.Physical) attribute = GetTextColor(TxtColorType.Str) +"물리</color>";
+        if (skillBase._data.SkillType == SkillType.Physical) attribute = GetTextColor(TxtColorType.Str) +"물리</color>";
         else attribute = GetTextColor(TxtColorType.Intelligence) +"마법</color>";
         return $"{colorStart}{values[0]}</color> + {attribute}계수의 데미지를 줍니다";
         */
@@ -33,6 +35,8 @@ public class Damage : SkillEffect
 
 public class BloodSuck : SkillEffect
 {
+    protected override SkillType SkillType  => SkillType.Utility;
+
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.SourceUnit.GetActionContainer().attackAction += Action;
@@ -41,7 +45,7 @@ public class BloodSuck : SkillEffect
     private void Action(SkillContext skillContext)
     {
         int finalValue = 1;//(int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
-        skillContext.SourceUnit.GetDamage(-finalValue,skillContext);
+        skillContext.SourceUnit.GetDamage(-finalValue,skillContext,SkillType);
     }
 
     public override string ReturnInformation()
@@ -52,12 +56,13 @@ public class BloodSuck : SkillEffect
 
 public class SelfPDamage : SkillEffect
 {
+    protected override SkillType SkillType  => SkillType.Attack;
 
     protected override void SkillAction(SkillContext skillContext)
     {
         float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
         float damage =(int)(casterHp *( (float)values[0]/100f));
-        skillContext.SourceUnit.GetDamage(damage,skillContext);
+        skillContext.SourceUnit.GetDamage(damage,skillContext, SkillType);
     }
 
     public override string ReturnInformation()
@@ -68,12 +73,13 @@ public class SelfPDamage : SkillEffect
 
 public class HealToTarget : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Utility;
 
     protected override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
-            unit.GetDamage(-values[0],skillContext);
+            unit.GetDamage(-values[0],skillContext,SkillType);
         });
     }
 
@@ -84,10 +90,11 @@ public class HealToTarget : SkillEffect
 }
 public class HealToSource : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Utility;
 
     protected override void SkillAction(SkillContext skillContext)
     {
-         skillContext.SourceUnit.GetDamage(-values[0],skillContext);
+         skillContext.SourceUnit.GetDamage(-values[0],skillContext, SkillType);
     }
 
     public override string ReturnInformation()
@@ -99,6 +106,7 @@ public class HealToSource : SkillEffect
 
 public class BarrierToTarget : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Utility;
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -116,6 +124,7 @@ public class BarrierToTarget : SkillEffect
 
 public class BarrierToSource : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Utility;
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -130,6 +139,7 @@ public class BarrierToSource : SkillEffect
 
 public class InCreaseCharm : SkillEffect
 {
+    protected override SkillType SkillType => SkillType.Utility;
 
     protected override void SkillAction(SkillContext skillContext)
     {
@@ -142,6 +152,25 @@ public class InCreaseCharm : SkillEffect
     public override string ReturnInformation()
     {
         return $"적에게 {GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 매혹도를 줍니다";
+    }
+}
+
+public class BloodHeal : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        var bloodBuff = skillContext.SourceUnit.GetBuffDebuff("Blood");
+        if (bloodBuff == null) return;
+        int value =  bloodBuff.stackCount;
+        skillContext.SourceUnit.GetDamage(-value,skillContext, SkillType);
+        bloodBuff.stackCount = 0;
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"보유한 피 버프만큼 체력을 회복합니다. 이후 피 버프가 사라집니다.";
     }
 }
 
