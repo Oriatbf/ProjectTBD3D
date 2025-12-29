@@ -66,7 +66,7 @@ public class BuffStackController : BaseController
 
     }
 
-    public void UnstackAllBuffs(Tile targetTile)
+    public void UnstackAllUnitBuffs(Tile targetTile)
     {
         if(targetTile==null) Debug.LogError("Tile is null");
         if(!stackData.ContainsKey(targetTile)||stackData[targetTile].Count == 0) return;
@@ -75,6 +75,19 @@ public class BuffStackController : BaseController
             GameObject.Destroy(_buffIcon.gameObject);
         }
         stackData.Remove(targetTile);
+    }
+
+    public void ResetAllBuffs()
+    {
+        foreach (var buffIcons in stackData.Values)
+        {
+            foreach (var buffIcon in buffIcons)
+            {
+                GameObject.Destroy(buffIcon.gameObject);
+            }
+            buffIcons.Clear();
+        }
+        stackData.Clear();
     }
 
     private void RefreshUI(Tile tile,List<BuffIcon> list)

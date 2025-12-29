@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnitInformationCard : MonoBehaviour
+public class UnitInfoCardCanvas : BaseCanvas
 {
     [SerializeField] private RectTransform card;
     [SerializeField] private Transform skillContent;
@@ -15,8 +15,9 @@ public class UnitInformationCard : MonoBehaviour
     [SerializeField] private Image icon;
     private List<Icon> skills = new List<Icon>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         foreach (Transform child in skillContent)
         {
             if(child.TryGetComponent(out Icon icon))

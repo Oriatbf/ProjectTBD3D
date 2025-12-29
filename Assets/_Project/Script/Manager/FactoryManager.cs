@@ -76,6 +76,9 @@ public class FactoryManager : Singleton<FactoryManager>
           {
                ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(curEnemyArrange);
                ApplicationManager.Inst.GetModule<TurnController>().MapStage();
+               ApplicationManager.Inst.GetModule<BuffStackController>().ResetAllBuffs();
+               ApplicationManager.Inst.GetModule<SkillStackController>().ResetAllSkillStacks();
+               ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ResetAllSkillTurnCounter();
                foreach (var unit in playerUnits)
                {
                     DataManager.Inst.SaveUnit(unit);

@@ -1128,7 +1128,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 10
@@ -4406,6 +4406,7 @@ MonoBehaviour:
       isMapGenerated: 0
       stageIndex: 0
     gold: 0
+    constId: 0
 --- !u!4 &2015289808
 Transform:
   m_ObjectHideFlags: 0

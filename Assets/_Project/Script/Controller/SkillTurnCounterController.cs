@@ -146,6 +146,16 @@ public class SkillTurnCounterController : BaseController
             list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-imageInterval*i), 0.2f);
         }
     }
+
+    public void ResetAllSkillTurnCounter()
+    {
+        foreach (var image in turnImageQueue)
+        {
+            GameObject.Destroy(image.gameObject);
+        }
+        turnImageQueue.Clear();
+        turnQueue.Clear();
+    }
     
 
     public void DequeueByTile(Tile sourceTile)

@@ -194,9 +194,9 @@ public class Unit : MonoBehaviour
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
         PoolManager.Inst.Despawn(healthContent);
-        ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllSkill(tile);
+        ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllUnitSkills(tile);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
-        ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllBuffs(tile);
+        ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllUnitBuffs(tile);
         DataManager.Inst.DeleteUnit(unitData.constId);
         Destroy(gameObject);
     }

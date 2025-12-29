@@ -30,13 +30,13 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     public void OnPointerExit(PointerEventData eventData)
     {
         //if(skill ==null) return;
-        ApplicationManager.Inst.GetModule<InformationController>().Hide();
+        ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Skill);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //if(skill ==null) return;
-        ApplicationManager.Inst.GetModule<InformationController>().Show();
+        ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
     }
 
 }

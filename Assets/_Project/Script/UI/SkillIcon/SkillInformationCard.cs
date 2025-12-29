@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class SkillInformationCard : MonoBehaviour
+public class SkillInfoCardCanvas : BaseCanvas
 {
     [SerializeField] private RectTransform card;
     [SerializeField] private TextMeshProUGUI nameTxt;

@@ -81,7 +81,7 @@ public class SkillStackController : BaseController
         RefreshUI(tile,stackData[tile]);
     }
 
-    public void UnstackAllSkill(Tile tile)
+    public void UnstackAllUnitSkills(Tile tile)
     {
         if (!stackData.ContainsKey(tile)) return;
         if(stackData[tile].Count ==0)return;
@@ -92,6 +92,19 @@ public class SkillStackController : BaseController
             
         }
         RefreshUI(tile,stackData[tile]);   
+    }
+
+    public void ResetAllSkillStacks()
+    {
+        foreach (var queue in stackData.Values)
+        {
+            foreach (var icon in queue)
+            {
+                GameObject.Destroy(icon.gameObject);
+            }
+            queue.Clear();
+        }
+        stackData.Clear();
     }
 
     private void RefreshUI(Tile tile,Queue<Icon> queue)

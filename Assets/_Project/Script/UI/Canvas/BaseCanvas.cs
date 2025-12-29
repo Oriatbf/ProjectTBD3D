@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Canvas))]
 public class BaseCanvas : MonoBehaviour
 {
+    [Tooltip("포지션을 움직일 부모 객체")]
     [SerializeField] private RectTransform parent;
     protected CanvasGroup canvasGroup;
     protected Canvas canvas;

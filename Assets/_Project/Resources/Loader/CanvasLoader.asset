@@ -19,3 +19,9 @@ MonoBehaviour:
   - Key: ShopCanvas
     Prefab: {fileID: 7626600485559309776, guid: 8b6b803b6677b1c458242bbfcbdd2c36, type: 3}
     SceneName: MapScene
+  - Key: SkillInfoCardCanvas
+    Prefab: {fileID: 77820003223514308, guid: d66f580e529fb5c459c9e462c400d30b, type: 3}
+    SceneName: GameScene
+  - Key: UnitInfoCardCanvas
+    Prefab: {fileID: 8889348253450800113, guid: 5cc978187e651d243949c21064e13f03, type: 3}
+    SceneName: GameScene
