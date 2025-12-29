@@ -71,7 +71,10 @@ public class SkillTurnCounterController : BaseController
             //실행할(삭제될) 스킬 받기
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
+            var sourceUnit = skill.GetSkillContext().SourceUnit;
+            //스킬 실행
             skill.SkillAction();
+            sourceUnit.AttackAnim();
             Debug.Log(skill.GetSkillContext().SourceUnit);
             await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
             //몬스터 위에 스킬 스택되어있던거 삭제

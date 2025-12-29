@@ -17,7 +17,8 @@ public class PlayerSpawnController : BaseController
     private Tile lastTile;
     private Dictionary<int ,UnitSaveData> unitSaveDatas = new Dictionary<int ,UnitSaveData>();
     private Dictionary<int ,UnitSaveData>spawnedUnits = new Dictionary<int ,UnitSaveData>();
-    private CharacterHead curCharacterHead;
+    private CharacterHead _curCharacterHead;
+    private PlayerSpawnCanvas _playerSpawnCanvas;
     
 
     public override void OnInitialize()
@@ -35,15 +36,20 @@ public class PlayerSpawnController : BaseController
     {
         var canvas = await Addressables.LoadAssetAsync<GameObject>(canvasPath).ToUniTask();
         var obj = GameObject.Instantiate(canvas);
-        if (obj.TryGetComponent<PlayerSpawnCanvas>(out var playerSpawnCanvas))
+        if (obj.TryGetComponent(out PlayerSpawnCanvas  playerSpawnCanvas))
         {
-            playerSpawnCanvas.Init(datas);
-            playerSpawnCanvas.SetPos(Vector2.zero,true);
-            Action spawnEndAction = null;
-            spawnEndAction += ()=>playerSpawnCanvas.SetPos(new Vector2(0,-300),true);
-            spawnEndAction += () => FactoryManager.Inst.GameStart();
-            playerSpawnCanvas.SetSpawnEndAction(spawnEndAction);
+            _playerSpawnCanvas = playerSpawnCanvas;
+            _playerSpawnCanvas.Init(datas);
+            _playerSpawnCanvas.SetPos(Vector2.zero,true);
+            _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
         }
+    }
+
+    private void SpawnEndAction()
+    {
+        if (spawnedUnits.Count <= 0) return;
+        _playerSpawnCanvas.SetPos(new Vector2(0,-300),true);
+         FactoryManager.Inst.GameStart();
     }
 
     public override void OnUpdate()
@@ -75,7 +81,7 @@ public class PlayerSpawnController : BaseController
             {
                 if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(characterHead.GetUnitData().constId)) return;
                 Debug.Log(characterHead.name);
-                curCharacterHead = characterHead;
+                _curCharacterHead = characterHead;
                 isTargeting = true;
                 return;
             }
@@ -97,8 +103,8 @@ public class PlayerSpawnController : BaseController
             {
                 if(Input.GetMouseButtonDown(0))
                 {
-                    FactoryManager.Inst.PlayerSpawn(curCharacterHead.GetUnitData(),tile);
-                    RegisterUnit(curCharacterHead.GetUnitData().constId);
+                    FactoryManager.Inst.PlayerSpawn(_curCharacterHead.GetUnitData(),tile);
+                    RegisterUnit(_curCharacterHead.GetUnitData().constId);
                     CancelTargeting();
                 }
                 else
@@ -125,7 +131,7 @@ public class PlayerSpawnController : BaseController
 
     private void CancelTargeting()
     {
-        curCharacterHead = null;
+        _curCharacterHead = null;
         isTargeting = false;
         ClearTiles();
     }

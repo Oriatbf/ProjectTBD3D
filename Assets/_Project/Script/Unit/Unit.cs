@@ -108,8 +108,6 @@ public class Unit : MonoBehaviour
     {
         healthContent = PoolManager.Inst.Spawn<HealthContent>();
         healthContent.Init(_statContainer);
-       
-      
     }
 
     private void LateUpdate()
@@ -139,6 +137,12 @@ public class Unit : MonoBehaviour
     {
         bringSkills = skills;
        // unitController.OverWriteBringSkills(bringSkills);
+    }
+
+    public void AttackAnim()
+    {
+        Debug.Log("스킬 애니메이션");
+        animator.Play(Attack);
     }
 
     public void AddBuff(string key,BuffDebuff buffDebuff)
