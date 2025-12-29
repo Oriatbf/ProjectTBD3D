@@ -40,6 +40,7 @@ public class SkillStackController : BaseController
     private Camera _camera;
     private Dictionary<Tile ,Queue<Icon>> stackData = new Dictionary<Tile ,Queue<Icon>>();
     private float skillIconInterval = 100;
+    bool isRefreshing = false;
 
     public override void OnInitialize()
     {
@@ -80,14 +81,47 @@ public class SkillStackController : BaseController
         RefreshUI(tile,stackData[tile]);
     }
 
+    public void UnstackAllSkill(Tile tile)
+    {
+        if (!stackData.ContainsKey(tile)) return;
+        if(stackData[tile].Count ==0)return;
+        for (int i = 0; i < stackData[tile].Count; i++)
+        {
+            var skillIcon = stackData[tile].Dequeue();
+            GameObject.Destroy(skillIcon.gameObject);
+            
+        }
+        RefreshUI(tile,stackData[tile]);   
+    }
+
     private void RefreshUI(Tile tile,Queue<Icon> queue)
     {
+        isRefreshing = true;
         var list = queue.ToList();
+        Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());
+        Vector3 originPos = screenPos+new Vector3(0,400);
+        Sequence seq = DOTween.Sequence();
+        
+        for (int i = 0; i < list.Count; i++)
+        {
+            seq.Join(list[i].transform.DOMove(originPos +  new Vector3(0,i*skillIconInterval),0.2f));
+        }
+        seq.AppendCallback(()=>isRefreshing = false);
+        seq.Play();
+    }
+
+    public void PositionedOnCamera(Tile tile)
+    {
+        if (isRefreshing )return;
+        if (!stackData.ContainsKey(tile)) return;
+        if (stackData[tile].Count == 0) return;
+        var list = stackData[tile].ToList();
         Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());
         Vector3 originPos = screenPos+new Vector3(0,400);
         for (int i = 0; i < list.Count; i++)
         {
-            list[i].transform.DOMove(originPos +  new Vector3(0,i*skillIconInterval),0.2f);
+            var pos = originPos + new Vector3(0, i * skillIconInterval);
+            list[i].transform.position = pos;
         }
     }
 }

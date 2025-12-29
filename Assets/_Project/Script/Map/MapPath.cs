@@ -130,7 +130,7 @@ namespace Map
             target.SetMoving(false);
             curPoint += count;
             DataManager.Inst.SaveStageIndex(curPoint);
-            await UniTask.WaitForSeconds(0.5f);
+            await UniTask.WaitForSeconds(0.25f);
             stageManager.StageEvent(stagePoints[curPoint].GetMapState());
             
         }

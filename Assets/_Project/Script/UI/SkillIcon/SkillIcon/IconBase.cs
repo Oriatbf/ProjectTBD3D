@@ -13,6 +13,11 @@ public class IconBase : MonoBehaviour
         icon.sprite = sprite;
     }
 
+    protected virtual void Reset()
+    {
+        icon.sprite = null;
+    }
+
 }
 
 

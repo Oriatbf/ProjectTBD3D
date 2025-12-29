@@ -12,10 +12,12 @@ public class UnitSaveData
     public int id;
     public List<int> bringSkills = new List<int>();
     public StatContainer statContainer;
+    public string iconKey;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
     {
+        iconKey = unitData.AnimatorName;
         constId = RandomID.GetConstID();
         id = unitData.Id;
         bringSkills = unitData.BringSkill;
@@ -37,6 +39,7 @@ public class GameData
     public List<UnitSaveData> units = new List<UnitSaveData>();
     public MapData mapData = new MapData();
     public int gold;
+    public int constId = 0;
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -73,6 +76,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             {
                 Data.units.Add(new UnitSaveData()
                 {
+                    iconKey = UnitData.Data.DataList[1].AnimatorName,
                     constId = RandomID.GetConstID(),
                     id = 1,
                     bringSkills = UnitData.Data.DataList[1].BringSkill,
@@ -116,21 +120,22 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unit"></param>
     public void SaveUnit(Unit unit)
     {
-        var unitData = unit.GetUnitData();
-        var originalData = SheetDataManager.Inst.GetUnitData(unitData.id);
+        var unitSaveData = unit.GetUnitData();
+        var originalData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         var originalStatContainer = new StatContainer(originalData);
         UnitSaveData newUnitSaveData = new UnitSaveData()
         {
-            constId = unitData.constId,
-            id= unitData.id,
+            constId = unitSaveData.constId,
+            id= unitSaveData.id,
+            iconKey = unitSaveData.iconKey,
             statContainer = originalStatContainer,
             bringSkills = unit.GetSkillList()
         };
-        newUnitSaveData.statContainer.hp.SetBaseValue(unitData.statContainer.hp._baseValue);
+        newUnitSaveData.statContainer.hp.SetBaseValue(unitSaveData.statContainer.hp._baseValue);
         
         foreach(var savedUnits in Data.units)
         {
-            if (savedUnits.constId == unitData.constId)
+            if (savedUnits.constId == unitSaveData.constId)
             {
                 savedUnits.bringSkills = newUnitSaveData.bringSkills;
                 savedUnits.statContainer = newUnitSaveData.statContainer;
@@ -138,6 +143,26 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             }
         }
         
+        Data.units.Add(newUnitSaveData);
+    }
+
+    public void SaveUnit(UnitSaveData unitSaveData)
+    {
+        Data.units.Add(unitSaveData);
+    }
+
+    public void SaveUnit(int id)
+    {
+        var originalData = SheetDataManager.Inst.GetUnitData(id);
+        var originalStatContainer = new StatContainer(originalData);
+        UnitSaveData newUnitSaveData = new UnitSaveData()
+        {
+            constId = RandomID.GetConstID(),
+            id= id,
+            iconKey = originalData.AnimatorName,
+            statContainer = originalStatContainer,
+            bringSkills = originalData.BringSkill,
+        };
         Data.units.Add(newUnitSaveData);
     }
 
@@ -149,7 +174,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         var unit = Data.units.FirstOrDefault(u => u.constId == constID);
         if (unit != null)
         {
-            Data.units.Remove(unit);
+           // Data.units.Remove(unit);
         }
     }
     /// <summary>
@@ -174,6 +199,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     
     public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
     public MapData GetMapData() => Data.mapData;
+    
+    
+    
+    public int GetConstId() => Data.constId;
+    public void SetConstID(int id) => Data.constId = id;
+    
+    public int GetGold()=>Data.gold;
     
     public void SetGold(int value)
     {

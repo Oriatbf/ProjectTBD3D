@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private List<int> bringSkills = new List<int>();
+    [SerializeField] private int constID;
     [EndFoldout]
     
     private Dictionary<string,BuffDebuff> buffDebuffs = new Dictionary<string,BuffDebuff>();
@@ -53,6 +55,7 @@ public class Unit : MonoBehaviour
         bringSkills = unitData.bringSkills;
         this.unitData = unitData;
         this.team = team;
+        this.constID = unitData.constId;
     }
     
     public void SetTile(Tile tile)
@@ -105,10 +108,18 @@ public class Unit : MonoBehaviour
     {
         healthContent = PoolManager.Inst.Spawn<HealthContent>();
         healthContent.Init(_statContainer);
-        healthContent.SetPos(tile.GetPos());
+       
       
     }
-    
+
+    private void LateUpdate()
+    {
+        if(healthContent != null)
+             healthContent.SetPos(tile.GetPos());
+        ApplicationManager.Inst.GetModule<SkillStackController>().PositionedOnCamera(tile);
+        ApplicationManager.Inst.GetModule<BuffStackController>().PositionedOnCamera(tile);
+    }
+
     public List<int> GetSkillList()
     {
         if(bringSkills.Count <= 0 || bringSkills==null)Debug.LogError("NoSkills In Unit");
@@ -183,6 +194,7 @@ public class Unit : MonoBehaviour
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
         PoolManager.Inst.Despawn(healthContent);
+        ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllSkill(tile);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
         ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllBuffs(tile);
         DataManager.Inst.DeleteUnit(unitData.constId);

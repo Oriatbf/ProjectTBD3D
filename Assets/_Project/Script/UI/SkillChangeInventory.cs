@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class SkillChangeInventory : MonoBehaviour
 {
     [SerializeField] private Transform skillContent;
+    [SerializeField] private Transform unitContent;
     [SerializeField] private Panel panel;
     [SerializeField] private List<ChangeIcon> skillIcons = new List<ChangeIcon>();
     private List<int> curSkillIds = new List<int>();
+    private List<UnitIcon> unitIcons = new List<UnitIcon>();
     
     private PointerEventData _pointerEventData;
     private List<RaycastResult> _raycastResults = new List<RaycastResult>();
@@ -25,22 +28,31 @@ public class SkillChangeInventory : MonoBehaviour
         {
             skillIcons.Add(icon.GetComponent<ChangeIcon>());
         }
+
+        foreach (Transform unitIcon in unitContent)
+        {
+            var u = unitIcon.GetComponent<UnitIcon>();
+            unitIcons.Add(u);
+        }
     }
 
-    public void Init(int constId,List<int> skillIds)
+    private void Initialize(int constId,List<int> skillIds)
     {
-        isActive = true;
         this.constId = constId;
         curSkillIds = skillIds;
         var skillBases = SheetDataManager.Inst.GetSkillBaseList(skillIds);
+        Debug.Log(skillBases.Count);
         for (int i = 0; i < skillBases.Count; i++)
         {
+            Debug.Log("Skill Init");
             skillIcons[i].Init(skillBases[i]);
         }
     }
     
      private void Update()
      {
+         ClickUnitIcon();
+
          if (!isActive) return;
         if (!isTargeting)
         {
@@ -51,6 +63,34 @@ public class SkillChangeInventory : MonoBehaviour
             HandleSkillTargeting();
         }
             
+     }
+
+     private void SetUnitIcon()
+     {
+         var savedUnits = DataManager.Inst.GetAllSavedUnits();
+         Debug.Log(savedUnits.Count);
+         for (int i = 0; i < savedUnits.Count; i++)
+         {
+             unitIcons[i].Init(savedUnits[i]);
+         }
+     }
+
+     private void ClickUnitIcon()
+     {
+         if (!Input.GetMouseButtonDown(0)) return;
+         _pointerEventData.position = Input.mousePosition;
+         _raycastResults.Clear();
+         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+
+         foreach (var result in _raycastResults)
+         {
+             if (result.gameObject.TryGetComponent(out UnitIcon unitIcon))
+             {
+                 Debug.Log("sss");
+                 var unitSaveData = unitIcon.GetUnitData();
+                 Initialize(unitSaveData.constId, unitSaveData.bringSkills);
+             }
+         }
      }
         
     /// <summary>
@@ -133,11 +173,14 @@ public class SkillChangeInventory : MonoBehaviour
     
     public void Show()
     {
+        isActive = true;
+        SetUnitIcon();
         panel.SetPosition(PanelStates.Show,true);
     }
 
     public void Hide()
     {
+        isActive = false;
         panel.SetPosition(PanelStates.Hide,true);
     }
 }

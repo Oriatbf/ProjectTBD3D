@@ -49,11 +49,12 @@ public class SkillTurnCounterController : BaseController
         List<GameObject> destroyObj = new List<GameObject>();
         int _count = turnImageQueue.Count;
         int textCount = turnQueue.Count;
-        if(_count != textCount)Debug.LogWarning("turnqueue개수가 서로 맞지 않음");        
+        if(_count != textCount)Debug.LogWarning("turnqueue개수가 서로 맞지 않음");  
         //TurnCounterUI이미지 삭제
         for (int i = 0; i < _count; i++)
         {
             RectTransform _rect = null;
+            if (turnQueue.Count <= 0 || turnImageQueue.Count<=0) return;
             var image = turnImageQueue.Dequeue();
             destroyObj.Add(image.gameObject);
             if(image.TryGetComponent(out RectTransform rect)) _rect = rect;

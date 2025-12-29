@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class UnitIcon : IconBase
 {
-    private UnitData.Data _unitData;
-    public void Init(UnitData.Data unitData)
+    protected UnitSaveData _unitSaveData;
+    public void Init(UnitSaveData unitSaveData)
     {
-        _unitData = unitData;
-        SetSprite(_unitData.AnimatorName);
+        _unitSaveData = unitSaveData;
+        Debug.Log(_unitSaveData.iconKey);
+        SetSprite(_unitSaveData.iconKey);
     }
     
-    public UnitData.Data GetUnitData() =>_unitData;
+    public UnitSaveData GetUnitData() =>_unitSaveData;
 }

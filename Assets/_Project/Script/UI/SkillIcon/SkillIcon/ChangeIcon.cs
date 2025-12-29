@@ -9,6 +9,12 @@ public class ChangeIcon : IconBase
         _skillBase = skillBase;
         SetSprite(skillBase.GetData().SpriteName);
     }
-    
+
+    protected override void Reset()
+    {
+        base.Reset();
+        _skillBase = null;
+    }
+
     public SkillBase GetSkillBase() =>_skillBase;
 }

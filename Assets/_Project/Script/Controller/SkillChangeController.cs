@@ -28,16 +28,14 @@ public class SkillChangeController : BaseController
         var changeObj = GameObject.Instantiate(changeCanvas);
         skillChangeUI = changeObj.GetComponent<SkillChangeUI>();
     }
-
-    public void InitUnitSkill(int constId)
-    {
-        var targetUnit = DataManager.Inst.GetAllSavedUnits().FirstOrDefault(u=>u.constId == constId);
-        skillChangeInventory.Init(constId,targetUnit.bringSkills);
-        skillChangeInventory.Show();
-    }
     
-    public void InitLootSkill(SkillBase skillBase)
+    
+    /// <summary>
+    /// 스킬 변경 UI 띄우기
+    /// </summary>
+    public void SetLootSkill(SkillBase skillBase)
     {
+        skillChangeInventory.Show();
         skillChangeUI.Init(skillBase);
         skillChangeUI.Show();
     }
