@@ -20,7 +20,6 @@ public class TileManager : Singleton<TileManager>
 
     private void Awake()
     {
-        DIContainer.RegisterService(this);
         InstanceTile();
     }
     

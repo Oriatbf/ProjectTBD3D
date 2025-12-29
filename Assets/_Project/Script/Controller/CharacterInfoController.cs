@@ -10,12 +10,12 @@ public class CharacterInfoController : BaseController
     private static readonly Vector2 InitializePos = new Vector2(0, -400);
     
     private CharacterInfoCanvas _characterInfoCanvas;
-    private SkillIcon curSkillIcon;
+    private Icon curIcon;
     private TargetType curTargetType;
-    
+
+    private Stat turnGauage;
     private Tile lastTile;
     private List<Tile> lastTiles = new List<Tile>();
-    private UnitSaveData curUnitData;
 
     private bool isShow = false;
     private bool isTargeting = false;
@@ -50,27 +50,21 @@ public class CharacterInfoController : BaseController
     /// <summary>
     /// 클릭한 캐릭터의 데이터와 타일정보를 받음
     /// </summary>
-    public void Init(UnitSaveData unitData,Tile curTile)
+    public void Init(Stat turnGauage,List<int> bringSkills,Tile curTile)
     {
-        curUnitData = unitData;
-        maxTurnStack = unitData.statContainer.turnGauge._maxValue;
-        curTurnStack = unitData.statContainer.turnGauge._baseValue;
+        if(curTile == null)Debug.LogError("CurTile is null");
+        this.turnGauage = turnGauage;
+        maxTurnStack = turnGauage._maxValue;
+        curTurnStack = turnGauage._baseValue;
         
-        var skills = SheetDataManager.Inst.GetSkillBaseList(unitData.bringSkills);
-        List<SkillStackInfo> skillStackInfos = new List<SkillStackInfo>();
+        var skills = SheetDataManager.Inst.GetSkillBaseList(bringSkills);
+        
         
         foreach (var skill in skills)
         {
-            SkillStackInfo skillStackInfo = new SkillStackInfo()
-            {
-                skill = skill.Clone(),
-                stackTurn = skill.GetData().RequireTurn,
-                sourceTile = curTile,
-                team = Team.PlayerTeam
-            };
-            skillStackInfos.Add(skillStackInfo);
+            skill.InitSource(curTile);
         }
-        _characterInfoCanvas.Init(skillStackInfos);
+        _characterInfoCanvas.Init(skills);
     }
 
     public override void OnUpdate()
@@ -100,10 +94,10 @@ public class CharacterInfoController : BaseController
 
         foreach (var result in _raycastResults)
         {
-            if (result.gameObject.TryGetComponent(out InventorySkillIcon skillIcon))
+            if (result.gameObject.TryGetComponent(out InventoryIcon skillIcon))
             {
-                curSkillIcon = skillIcon;
-                curTargetType = skillIcon.GetSkillStackInfo().skill.GetData().TargetType;
+                curIcon = skillIcon;
+                curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
                 isTargeting = true;
                 return;
             }
@@ -155,7 +149,7 @@ public class CharacterInfoController : BaseController
         lastTile = tile;
         ClearTargetTiles();
 
-        var data = curSkillIcon.GetSkillStackInfo().skill.GetData();
+        var data = curIcon.GetSkillBase().GetData();
         var targetTiles = TileManager.Inst.GetTiles(tile, data.RowCount, data.ColumnCount);
         
         lastTiles.AddRange(targetTiles);
@@ -166,10 +160,10 @@ public class CharacterInfoController : BaseController
     }
     private bool TryExecuteSkill(Tile targetTile)
     {
-        var originalSkillStack = curSkillIcon?.GetSkillStackInfo();
-        if (originalSkillStack == null) return false;
+        var originalSkillBase = curIcon?.GetSkillBase();
+        if (originalSkillBase == null) return false;
 
-        var skillStackInfo = new SkillStackInfo(originalSkillStack);
+        var skillStackInfo = new SkillStackInfo(originalSkillBase);
         var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
         
         // 턴 게이지 체크
@@ -177,12 +171,12 @@ public class CharacterInfoController : BaseController
 
         curTurnStack += reqTurn;
         skillStackInfo.stackTurn = curTurnStack;
-        curUnitData.statContainer.turnGauge.SetBaseValue(curTurnStack);
+        turnGauage.SetBaseValue(curTurnStack);
 
         var skill = skillStackInfo.skill;
-        
+        if(skill.GetSkillContext().SourceTile== null)Debug.LogError("skillStackInfo.sourceTile is null");
         //시전자와 타겟의 위치를 입력
-        skill.InitSource(skillStackInfo.sourceTile);
+        //skill.InitSource(skillStackInfo.sourceTile);
         if(targetTile!=null) skill.InitTarget(targetTile);
 
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
@@ -197,17 +191,19 @@ public class CharacterInfoController : BaseController
     private void CancelTargeting()
     {
         ClearTargetTiles();
-        curSkillIcon = null;
+        curIcon = null;
         isTargeting = false;
     }
     public void Show()
     {
         isShow = true;
+        _characterInfoCanvas.ChangeState(true,true,true);
         _characterInfoCanvas.SetPos(Vector2.zero,true,0.25f);
     }
     public void Hide()
     {
         isShow = false;
+        _characterInfoCanvas.ChangeState(false,true);
         _characterInfoCanvas.SetPos(InitializePos,true,0.25f);
     }
     

@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,12 @@ public class TopInfoCanvas : MonoBehaviour
     [SerializeField] private TextMeshProUGUI goldTxt;
     private float textAnimDur = 0.4f;
     private int curGold = 0;
-    
+
+    private void Start()
+    {
+        goldTxt.text=DataManager.Inst.Data.gold+"G";
+    }
+
     public void AddGold(int value)
     {
         GoldTextAnim(curGold, curGold+value);

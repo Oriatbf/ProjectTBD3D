@@ -64,7 +64,6 @@ namespace SkillData
 		public TargetType TargetType;
 		public System.Int32 RowCount;
 		public System.Int32 ColumnCount;
-		public SkillAttribute SkillAttribute;
 		public System.String EffectData;
   
 

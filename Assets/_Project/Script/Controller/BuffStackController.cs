@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class BuffStackController : BaseController
     private Transform content;
     private BuffIcon buffIconPrefab;
     private float skillIconInterval = 75;
-    
+    private bool isRefreshing = false;
     
     
     private readonly string buffStackCanvasPath = "Assets/_Project/Prefab/UI/Buff/BuffStackCanvas.prefab";
@@ -65,7 +66,7 @@ public class BuffStackController : BaseController
 
     }
 
-    public void UnstackAllBuffs(Tile targetTile)
+    public void UnstackAllUnitBuffs(Tile targetTile)
     {
         if(targetTile==null) Debug.LogError("Tile is null");
         if(!stackData.ContainsKey(targetTile)||stackData[targetTile].Count == 0) return;
@@ -76,13 +77,45 @@ public class BuffStackController : BaseController
         stackData.Remove(targetTile);
     }
 
+    public void ResetAllBuffs()
+    {
+        foreach (var buffIcons in stackData.Values)
+        {
+            foreach (var buffIcon in buffIcons)
+            {
+                GameObject.Destroy(buffIcon.gameObject);
+            }
+            buffIcons.Clear();
+        }
+        stackData.Clear();
+    }
+
     private void RefreshUI(Tile tile,List<BuffIcon> list)
     {
+        isRefreshing = true;
         Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());
         Vector3 originPos = screenPos-new Vector3(0,30);
+        Sequence seq = DOTween.Sequence();
         for (int i = 0; i < list.Count; i++)
         {
-            list[i].transform.DOMove(originPos +  new Vector3(i*skillIconInterval,0),0.2f);
+            seq.Join(list[i].transform.DOMove(originPos +  new Vector3(i*skillIconInterval,0),0.2f));
+        }
+        seq.AppendCallback(()=>isRefreshing = false);
+        seq.Play();
+    }
+
+    public void PositionedOnCamera(Tile tile)
+    {
+        if (isRefreshing )return;
+        if (!stackData.ContainsKey(tile)) return;
+        if (stackData[tile].Count == 0) return;
+        var list = stackData[tile].ToList();
+        Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());
+        Vector3 originPos =  screenPos-new Vector3(0,30);;
+        for (int i = 0; i < list.Count; i++)
+        {
+            var pos = originPos +  new Vector3(i*skillIconInterval,0);
+            list[i].transform.position = pos;
         }
     }
 }

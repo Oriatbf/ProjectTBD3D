@@ -30,13 +30,13 @@ public class SkillTurnCounterController : BaseController
     {
         base.OnUpdate();
 
-        if (Input.GetKeyDown(KeyCode.F5))
+        if (Input.GetKeyDown(KeyCode.F6))
         {
-            TBDLogger.CommandLog(KeyCode.F5,this);
-            var skillList = turnQueue.ToList();
-            for (int i = 0; i < skillList.Count; i++)
+            TBDLogger.CommandLog(KeyCode.F6,this);
+            var list = turnImageQueue.ToList();
+            for (int i = 0; i < list.Count; i++)
             {
-                Debug.Log($"{skillList[i].skill.GetData().Name} {skillList[i].stackTurn}");
+                Debug.Log($"{list[i]}");
             }
         }
     }
@@ -48,11 +48,13 @@ public class SkillTurnCounterController : BaseController
     {
         List<GameObject> destroyObj = new List<GameObject>();
         int _count = turnImageQueue.Count;
-        
+        int textCount = turnQueue.Count;
+        if(_count != textCount)Debug.LogWarning("turnqueue개수가 서로 맞지 않음");  
         //TurnCounterUI이미지 삭제
         for (int i = 0; i < _count; i++)
         {
             RectTransform _rect = null;
+            if (turnQueue.Count <= 0 || turnImageQueue.Count<=0) return;
             var image = turnImageQueue.Dequeue();
             destroyObj.Add(image.gameObject);
             if(image.TryGetComponent(out RectTransform rect)) _rect = rect;
@@ -70,12 +72,14 @@ public class SkillTurnCounterController : BaseController
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
             skill.SkillAction();
-            await UniTask.WaitForSeconds(0.5f); //한 턴 한 턴을 보여주기 위해 딜레이
+            Debug.Log(skill.GetSkillContext().SourceUnit);
+            await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
             //몬스터 위에 스킬 스택되어있던거 삭제
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
         //한 턴에 해당하는 UI gameObject 삭제
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
+        ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }
@@ -142,6 +146,16 @@ public class SkillTurnCounterController : BaseController
             list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-imageInterval*i), 0.2f);
         }
     }
+
+    public void ResetAllSkillTurnCounter()
+    {
+        foreach (var image in turnImageQueue)
+        {
+            GameObject.Destroy(image.gameObject);
+        }
+        turnImageQueue.Clear();
+        turnQueue.Clear();
+    }
     
 
     public void DequeueByTile(Tile sourceTile)
@@ -153,6 +167,7 @@ public class SkillTurnCounterController : BaseController
             if (list[i].sourceTile == sourceTile)
             {
                 list.RemoveAt(i);
+                GameObject.Destroy(imageList[i].gameObject);
                 imageList.RemoveAt(i);
             }
         }

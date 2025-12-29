@@ -46,11 +46,6 @@ public class TurnController : BaseController
     /// 맵 선택창으로 이동
     /// </summary>
     public void MapStage() => playerTurnEnd.NextStageActive();
-
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-    }
     
     public void Reset()
     {

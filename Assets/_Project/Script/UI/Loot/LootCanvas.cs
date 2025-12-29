@@ -17,7 +17,7 @@ public class LootCanvas : MonoBehaviour
     private void Awake()
     {
         Hide();
-        SetLootIcon();
+        SetLootIcon();  
         closeBtn.onClick.AddListener(Hide);
     }
 
@@ -54,6 +54,8 @@ public class LootCanvas : MonoBehaviour
         Action action=null;
         var _lootIcon =  Instantiate(lootIcon, lootContent);
         action += () => Destroy(_lootIcon.gameObject);
+        var a = DataManager.Inst.GetAllSavedUnits();
+        action += ()=>ApplicationManager.Inst.GetModule<SkillChangeController>().SetLootSkill(skill);
         //스킬 바꾸는 액션 추가해야함
         _lootIcon.Init(skill,action);
     }

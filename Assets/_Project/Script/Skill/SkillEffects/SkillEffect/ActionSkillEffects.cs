@@ -1,0 +1,178 @@
+using System;
+using System.Collections.Generic;
+using SkillData;
+using UnityEngine;
+using static ColorText;
+
+
+public class Damage : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Attack;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        int finalValue = (int)skillContext.SourceUnit.GetStatContainer().str.FinalValue() + values[0];
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(finalValue,skillContext,SkillType);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        /*
+        string attribute = "";
+        string colorStart = skillBase._data.SkillType == SkillType.Physical ? 
+            GetTextColor(TxtColorType.Str) : GetTextColor(TxtColorType.Intelligence);
+        
+        if (skillBase._data.SkillType == SkillType.Physical) attribute = GetTextColor(TxtColorType.Str) +"물리</color>";
+        else attribute = GetTextColor(TxtColorType.Intelligence) +"마법</color>";
+        return $"{colorStart}{values[0]}</color> + {attribute}계수의 데미지를 줍니다";
+        */
+        return $"{GetTextColor(TxtColorType.Str)}{values[0]}</color>의 데미지를 줍니다";
+    }
+}
+
+public class BloodSuck : SkillEffect
+{
+    protected override SkillType SkillType  => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.GetActionContainer().attackAction += Action;
+    }
+
+    private void Action(SkillContext skillContext)
+    {
+        int finalValue = 1;//(int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
+        skillContext.SourceUnit.GetDamage(-finalValue,skillContext,SkillType);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"타격 후 {GetTextColor(TxtColorType.Health)}1</color>만큼 회복합니다";
+    }
+}
+
+public class SelfPDamage : SkillEffect
+{
+    protected override SkillType SkillType  => SkillType.Attack;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
+        float damage =(int)(casterHp *( (float)values[0]/100f));
+        skillContext.SourceUnit.GetDamage(damage,skillContext, SkillType);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"현재 체력의{GetTextColor(TxtColorType.Str)}{values[0]}%</color>만큼 데미지를 받습니다";
+    }
+}
+
+public class HealToTarget : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(-values[0],skillContext,SkillType);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
+    }
+}
+public class HealToSource : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+         skillContext.SourceUnit.GetDamage(-values[0],skillContext, SkillType);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Health)}{values[0]}</color>의 힐을 받습니다";
+    }
+}
+
+
+public class BarrierToTarget : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().barrier.AddBaseValue(values[0]);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 줍니다";
+    }
+}
+
+public class BarrierToSource : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.SourceUnit.GetStatContainer().barrier.AddBaseValue(values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>의 베리어를 받습니다";
+    }
+}
+
+public class InCreaseCharm : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetStatContainer().charmResist.AddBaseValue(values[0]);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"적에게 {GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 매혹도를 줍니다";
+    }
+}
+
+public class BloodHeal : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    protected override void SkillAction(SkillContext skillContext)
+    {
+        var bloodBuff = skillContext.SourceUnit.GetBuffDebuff("Blood");
+        if (bloodBuff == null) return;
+        int value =  bloodBuff.stackCount;
+        skillContext.SourceUnit.GetDamage(-value,skillContext, SkillType);
+        bloodBuff.stackCount = 0;
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"보유한 피 버프만큼 체력을 회복합니다. 이후 피 버프가 사라집니다.";
+    }
+}
+
+
+

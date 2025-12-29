@@ -76,6 +76,10 @@ namespace Map
                 case MapState.Boss:
                     action += ()=>FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
                     break;
+                case MapState.Shop:
+                    ApplicationManager.Inst.GetModule<ShopController>().Show();
+                    break;
+                    
             }
             action?.Invoke();
         }

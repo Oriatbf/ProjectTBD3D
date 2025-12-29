@@ -1,35 +1,32 @@
 using System;
 using System.Collections.Generic;
-using DG.Tweening;
 using SkillData;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using VInspector;
 
-public class CharacterInfoCanvas : MonoBehaviour
+public class CharacterInfoCanvas : BaseCanvas
 {
     [Foldout("Serialize")]
-    [SerializeField] private RectTransform backGroundParent;
     [SerializeField] private Transform skillContent;
-    [SerializeField] private Image image;
     [EndFoldout]
-    private SkillIcon skillIconPrefab;
+    private Icon iconPrefab;
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
 
-    
 
-    private async void Awake()
+    protected async override void Awake()
     {
+        base.Awake();
         var obj = await Addressables.LoadAssetAsync<GameObject>(skillIconPath).Task;
-        skillIconPrefab = obj.GetComponent<SkillIcon>();
+        iconPrefab = obj.GetComponent<Icon>();
     }
     
+    
+    
 
-    public void Init(List<SkillStackInfo> skillStackInfos)
+    public void Init(List<SkillBase> skillBases)
     {
+        if(skillBases.Count<=0)Debug.LogError("skillbases is null");
         if (skillContent.childCount > 0)
         {
             foreach (Transform child in skillContent)
@@ -37,22 +34,11 @@ public class CharacterInfoCanvas : MonoBehaviour
                 Destroy(child.gameObject);
             }
         }
-        foreach (var skillStackInfo in skillStackInfos)
+        foreach (var skill in skillBases)
         {
-            var _skillIcon = Instantiate(skillIconPrefab, skillContent);
-            _skillIcon.Init(skillStackInfo);
+            var _skillIcon = Instantiate(iconPrefab, skillContent);
+            _skillIcon.Init(skill);
         }
     }
-    public void SetPos(Vector2 pos,bool tween = false,float duration = 0.5f,Ease ease = Ease.OutQuad)
-    {
-        backGroundParent.DOComplete();
-        if (!tween)
-        {
-            backGroundParent.anchoredPosition = pos;
-        }
-        else
-        {
-            backGroundParent.DOAnchorPos(pos, duration).SetEase(ease);
-        }
-    }
+   
 }
