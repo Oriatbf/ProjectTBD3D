@@ -30,8 +30,6 @@ namespace Map
     public class StageManager : MonoBehaviour
     {
         
-
-
         [Foldout("Data Setting")] [SerializeField]
         private int stageCount;
 

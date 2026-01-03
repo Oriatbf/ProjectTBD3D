@@ -6,6 +6,16 @@ public class CanvasController : BaseController
 {
     CanvasLoader _canvasLoader;
     Dictionary<string, GameObject> _canvasDictionary = new Dictionary<string, GameObject>();
+   
+    public override ControllerInfo ControllerInfo { get; } = new()
+    {
+        ContainSceneNames = new string[] {"MapScene","GameScene" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
+
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -13,6 +23,7 @@ public class CanvasController : BaseController
         LoadSceneCanvas(SceneManager.GetActiveScene().name);
     }
 
+   
     public GameObject GetCanvas(string canvasName)
     {
         if(!_canvasDictionary.ContainsKey(canvasName))Debug.LogError($"{canvasName}의 이름을 가진 canvas프래팹이 없음");

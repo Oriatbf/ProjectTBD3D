@@ -306,6 +306,7 @@ MonoBehaviour:
   parent: {fileID: 4879461419225580393}
   backGround: {fileID: 168514216183240841}
   spawnEndBtn: {fileID: 7799417141714002135}
+  unitIconPrefab: {fileID: 6155587052948870210, guid: 41d752af6335c7448b5f2cdea8d042a2, type: 3}
 --- !u!1 &2828860591097145441
 GameObject:
   m_ObjectHideFlags: 0

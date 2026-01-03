@@ -21,7 +21,7 @@ MonoBehaviour:
     SceneName: MapScene
   - Key: SkillInfoCardCanvas
     Prefab: {fileID: 77820003223514308, guid: d66f580e529fb5c459c9e462c400d30b, type: 3}
-    SceneName: GameScene
+    SceneName: GamePlay
   - Key: UnitInfoCardCanvas
     Prefab: {fileID: 8889348253450800113, guid: 5cc978187e651d243949c21064e13f03, type: 3}
-    SceneName: GameScene
+    SceneName: GamePlay

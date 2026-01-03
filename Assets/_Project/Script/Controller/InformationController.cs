@@ -13,6 +13,16 @@ public class InformationController : BaseController
     private UnitInfoCardCanvas _unitInfoCardCanvas;
     private bool isUnitShow = false;
     private bool isSkillShow = false;
+
+    public override ControllerInfo ControllerInfo { get; }= new()
+    {
+        ContainSceneNames = new string[] {"GamePlay" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
+
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -35,8 +45,9 @@ public class InformationController : BaseController
         Show(DataType.Skill);
     }
 
-    public void InitUnitData(UnitData.Data unitData, Vector3 targetPos)
+    public void InitUnitData(UnitSaveData unitSaveData, Vector3 targetPos)
     {
+        var unitData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         _unitInfoCardCanvas.InitData(unitData, targetPos);
         //Show();
     }

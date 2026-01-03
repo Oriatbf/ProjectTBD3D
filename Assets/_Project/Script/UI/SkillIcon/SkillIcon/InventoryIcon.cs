@@ -8,7 +8,7 @@ public class InventoryIcon : Icon
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI turnTxt;
 
-    public void Init(SkillBase skillBase)
+    public override void Init(SkillBase skillBase)
     {
         base.Init(skillBase);
         

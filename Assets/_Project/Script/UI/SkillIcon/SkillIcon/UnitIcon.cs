@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UnitIcon : IconBase
+public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
 {
     protected UnitSaveData _unitSaveData;
     public void Init(UnitSaveData unitSaveData)
@@ -11,4 +12,22 @@ public class UnitIcon : IconBase
     }
     
     public UnitSaveData GetUnitData() =>_unitSaveData;
+    
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        ApplicationManager.Inst.GetModule<InformationController>().InitUnitData(_unitSaveData,Input.mousePosition);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //if(skill ==null) return;
+        ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Unit);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //if(skill ==null) return;
+        ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Unit);
+    }
+
 }

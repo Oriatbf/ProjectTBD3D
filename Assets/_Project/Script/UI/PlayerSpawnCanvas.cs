@@ -11,19 +11,15 @@ public class PlayerSpawnCanvas : MonoBehaviour
     [SerializeField ]private Transform parent;
     [SerializeField] private RectTransform backGround;
     [SerializeField] private Button spawnEndBtn;
-    
-    private CharacterHead _characterHeadPrefab;
-    private readonly string characterHeadPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterHead.prefab";
-
+    [SerializeField] private UnitIcon unitIconPrefab;
+  
 
 
     public async void  Init(List<UnitSaveData> unitSaveData)
     {
-         var obj = await Addressables.LoadAssetAsync<GameObject>(characterHeadPath).ToUniTask();
-         _characterHeadPrefab = obj.GetComponent<CharacterHead>();
         foreach (var unitData in unitSaveData)
         {
-            var instance = Instantiate(_characterHeadPrefab,parent);
+            var instance = Instantiate(unitIconPrefab,parent);
             instance.Init(unitData);
         }
     }

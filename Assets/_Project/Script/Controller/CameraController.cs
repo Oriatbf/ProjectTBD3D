@@ -8,7 +8,7 @@ public class CameraController : BaseController
     private Camera _camera;
     private Vector3 originalPos;
     private Quaternion originalRot;
-    private float fov = 0; 
+    private float fov = 0; //Camera Field Of View
     
     private readonly float clampRotY = 2.5f;
     private readonly float dur = 0.75f;
@@ -44,7 +44,7 @@ public class CameraController : BaseController
         _camera.DOFieldOfView(fov - 1, dur).SetEase(Ease.OutQuad);
          await _camera.transform.DORotate(euler, dur).SetEase(Ease.OutQuad).ToUniTask();
          await UniTask.WaitForSeconds(.15f);
-         await  _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
+         _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
     }
 
     public void OriginLook()

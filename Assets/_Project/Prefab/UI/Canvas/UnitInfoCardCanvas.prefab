@@ -1073,9 +1073,6 @@ GameObject:
   - component: {fileID: 5295521565023093255}
   - component: {fileID: 4620871020937127767}
   - component: {fileID: 2973244276516971967}
-  - component: {fileID: 7001353115141615357}
-  - component: {fileID: 1065805757998297291}
-  - component: {fileID: 785856933071506384}
   m_Layer: 5
   m_Name: CardBackGround
   m_TagString: Untagged
@@ -1146,60 +1143,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &7001353115141615357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4422918731421413210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d66393b7e2e8b704b9d9e2b2e9bde9f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parent: {fileID: 0}
-  card: {fileID: 5295521565023093255}
-  skillContent: {fileID: 3384439986629699256}
-  nameTxt: {fileID: 2062622759051239228}
-  arrtibuteTxt: {fileID: 553212832567113305}
-  descriptionTxt: {fileID: 6616383816081820187}
-  icon: {fileID: 2116643112710522602}
---- !u!225 &1065805757998297291
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4422918731421413210}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
---- !u!223 &785856933071506384
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4422918731421413210}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!1 &4580819082574377833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2341,7 +2284,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &4913693205286976394
 MonoBehaviour:

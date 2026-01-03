@@ -8,7 +8,15 @@ public class ShopController : BaseController
     private bool isFirstOpen = false;
     ShopCanvas shopCanvas;
 
-    
+    public override ControllerInfo ControllerInfo { get; } = new()
+    {
+        ContainSceneNames = new string[] {"MapScene" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
+
     public override void OnInitialize()
     {
         base.OnInitialize();

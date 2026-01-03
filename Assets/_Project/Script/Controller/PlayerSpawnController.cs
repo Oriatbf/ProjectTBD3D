@@ -17,7 +17,7 @@ public class PlayerSpawnController : BaseController
     private Tile lastTile;
     private Dictionary<int ,UnitSaveData> unitSaveDatas = new Dictionary<int ,UnitSaveData>();
     private Dictionary<int ,UnitSaveData>spawnedUnits = new Dictionary<int ,UnitSaveData>();
-    private CharacterHead _curCharacterHead;
+    private UnitIcon _curUnitIcon;
     private PlayerSpawnCanvas _playerSpawnCanvas;
     
 
@@ -77,11 +77,11 @@ public class PlayerSpawnController : BaseController
         foreach (var result in _raycastResults)
         {
             //부모에 스크립트 존재
-            if (result.gameObject.transform.parent.TryGetComponent(out CharacterHead characterHead))
+            if (result.gameObject.transform.parent.TryGetComponent(out UnitIcon unitIcon))
             {
-                if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(characterHead.GetUnitData().constId)) return;
-                Debug.Log(characterHead.name);
-                _curCharacterHead = characterHead;
+                if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
+                Debug.Log(unitIcon.name);
+                _curUnitIcon = unitIcon;
                 isTargeting = true;
                 return;
             }
@@ -103,8 +103,8 @@ public class PlayerSpawnController : BaseController
             {
                 if(Input.GetMouseButtonDown(0))
                 {
-                    FactoryManager.Inst.PlayerSpawn(_curCharacterHead.GetUnitData(),tile);
-                    RegisterUnit(_curCharacterHead.GetUnitData().constId);
+                    FactoryManager.Inst.PlayerSpawn(_curUnitIcon.GetUnitData(),tile);
+                    RegisterUnit(_curUnitIcon.GetUnitData().constId);
                     CancelTargeting();
                 }
                 else
@@ -131,7 +131,7 @@ public class PlayerSpawnController : BaseController
 
     private void CancelTargeting()
     {
-        _curCharacterHead = null;
+        _curUnitIcon = null;
         isTargeting = false;
         ClearTiles();
     }

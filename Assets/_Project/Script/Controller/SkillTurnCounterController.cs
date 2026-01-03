@@ -55,10 +55,14 @@ public class SkillTurnCounterController : BaseController
         {
             RectTransform _rect = null;
             if (turnQueue.Count <= 0 || turnImageQueue.Count<=0) return;
+            //실행할(삭제될) 스킬TurnImage 받기
             var image = turnImageQueue.Dequeue();
             destroyObj.Add(image.gameObject);
             if(image.TryGetComponent(out RectTransform rect)) _rect = rect;
             var curPos  = rect.anchoredPosition;
+            //실행할(삭제될) 스킬 받기
+            var skillStackInfo = turnQueue.Dequeue();
+            var skill = skillStackInfo.skill;
             if (_rect != null)
             {
                 int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
@@ -68,15 +72,14 @@ public class SkillTurnCounterController : BaseController
                 image.ArrowAlpha();
                 await sequence.Play().AsyncWaitForCompletion();
             }
-            //실행할(삭제될) 스킬 받기
-            var skillStackInfo = turnQueue.Dequeue();
-            var skill = skillStackInfo.skill;
+            
             var sourceUnit = skill.GetSkillContext().SourceUnit;
             //스킬 실행
-            skill.SkillAction();
             sourceUnit.AttackAnim();
-            Debug.Log(skill.GetSkillContext().SourceUnit);
+            skill.SkillAction();
             await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
+            if(skill.GetSkillContext().TargetUnit!=null)
+                await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().TargetUnit);
             //몬스터 위에 스킬 스택되어있던거 삭제
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
