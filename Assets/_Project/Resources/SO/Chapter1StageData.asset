@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09f59ba0cbd66644a351a6079685ce9, type: 3}
+  m_Name: Chapter1StageData
+  m_EditorClassIdentifier: 
+  maxConsecutiveSameCount: 0
+  stageDatas:
+  - mapState: 1
+    percentage: 40
+    priority: 4
+    range: 0
+  - mapState: 2
+    percentage: 15
+    priority: 2
+    range: 0
+  - mapState: 4
+    percentage: 30
+    priority: 3
+    range: 0
+  - mapState: 5
+    percentage: 15
+    priority: 1
+    range: 0

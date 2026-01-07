@@ -3694,7 +3694,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthContent: {fileID: 1073216997453472850, guid: d5670ed4974fca24aaa5178db619e8d6, type: 3}
-  stageContent: {fileID: -1740694835128096180, guid: 3973d9076410e994b96e3805f4b5bca2, type: 3}
 --- !u!114 &553695529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5549,9 +5548,8 @@ MonoBehaviour:
   Data:
     units: []
     mapData:
-      stageStates: 
       isMapGenerated: 0
-      stageIndex: 0
+      curStageIndex: {x: 0, y: 0}
     gold: 0
     constId: 0
 --- !u!4 &731872366
@@ -5657,6 +5655,7 @@ GameObject:
   m_Component:
   - component: {fileID: 734669190}
   - component: {fileID: 734669191}
+  - component: {fileID: 734669192}
   m_Layer: 0
   m_Name: Vehicle
   m_TagString: Untagged
@@ -5692,8 +5691,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa466050d832cbc47a8648bf681235a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  curIndex: {x: 0, y: 0}
   wheelParent: {fileID: 1144959901}
   rotationSpeed: 300
+--- !u!65 &734669192
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734669189}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.42, y: 3.09, z: 1.61}
+  m_Center: {x: 0, y: 0.9692387, z: 0}
 --- !u!1 &767962644
 GameObject:
   m_ObjectHideFlags: 0
@@ -16381,84 +16402,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ca05d7dd9a2ee35499ac0d40cd66ad2d, type: 3}
   m_PrefabInstance: {fileID: 2072962698}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2078084415
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2078084416}
-  - component: {fileID: 2078084418}
-  m_Layer: 0
-  m_Name: Map
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2078084416
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078084415}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2078084418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078084415}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5224f2cf50ab5e469b6b6b81c050e7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stageCount: 9
-  maxConsecutiveSameCount: 3
-  stageDatas:
-  - mapState: 0
-    percentage: 50
-    priority: 4
-    range: 0
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  - mapState: 3
-    percentage: 25
-    priority: 3
-    range: 0
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  - mapState: 2
-    percentage: 15
-    priority: 2
-    range: 0
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  - mapState: 1
-    percentage: 10
-    priority: 1
-    range: 0
-    triggerEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  curMapState: 0
-  curStageIndex: 0
-  finalStageTypes: 
 --- !u!1001 &2086711056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17635,7 +17578,6 @@ SceneRoots:
   - {fileID: 909774312}
   - {fileID: 26412665}
   - {fileID: 734669190}
-  - {fileID: 2078084416}
   - {fileID: 553695530}
   - {fileID: 1099977818}
   - {fileID: 1102541097}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Map;
+using Newtonsoft.Json;
 using UnityEngine;
 
 [Serializable]
@@ -28,9 +29,9 @@ public class UnitSaveData
 [Serializable]
 public class MapData
 {
-    public List<MapState> stageStates = new List<MapState>();
+    public List<Room> mapDict =new List<Room>();
     public bool isMapGenerated = false;
-    public int stageIndex=0;
+    public Vector2 curStageIndex=Vector2.zero;
 }
 
 [Serializable]
@@ -91,12 +92,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         {
             string loadJson = File.ReadAllText(path);
             Data = JsonUtility.FromJson<GameData>(loadJson);
+            //Data = JsonConvert.DeserializeObject<GameData>(loadJson);
         }
     }
 
     public void JsonSave()
     {
         string json = JsonUtility.ToJson(Data, true);
+        //string json = JsonConvert.SerializeObject(Data, Formatting.Indented);
         File.WriteAllText(path, json);
     }
     
@@ -180,9 +183,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <summary>
     /// 맵 상태 저장
     /// </summary>
-    public void SaveStageStates(List<MapState> states)
+    public void SaveMapData(List<Room> mapData)
     {
-        Data.mapData.stageStates = states;
+        Data.mapData.mapDict = mapData;
         Data.mapData.isMapGenerated = true;
         JsonSave();
     }
@@ -197,7 +200,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         JsonSave();
     }
     
-    public void SaveStageIndex(int index)=>Data.mapData.stageIndex = index;
+    public void SaveStageIndex(Vector2Int index)=>Data.mapData.curStageIndex = index;
     public MapData GetMapData() => Data.mapData;
     
     

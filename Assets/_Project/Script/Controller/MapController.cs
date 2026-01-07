@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Map;
 using UnityEngine;
 
 public class MapController : BaseController
@@ -26,13 +29,27 @@ public class MapController : BaseController
         var roomObj = Resources.Load<GameObject>("RoomVisual");
         _roomTilePrefab = roomObj.GetComponent<RoomTile>();
         if(_roomTilePrefab == null)Debug.LogError("roomPrefab is null");
-        mapGenerate.Setmap(50);
-        MapVisualization(mapGenerate.GetMapDict());
+        
+        Dictionary<Vector2Int,Room> mapDict = new Dictionary<Vector2Int, Room>();
+        List<Room> roomList = new List<Room>();
+        if (!DataManager.Inst.GetMapData().isMapGenerated)
+        {
+            mapGenerate.Setmap(50);
+            mapDict = mapGenerate.GetMapDict();
+            roomList = mapDict.Values.ToList();
+            DataManager.Inst.SaveMapData(roomList);
+        }
+        else
+        {
+            roomList = DataManager.Inst.GetMapData().mapDict;
+            Debug.Log($"저장된 맵을 불러옵니다. 맵 개수 : {roomList.Count}");
+        }
+        MapVisualization(roomList);
     }
 
-    private void MapVisualization(Dictionary<Vector2Int,Room> mapDict)
+    private void MapVisualization(List<Room> roomList)
     {
-        foreach (var room in mapDict.Values)
+        foreach (var room in roomList)
         {
             var roomPos = room.GetIndex();
             var pos = new Vector3(roomPos.x*5, 0, roomPos.y*5);
@@ -40,6 +57,34 @@ public class MapController : BaseController
             roomTile.InitRoomData(room);
             _roomTileDict.Add(roomPos,roomTile);
             if(room.GetLinkedDict().Count <= 0)continue;
+        }
+    }
+
+    public void EnterRoom(RoomTile roomTile)
+    {
+        switch (roomTile.GetRoom().GetRoomType())
+        {
+            case RoomType.Village:
+                break;
+            case RoomType.Enemy:
+                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
+                break;
+            case RoomType.StrongEnemy:
+                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
+                break;
+            case RoomType.Boss:
+                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
+                break;
+            case RoomType.Event:
+                break;
+            case RoomType.Rebellion:
+                break;
+            case RoomType.Shop:
+                break;
+            case RoomType.None:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -53,10 +98,10 @@ public class MapController : BaseController
         ResetAllRoomTileState();
         var originRoomTile = _roomTileDict[originPos];
         originRoomTile.SetRoomState(RoomState.Current);
-        BFS(originPos, cnt);
+        SetReachableStateBFS(originPos, cnt);
     }
 
-    private void BFS(Vector2Int originPos, int cnt)
+    private void SetReachableStateBFS(Vector2Int originPos, int cnt)
     {
         if (!_roomTileDict.ContainsKey(originPos))
         {
@@ -64,18 +109,16 @@ public class MapController : BaseController
             return;
         }
         
-        Queue<(Room room, int dist)> queue = new();
+        Queue<(Vector2Int index, int dist)> queue = new();
         HashSet<Vector2Int> visited = new();
-
-        Room originRoom = _roomTileDict[originPos].GetRoom();
-        queue.Enqueue((originRoom, 0));
-        visited.Add(originRoom.GetIndex());
+        
+        queue.Enqueue((originPos, 0));
+        visited.Add(originPos);
 
         while (queue.Count > 0)
         {
-            (Room currentRoom, int dist) = queue.Dequeue();
-            var currentPos = currentRoom.GetIndex();
-            var currentRoomTile = _roomTileDict[currentPos];
+            (Vector2Int currentIndex, int dist) = queue.Dequeue();
+            var currentRoomTile = _roomTileDict[currentIndex];
             if (dist > 0 && dist <= cnt)
                 currentRoomTile.SetRoomState(RoomState.Reachable);
             // 거리 제한
@@ -83,14 +126,14 @@ public class MapController : BaseController
                 continue;
 
             // 연결된 방만 탐색 → 벽 고려
-            foreach (var nextRoom in currentRoom.GetLinkedDict().Values)
+            foreach (var roomLinkData in _roomTileDict[currentIndex].GetRoom().GetLinkedDict())
             {
-                var nextPos = nextRoom.GetIndex();
+                var nextPos = roomLinkData.targetIndex;
                 if (visited.Contains(nextPos))
                     continue;
 
                 visited.Add(nextPos);
-                queue.Enqueue((nextRoom, dist + 1));
+                queue.Enqueue((nextPos, dist + 1));
             }
             
         }

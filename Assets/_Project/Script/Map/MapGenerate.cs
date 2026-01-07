@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Utility;
+using Map;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public enum RoomType
 {
-    Village,Enemy,StrongEnemy,Boss,Event,Rebellion,None
+    Village,Enemy,StrongEnemy,Boss,Event,Shop,Rebellion,None
 }
 
 public class MapGenerate
@@ -16,16 +17,23 @@ public class MapGenerate
     {
         Random,Far,Close
     }
+    
+    StageTypeGenerator stageTypeGenerator = new StageTypeGenerator();
+    
     //초기 설정 값
-    private Vector2Int originIndex = Vector2Int.zero;
-    private int minDistance = 10;
-    private int maxDistance = 15;
+    private Vector2Int _startIndex = Vector2Int.zero;
+    private Vector2Int _endIndex = Vector2Int.zero;
+    private int minDistance = 15;
+    private int maxDistance = 20;
+    
+    //생성중 임시 데이터
+    private List<Room> orderedRooms = new List<Room>();
+    
     //데이터
     private List<Room> mainPathRooms = new List<Room>();
     private Dictionary<Vector2Int,Room> mapDictionary = new Dictionary<Vector2Int,Room>();
     private int curRoomCnt = 0;
     private int _mapCnt = 0;
-    private Vector2Int _startIndex = Vector2Int.zero;
     
     
     public void Setmap(int mapCnt)
@@ -36,6 +44,8 @@ public class MapGenerate
         SetMainPath(finalDistance);
         SetExtraRoom(_mapCnt);
         SetExtraLink();
+        AssignPathOrder();
+        SetRoomType();
     }
 
     /// <summary>
@@ -71,11 +81,21 @@ public class MapGenerate
                 var lastRoom = mapDictionary[lastIndex];
                 var lastDir = IndexToDirection(curIndex-lastIndex);
                 var createdDir = OppositeDirection(lastDir);
-                lastRoom.GetLinkedDict().Add(lastDir, createdRoom);
-                createdRoom.GetLinkedDict().Add(createdDir,mapDictionary[lastIndex]);
+                lastRoom.GetLinkedDict().Add(new RoomLinkData
+                {
+                    direction = lastDir,
+                    targetIndex =  createdRoom.GetIndex()
+                });
+                createdRoom.GetLinkedDict().Add(new RoomLinkData
+                {
+                    direction = createdDir,
+                    targetIndex = lastIndex
+                });
             }
             lastIndex = createdRoom.GetIndex();
         }
+        mainPathRooms[^1].SetRoomType(RoomType.Boss);
+        _endIndex = mainPathRooms[^1].GetIndex();
         Debug.Log($"메인 패스의 개수는 {mainPathRooms.Count}");
     }
 
@@ -133,14 +153,26 @@ public class MapGenerate
             {
                 if (mapDictionary.ContainsKey(index + dirIndex))
                 {
+                    var targetIndex = index + dirIndex;
                     var targetRoom  = mapDictionary[index + dirIndex];
-                    if( room.GetLinkedDict().ContainsValue(targetRoom))continue;
+
+                    if (room.GetLinkedDict().Any(s => s.targetIndex == targetIndex))
+                        continue;
                     var dir = IndexToDirection( dirIndex);
                     if (isFirst || Random.value < 0.2f || mainPathRooms.Contains(targetRoom))
                     {
                         isFirst = false;
-                        room.GetLinkedDict().Add(dir, targetRoom);
-                        targetRoom.GetLinkedDict().Add(OppositeDirection(dir), room);
+                        room.GetLinkedDict().Add(new RoomLinkData
+                        {
+                            direction = dir,
+                            targetIndex = targetIndex,
+                        });
+                        
+                        targetRoom.GetLinkedDict().Add(new RoomLinkData
+                        {
+                            direction = OppositeDirection(dir),
+                            targetIndex = index,
+                        });
                     }
                 }
             }
@@ -149,6 +181,11 @@ public class MapGenerate
 
     private void SetRoomType()
     {
+        var stageTypes = stageTypeGenerator.GetStageTypes(_mapCnt);
+        for (int i = 0; i < orderedRooms.Count; i++)
+        {
+            orderedRooms[i].SetRoomType(stageTypes[i]);
+        }
         
     }
 
@@ -235,6 +272,53 @@ public class MapGenerate
     }
     
     #endregion
+    
+    private void AssignPathOrder()
+    {
+
+        var visited = new HashSet<Vector2Int>();
+        var queue = new Queue<Vector2Int>();
+        int orderCounter = 0;
+
+        // Start 위치부터 시작
+        queue.Enqueue(_startIndex);
+        visited.Add(_startIndex);
+        orderedRooms.Add(mapDictionary[_startIndex]);
+
+        while (queue.Count > 0 && orderCounter < _mapCnt)
+        {
+            var currentBatch = queue.ToArray();
+            queue.Clear();
+            currentBatch.Shuffle();
+
+            foreach (var pos in currentBatch)
+            {
+                // End 위치는 마지막에 처리
+                if (pos == _endIndex) continue;
+
+                mapDictionary[pos].SetOrder(orderCounter);
+                orderedRooms.Add(mapDictionary[pos]);
+                orderCounter++;
+
+                // 인접 위치 중 방문하지 않은 곳 큐에 추가
+                foreach (var dir in Get4Dirs())
+                {
+                    var neighbor = pos + dir;
+                    if (mapDictionary.ContainsKey(neighbor) && !visited.Contains(neighbor))
+                    {
+                        queue.Enqueue(neighbor);
+                        visited.Add(neighbor);
+                    }
+                }
+            }
+        }
+
+        // End 위치는 마지막 PathOrder
+        mapDictionary[_endIndex].SetOrder(orderCounter);
+        orderedRooms.Add(mapDictionary[_endIndex]);
+
+        Debug.Log($"[MapService] PathOrder 할당 완료 - 총 {visited.Count}개");
+    }
     
     /// <summary>
     /// 초기 마을 설정

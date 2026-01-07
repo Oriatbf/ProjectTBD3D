@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public enum RoomState
@@ -13,6 +14,7 @@ public class RoomTile : MonoBehaviour
    private RoomState _roomState;
    [SerializeField] private Transform up,down,left,right;
    [SerializeField] private Transform mapEdge;
+   [SerializeField] private TextMeshPro roomTypeTxt;
    private List<Transform> links = new List<Transform>();
    private List<SpriteRenderer> sprList = new List<SpriteRenderer>();
    
@@ -45,6 +47,7 @@ public class RoomTile : MonoBehaviour
    public void InitRoomData(Room room)
    {
       _room = room;
+      roomTypeTxt.text = _room.GetRoomType().ToString();
       SetLinkVisual();
    }
 
@@ -88,7 +91,7 @@ public class RoomTile : MonoBehaviour
       
       foreach (var linkData in _room.GetLinkedDict())
       {
-         switch (linkData.Key)
+         switch (linkData.direction)
          {
             case Direction.Up:
                up.gameObject.SetActive(false);

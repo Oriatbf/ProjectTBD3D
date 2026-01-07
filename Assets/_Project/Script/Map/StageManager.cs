@@ -9,79 +9,37 @@ using Random = UnityEngine.Random;
 
 namespace Map
 {
-    public enum MapState
+    public class StageTypeGenerator
     {
-        Enemy,
-        StrongEnemy,
-        Shop,
-        Event,
-        Boss,
-        None
-    }
-    [Serializable]
-    public class StageData
-    {
-        public MapState mapState; // 스테이지 종류
-        public int percentage; //이 스테이지가 나올 퍼센트
-        public int priority; //확률 재 분배 시 우선순위(내림차순 정렬)
-        [Tooltip("디버깅용")]public int range; //랜덤 정수의 범위 설정
-        public UnityEvent triggerEvent;
-    }
-    public class StageManager : MonoBehaviour
-    {
-        
-        [Foldout("Data Setting")] [SerializeField]
-        private int stageCount;
 
-        [Tooltip("연속 동일한 스테이지가 나올 최대 개수")] [SerializeField]
-        private int maxConsecutiveSameCount;
-
-        [SerializeField] private List<StageData> stageDatas = new List<StageData>();
+        private List<StageData> stageDatas = new List<StageData>();
 
         [EndFoldout] 
         [Foldout("Debugging")] [SerializeField]
-        private MapState curMapState;
+        private RoomType curMapState;
+        private int _stageCount;
+        private int _maxConsecutiveSameCount = 0;
 
-        [SerializeField] private int curStageIndex;
-        [EndFoldout] [SerializeField] private List<MapState> finalStageTypes;
-
-        private void Awake()
-        {
-            stageDatas = stageDatas.OrderByDescending(s => s.priority).ToList(); //우선순위로 정렬
-            CheckPercent(stageDatas); //지정한 확률 체크
-        }
         
-        public  List<MapState> GetStageState(int stageCount)
+        [EndFoldout] [SerializeField] private List<RoomType> finalStageTypes;
+        
+        
+        public  List<RoomType> GetStageTypes(int stageCount)
         {
-            this.stageCount = stageCount;
+            var stageDataSO = Resources.Load<StageDataSO>("SO/Chapter1StageData");
+            stageDatas = stageDataSO.stageDatas;
+            stageDatas = stageDatas.OrderByDescending(s => s.priority).ToList(); //우선순위로 정렬
+            
+            _stageCount = stageCount;
+            _maxConsecutiveSameCount = stageDataSO.maxConsecutiveSameCount;
+            
+            CheckPercent(stageDatas); //지정한 확률 체크
+
             SetStage();
             return finalStageTypes;
         }
 
 
-        //스테이지의 이벤트
-        public void StageEvent(MapState mapState)
-        {
-            Action action = null;
-            switch (mapState)
-            {
-                case MapState.Enemy:
-                    action += () => FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
-                    break;
-                case MapState.StrongEnemy:
-                    action += ()=>FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
-                    break;
-                case MapState.Boss:
-                    action += ()=>FadeInFadeOutManager.Inst.FadeOut("GameScene", true);
-                    break;
-                case MapState.Shop:
-                    ApplicationManager.Inst.GetModule<ShopController>().Show();
-                    break;
-                    
-            }
-            action?.Invoke();
-        }
-        
 
 
         #region 스테이지 설정 알고리즘
@@ -127,13 +85,13 @@ namespace Map
         [Button]
         private void SetStage()
         {
-            finalStageTypes = new List<MapState>();
-            finalStageTypes.Add(MapState.None);
-            finalStageTypes.Add(MapState.Enemy);
-            for (int i = 1; i < stageCount - 1; i++)
+            finalStageTypes = new List<RoomType>();
+            finalStageTypes.Add(RoomType.None);
+            finalStageTypes.Add(RoomType.Enemy);
+            for (int i = 1; i < _stageCount - 1; i++)
             {
                 var stage = GetStage(stageDatas);
-                if (CountConsecutiveSame(stage) >= maxConsecutiveSameCount)
+                if (CountConsecutiveSame(stage) >= _maxConsecutiveSameCount)
                 {
                     stage = GetExclusionStage(stage);
                 }
@@ -141,7 +99,7 @@ namespace Map
                 if (stage != null) finalStageTypes.Add(stage.mapState);
             }
 
-            finalStageTypes.Add(MapState.Boss);
+            finalStageTypes.Add(RoomType.Boss);
         }
 
         /// <summary>
@@ -151,7 +109,6 @@ namespace Map
         {
             int random = Random.Range(1, 100 + 1);
             StageData stage = _stageDatas.FirstOrDefault(s => s.range >= random);
-            if(stage == null)Debug.LogError("stage is null");
             return stage;
         }
 
@@ -179,7 +136,6 @@ namespace Map
         /// </summary>
         private int CountConsecutiveSame(StageData targetStageData)
         {
-            if(targetStageData ==null)Debug.LogError("targetStageData is null");
             int count = 0;
             for (int i = finalStageTypes.Count - 1; i >= 0 && finalStageTypes[i] == targetStageData.mapState; i--)
                 count += 1;

@@ -13,6 +13,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         await CreateController();
         foreach (var value in _modulesByType.Values)
         {
+            Debug.Log(value.GetType());
             value.OnInitialize();
         }
     }
@@ -49,7 +50,6 @@ public class ApplicationManager : Singleton<ApplicationManager>
         for(int i = 0;i<moduleList.Count;i++)
         {
             var pair = moduleList[i];
-            Debug.Log($"{pair.Key.Name} : {pair.Value.ControllerInfo.ContainSceneNames[0]}");
             if (!pair.Value.ControllerInfo.ContainSceneNames.Contains(sceneName))
             {
                 UnRegisterModule(pair.Key);

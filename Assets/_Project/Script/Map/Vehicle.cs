@@ -41,6 +41,7 @@ public class Vehicle : MonoBehaviour
                     curIndex =  roomTile.GetRoom().GetIndex();
                     transform.position = new Vector3(curIndex.x*5,transform.position.y , curIndex.y*5);
                     ApplicationManager.Inst.GetModule<MapController>().ResetAllRoomTileState();
+                    ApplicationManager.Inst.GetModule<MapController>().EnterRoom(roomTile);
                 }
                 
             }
