@@ -19,7 +19,11 @@ public class ShopUnitIcon : UnitIcon
     private void BtnAction()
     {
         var curGold = DataManager.Inst.GetGold();
-        if (curGold < 100) return;
+        if (curGold < 100)
+        {
+            Debug.Log("골드가 부족합니다");
+            return;
+        }
         ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(-curGold);
         DataManager.Inst.SaveUnit(_unitSaveData);
 

@@ -20,20 +20,26 @@ public class PlayerSpawnController : BaseController
     private UnitIcon _curUnitIcon;
     private PlayerSpawnCanvas _playerSpawnCanvas;
     
+    //게임 생성중 데이터
+    private List<UnitSaveData> _allSavedUnits = new List<UnitSaveData>();
+    
 
     public override void OnInitialize()
     {
         base.OnInitialize();
         _camera = Camera.main;
-        var datas = DataManager.Inst.GetAllSavedUnits();
-        foreach (var data in datas)
+        _allSavedUnits = DataManager.Inst.GetAllSavedUnits();
+        foreach (var data in _allSavedUnits)
             unitSaveDatas.Add(data.constId,data);
         _pointerEventData = new PointerEventData(EventSystem.current);
-        SetCanvas(datas);
     }
 
-    public async void SetCanvas(List<UnitSaveData> datas)
+    /// <summary> 
+    /// 플레이어 유닛 소환 UI 생성
+    /// </summary>
+    public async void SetCanvas()
     {
+        var datas = _allSavedUnits;
         var canvas = await Addressables.LoadAssetAsync<GameObject>(canvasPath).ToUniTask();
         var obj = GameObject.Instantiate(canvas);
         if (obj.TryGetComponent(out PlayerSpawnCanvas  playerSpawnCanvas))

@@ -18,12 +18,9 @@ public class FactoryManager : Singleton<FactoryManager>
      private readonly string SOLabel = "EnemySO";
      
 
-     private async void Start()
+     private async void Awake()
      {
-          await LoadAllScriptableObjects();
-          var random = Random.Range(0,enemyArrangeSOs.Count);
-          curEnemyArrange = enemyArrangeSOs[random];
-          EnemySpawn(curEnemyArrange);
+        
      }
      
      /// <summary>
@@ -118,13 +115,17 @@ public class FactoryManager : Singleton<FactoryManager>
      /// <summary>
      /// id에 기반해 적군 유닛 소환
      /// </summary>
-     private void EnemySpawn(EnemyArrangeSO so)
+     public async void EnemySpawn()
      {
+          await LoadAllScriptableObjects();
+          var random = Random.Range(0,enemyArrangeSOs.Count);
+          curEnemyArrange = enemyArrangeSOs[random];
+          var so = curEnemyArrange;
           foreach (var enemyArrange in so.EnemyArranges)
           {
                var _unit = CreateUnit(enemyArrange.unitIndex,Team.EnemyTeam);
                enemyUnits.Add(_unit);
-               var _tile = TileManager.Inst.GetEnemyTile(enemyArrange.posIndex);
+               var _tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(enemyArrange.posIndex);
                _unit.SetTile(_tile);
                _tile.SetUnit(_unit);
                _unit.transform.position = _tile.GetPos();

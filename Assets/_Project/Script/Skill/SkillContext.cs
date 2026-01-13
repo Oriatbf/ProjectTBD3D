@@ -63,15 +63,16 @@ namespace SkillData
         private List<Tile> GetTargetTiles()
         {
             List<Tile> _tiles = new List<Tile>();
+            var tileController = ApplicationManager.Inst.GetModule<TileController>();
             switch (targetType)
             {
                 case TargetType.Area:
-                    _tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
+                    _tiles = tileController.GetTiles(TargetTile,rowCount,columnCount);
                     break;
                 case TargetType.Source:
                     break;
                 case TargetType.All:
-                    _tiles = TileManager.Inst.GetAllTiles();
+                    _tiles = tileController.GetAllTiles();
                     break;
             }
             

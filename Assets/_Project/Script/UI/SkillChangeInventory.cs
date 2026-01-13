@@ -77,7 +77,7 @@ public class SkillChangeInventory : MonoBehaviour
 
      private void ClickUnitIcon()
      {
-         if (!Input.GetMouseButtonDown(0)) return;
+         if (!Input.GetMouseButtonDown(0) || !isActive) return;
          _pointerEventData.position = Input.mousePosition;
          _raycastResults.Clear();
          EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);

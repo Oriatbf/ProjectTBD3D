@@ -7,10 +7,12 @@ public class Counter : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
+        /*
         if(skillContext == null)Debug.LogError("no skill context");
         if(skillContext.SourceUnit == null)Debug.LogError("no source unit");
         if(skillContext.SourceUnit.GetActionContainer() == null)Debug.LogError("no ActionContainer");
-        skillContext.SourceUnit.GetActionContainer().hurtAction += Action;
+        skillContext.SourceUnit.GetActionContainer().AddActionState(Action,A); += Action;
+        */
     }
     
     private void Action(SkillContext skillContext,SkillType targetSkillType)

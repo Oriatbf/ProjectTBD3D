@@ -10,21 +10,36 @@ public class Fire : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.ForEachTarget(unit =>
+       skillContext.ForEachTarget(unit =>
         {
-            BuffDebuff debuff = new BuffDebuff(
-                unit,"Fire",values[0],DecreaseType.OnlyTurn,values[1]
+            ActionData fireData = new ActionData(
+                id: "Fire",
+                owner: unit,
+                stack: values[1],      // 데미지
+                turn: values[0],       // 턴 수
+                decreaseType: DecreaseType.OnlyTurn,
+                targetType: ActionTargetType.Self
             );
-            debuff.AddBuffAction(Action,skillContext);
-            unit.AddBuff("Fire",debuff);
+
+            // 시전자 정보 저장
+            fireData.sourceUnit = skillContext.SourceUnit;
+
+            fireData.action = (data, context) =>
+            {
+                context.TargetUnit?.GetDamage(data.stack, context, SkillType.Buff);
+            };
+
+            fireData.finishAction = (data) =>
+            {
+                Debug.Log($"{data.ownerUnit.name}의 화상이 끝났습니다.");
+            };
+
+            ActionState fireState = new ActionState(fireData);
+            unit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, fireState);
         });
        
     }
-
-    private void Action(BuffDebuff buffDebuff, SkillContext skillContext)
-    {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext,SkillType);
-    }
+    
 
     public override string ReturnInformation()
     {
@@ -39,20 +54,26 @@ public class Poison : SkillEffect
     {
         skillContext.ForEachTarget(unit =>
         {
-            BuffDebuff debuff = new BuffDebuff(
-                unit,"Poison",values[0],DecreaseType.OnlyStack,values[0]
+            ActionData poisonData = new ActionData(
+                id: "Poison",
+                owner: unit,
+                stack: values[0],
+                turn: 0,
+                decreaseType: DecreaseType.OnlyStack,
+                targetType: ActionTargetType.Self
             );
-            debuff.AddBuffAction(Action,skillContext);
-            unit.AddBuff("Poison",debuff);
-        });
-       
-    }
 
-    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
-    {
-        buffDebuff.targetUnit.GetDamage(buffDebuff.stackCount,skillContext,SkillType);
+            poisonData.sourceUnit = skillContext.SourceUnit;
+
+            poisonData.action = (data, context) =>
+            {
+                context.TargetUnit?.GetDamage(data.stack, context, SkillType.Buff);
+            };
+
+            ActionState poisonState = new ActionState(poisonData);
+            unit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
+        });
     }
-    
 
     public override string ReturnInformation()
     {
@@ -68,22 +89,31 @@ public class Ice : SkillEffect
     {
         skillContext.ForEachTarget(unit =>
         {
-            BuffDebuff debuff = new BuffDebuff(
-                unit,"Ice",values[0],DecreaseType.None,values[0]
+            ActionData freezeData = new ActionData(
+                id: "Freeze",
+                owner: unit,
+                stack: values[0],
+                turn: 999,
+                decreaseType: DecreaseType.None,
+                targetType: ActionTargetType.Self
             );
-            debuff.AddBuffAction(Action,skillContext);
-            unit.AddBuff("Ice",debuff);
+
+            freezeData.action = (data, context) =>
+            {
+                if (data.stack >= 3)
+                {
+                    Debug.Log($"{data.ownerUnit.name}이(가) 빙결되었습니다!");
+                    // TODO: 행동 불가 처리
+                    //data.Finish();
+                }
+            };
+
+            ActionState freezeState = new ActionState(freezeData);
+            unit.GetActionContainer().AddActionState(
+                ActionTrigger.OnTurnStart, freezeState);
         });
     }
 
-    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
-    {
-        if (buffDebuff.stackCount >= 3)
-        {
-            Debug.Log("빙결");
-            buffDebuff.DeActivate();
-        }
-    }
 
     public override string ReturnInformation()
     {
@@ -97,7 +127,31 @@ public class DamageBuff : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
+        skillContext.ForEachTarget(unit =>
+        {
+            ActionData damageBuffData = new ActionData(
+                id: "DamageBuff",
+                owner: unit,
+                stack: values[0],
+                turn: 999,
+                decreaseType: DecreaseType.None,
+                targetType: ActionTargetType.Self
+            );
+
+            damageBuffData.action = (data, context) =>
+            {
+                context.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
+                data.isExist = false;
+            };
+
+            ActionState damageBuffState = new ActionState(damageBuffData);
+            unit.GetActionContainer().AddActionState(
+                ActionTrigger.OnTurnStart, damageBuffState);
+        });
+        
+        
+        
+      //  skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
     }
 
     public override string ReturnInformation()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Pooling;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,7 +22,7 @@ public class Unit : MonoBehaviour
     private Tile tile; 
     
     private Animator animator;
-    private ActionContainer actionContainer;
+    private ActionStateContainer _actionStateContainer;
     private UnitSaveData unitData;
     private UnitController unitController;
     
@@ -35,7 +36,7 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        actionContainer = new ActionContainer();
+        _actionStateContainer = new ActionStateContainer();
         unitController = GetComponent<UnitController>();
     }
     private void Start()
@@ -106,7 +107,7 @@ public class Unit : MonoBehaviour
 
     private void SetHealthContent()
     {
-        healthContent = PoolManager.Inst.Spawn<HealthContent>();
+        healthContent = ApplicationManager.Inst.GetModule<PoolController>().Spawn<HealthContent>("HealthContent");
         healthContent.Init(_statContainer);
     }
 
@@ -114,6 +115,7 @@ public class Unit : MonoBehaviour
     {
         if(healthContent != null)
              healthContent.SetPos(tile.GetPos());
+        if(tile == null) Debug.LogError("Unit tile is null");
         ApplicationManager.Inst.GetModule<SkillStackController>().PositionedOnCamera(tile);
         ApplicationManager.Inst.GetModule<BuffStackController>().PositionedOnCamera(tile);
     }
@@ -128,7 +130,7 @@ public class Unit : MonoBehaviour
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
     public BuffDebuff GetBuffDebuff(string id) => buffDebuffs[id];
-    public ActionContainer GetActionContainer() => actionContainer;
+    public ActionStateContainer GetActionContainer() => _actionStateContainer;
     public Animator GetAnimator() => animator;
     
     public UnitSaveData GetUnitData() => unitData;
@@ -168,14 +170,14 @@ public class Unit : MonoBehaviour
             _statContainer.barrier.AddBaseValue(-damage);
             if(remainDamage > 0)
                 _statContainer.hp.AddBaseValue( -remainDamage);
-            skillContext.SourceUnit.GetActionContainer().attackAction?.Invoke(skillContext);
+            skillContext.SourceUnit.GetActionContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 
             
-            actionContainer.hurtAction?.Invoke(skillContext,skillType);
+            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHit,skillContext); 
         }
         else
         {
             _statContainer.hp.AddBaseValue( -damage);
-            actionContainer.healAction?.Invoke(skillContext);
+            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHeal,skillContext);
         }
         ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }
@@ -197,7 +199,7 @@ public class Unit : MonoBehaviour
     private void OnDispos()
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
-        PoolManager.Inst.Despawn(healthContent);
+        ApplicationManager.Inst.GetModule<PoolController>().Despawn(healthContent);
         ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllUnitSkills(tile);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
         ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllUnitBuffs(tile);

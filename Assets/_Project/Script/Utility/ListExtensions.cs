@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core.Utility
 {
-    public static class ListExtensions
+    public static class Extensions
     {
         public static void Shuffle<T>(this List<T> list)
         {
@@ -71,6 +72,12 @@ namespace Core.Utility
             }
 
             return randomList;
+        }
+        
+        public static T GetRandomEnum<T>() where T : Enum
+        {
+            var values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(UnityEngine.Random.Range(0, values.Length));
         }
     }
 }

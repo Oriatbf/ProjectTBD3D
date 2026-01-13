@@ -17,16 +17,20 @@ MonoBehaviour:
   - mapState: 1
     percentage: 40
     priority: 4
-    range: 0
+    range: 55
   - mapState: 2
     percentage: 15
     priority: 2
-    range: 0
+    range: 85
   - mapState: 4
-    percentage: 30
+    percentage: 15
     priority: 3
-    range: 0
-  - mapState: 5
+    range: 70
+  - mapState: 6
     percentage: 15
     priority: 1
-    range: 0
+    range: 100
+  - mapState: 5
+    percentage: 15
+    priority: 5
+    range: 15

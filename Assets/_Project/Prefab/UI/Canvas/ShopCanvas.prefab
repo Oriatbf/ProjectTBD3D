@@ -62,7 +62,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &6249796213907445610
 MonoBehaviour:
@@ -119,6 +119,7 @@ MonoBehaviour:
   parent: {fileID: 6189405357548361151}
   skillContent: {fileID: 4183564899557842946}
   unitContent: {fileID: 3112907277238537986}
+  exitBtn: {fileID: 4388267247530774167}
 --- !u!225 &1838276830220655633
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -363,6 +364,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3423155955852141665, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
   m_PrefabInstance: {fileID: 1553315436280693859}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4388267247530774167 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2983702815868308212, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
+  m_PrefabInstance: {fileID: 1553315436280693859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6189405357548361151 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4641895417828970972, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}

@@ -18,7 +18,7 @@ MonoBehaviour:
     SceneName: SkillTest
   - Key: ShopCanvas
     Prefab: {fileID: 7626600485559309776, guid: 8b6b803b6677b1c458242bbfcbdd2c36, type: 3}
-    SceneName: MapScene
+    SceneName: GamePlay
   - Key: SkillInfoCardCanvas
     Prefab: {fileID: 77820003223514308, guid: d66f580e529fb5c459c9e462c400d30b, type: 3}
     SceneName: GamePlay

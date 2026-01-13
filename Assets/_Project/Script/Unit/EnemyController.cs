@@ -67,10 +67,11 @@ public class EnemyController : UnitController
     /// </summary>
     private void FindingTargetTile(SkillData.SkillBase skill)
     {
+        var tileController = ApplicationManager.Inst.GetModule<TileController>();
         int rowCount = skill.GetData().RowCount;
         int columnCount = skill.GetData().ColumnCount;
-        int mid = TileManager.Inst.GetHalfCount();
-        int row = TileManager.Inst.GetRowCount();
+        int mid = tileController.GetHalfCount();
+        int row = tileController.GetRowCount();
 
         Tile maxTile = null;
         int maxCount = 0;
@@ -78,8 +79,8 @@ public class EnemyController : UnitController
         {
             for (int j = 0; j <row; j++)
             {
-                Tile curTile = TileManager.Inst.GetTile(new Vector2(i, j));
-                var list = TileManager.Inst.GetTiles(curTile,rowCount, columnCount);
+                Tile curTile = tileController.GetTile(new Vector2(i, j));
+                var list = tileController.GetTiles(curTile,rowCount, columnCount);
                 int playerCnt = 0;
                 if (list.Count > 0)
                 {

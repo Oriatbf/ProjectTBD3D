@@ -2,10 +2,6 @@ using System;
 using SkillData;
 using UnityEngine;
 
-public enum DecreaseType
-{
-    None,OnlyTurn,OnlyStack,TurnAndStack
-}
 
 public class BuffDebuff
 {

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopCanvas :  BaseCanvas
 {
     [SerializeField] private Transform skillContent,unitContent;
+    [SerializeField] private Button exitBtn;
     private List<ShopSkillIcon> shopSkillIcons = new List<ShopSkillIcon>();
     private List<ShopUnitIcon> shopUnitIcons = new List<ShopUnitIcon>();
 
@@ -19,6 +21,12 @@ public class ShopCanvas :  BaseCanvas
             if (child.TryGetComponent(out ShopUnitIcon shopUnitIcon))
                 shopUnitIcons.Add(shopUnitIcon);
       
+    }
+
+    public void InitExitAction(Action action)
+    {
+        exitBtn.onClick.RemoveAllListeners();
+        exitBtn.onClick.AddListener(()=>action?.Invoke());
     }
     
 

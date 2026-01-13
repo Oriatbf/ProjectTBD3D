@@ -3,14 +3,12 @@ using UnityEngine.UI;
 
 public class ShopController : BaseController
 {
-    private Button exitBtn;
-    private SkillZone skillZone;
     private bool isFirstOpen = false;
     ShopCanvas shopCanvas;
 
     public override ControllerInfo ControllerInfo { get; } = new()
     {
-        ContainSceneNames = new string[] {"MapScene" },
+        ContainSceneNames = new string[] {"GamePlay" },
         Priority = 0,
         UpdateInterval = 1,
         LateUpdateInterval = 1,
@@ -22,8 +20,11 @@ public class ShopController : BaseController
         base.OnInitialize();
         var applicationManager  = ApplicationManager.Inst;
         var canvas = applicationManager.GetModule<CanvasController>().GetCanvas("ShopCanvas");
-        if(canvas != null) shopCanvas = canvas.GetComponent<ShopCanvas>();
-        // exitBtn.onClick.AddListener(()=>Hide());
+        if (canvas != null)
+        {
+            shopCanvas = canvas.GetComponent<ShopCanvas>();
+            shopCanvas.InitExitAction(Hide);
+        }
     }
 
     public void Show()

@@ -2,210 +2,211 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
 
-public class CharacterInfoController : BaseController
+namespace _Project.Script.Controller
 {
-    private string CanvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterInfoCanvas.prefab";
-    private static readonly Vector2 InitializePos = new Vector2(0, -400);
+    public class CharacterInfoController : BaseController
+    {
+        private string CanvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterInfoCanvas.prefab";
+        private static readonly Vector2 InitializePos = new Vector2(0, -400);
     
-    private CharacterInfoCanvas _characterInfoCanvas;
-    private Icon curIcon;
-    private TargetType curTargetType;
+        private CharacterInfoCanvas _characterInfoCanvas;
+        private Icon curIcon;
+        private TargetType curTargetType;
 
-    private Stat turnGauage;
-    private Tile lastTile;
-    private List<Tile> lastTiles = new List<Tile>();
+        private Stat turnGauage;
+        private Tile lastTile;
+        private List<Tile> lastTiles = new List<Tile>();
 
-    private bool isShow = false;
-    private bool isTargeting = false;
-    private float maxTurnStack = 0;
-    private float curTurnStack = 0;
+        private bool isShow = false;
+        private bool isTargeting = false;
+        private float maxTurnStack = 0;
+        private float curTurnStack = 0;
 
-    private Camera _camera;
-    private PointerEventData _pointerEventData;
-    private List<RaycastResult> _raycastResults = new List<RaycastResult>();
-    public override void OnInitialize()
-    {
-        base.OnInitialize();
-        _camera = Camera.main;
-        _pointerEventData = new PointerEventData(EventSystem.current);
-        SetCanvas();
-    }
-
-    /// <summary>
-    /// CharaterInfoCanvas 소환
-    /// </summary>
-    private async void SetCanvas()
-    {
-        var canvas =  await Addressables.LoadAssetAsync<GameObject>(CanvasPath).Task;
-        var obj = GameObject.Instantiate(canvas);
-        if (obj.TryGetComponent(out CharacterInfoCanvas characterInfoCanvas))
+        private Camera _camera;
+        private PointerEventData _pointerEventData;
+        private List<RaycastResult> _raycastResults = new List<RaycastResult>();
+        public override void OnInitialize()
         {
-            _characterInfoCanvas = characterInfoCanvas;
-            characterInfoCanvas.SetPos(InitializePos);
+            base.OnInitialize();
+            _camera = Camera.main;
+            _pointerEventData = new PointerEventData(EventSystem.current);
         }
-    }
 
-    /// <summary>
-    /// 클릭한 캐릭터의 데이터와 타일정보를 받음
-    /// </summary>
-    public void Init(Stat turnGauage,List<int> bringSkills,Tile curTile)
-    {
-        if(curTile == null)Debug.LogError("CurTile is null");
-        this.turnGauage = turnGauage;
-        maxTurnStack = turnGauage._maxValue;
-        curTurnStack = turnGauage._baseValue;
-        
-        var skills = SheetDataManager.Inst.GetSkillBaseList(bringSkills);
-        
-        
-        foreach (var skill in skills)
+        /// <summary>
+        /// CharaterInfoCanvas 소환
+        /// </summary>
+        public async void SetCanvas()
         {
-            skill.InitSource(curTile);
-        }
-        _characterInfoCanvas.Init(skills);
-    }
-
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        if (!isTargeting)
-        {
-            HandleSkillSelection();
-        }
-        else
-        {
-            HandleSkillTargeting();
-        }
-        
-    }
-    
-    /// <summary>
-    /// 스킬을 클릭하여 선택
-    /// </summary>
-    private void HandleSkillSelection()
-    {
-        if (!Input.GetMouseButtonDown(0)) return;
-        _pointerEventData.position = Input.mousePosition;
-        _raycastResults.Clear();
-        EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
-
-        foreach (var result in _raycastResults)
-        {
-            if (result.gameObject.TryGetComponent(out InventoryIcon skillIcon))
+            var canvas =  await Addressables.LoadAssetAsync<GameObject>(CanvasPath).Task;
+            var obj = GameObject.Instantiate(canvas);
+            if (obj.TryGetComponent(out CharacterInfoCanvas characterInfoCanvas))
             {
-                curIcon = skillIcon;
-                curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
-                isTargeting = true;
+                _characterInfoCanvas = characterInfoCanvas;
+                characterInfoCanvas.SetPos(InitializePos);
+            }
+        }
+
+        /// <summary>
+        /// 클릭한 캐릭터의 데이터와 타일정보를 받음
+        /// </summary>
+        public void Init(Stat turnGauage,List<int> bringSkills,Tile curTile)
+        {
+            if(curTile == null)Debug.LogError("CurTile is null");
+            this.turnGauage = turnGauage;
+            maxTurnStack = turnGauage._maxValue;
+            curTurnStack = turnGauage._baseValue;
+        
+            var skills = SheetDataManager.Inst.GetSkillBaseList(bringSkills);
+        
+        
+            foreach (var skill in skills)
+            {
+                skill.InitSource(curTile);
+            }
+            _characterInfoCanvas.Init(skills);
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+
+            if (!isTargeting)
+            {
+                HandleSkillSelection();
+            }
+            else
+            {
+                HandleSkillTargeting();
+            }
+        
+        }
+    
+        /// <summary>
+        /// 스킬을 클릭하여 선택
+        /// </summary>
+        private void HandleSkillSelection()
+        {
+            if (!Input.GetMouseButtonDown(0)) return;
+            _pointerEventData.position = Input.mousePosition;
+            _raycastResults.Clear();
+            EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+
+            foreach (var result in _raycastResults)
+            {
+                if (result.gameObject.TryGetComponent(out InventoryIcon skillIcon))
+                {
+                    curIcon = skillIcon;
+                    curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
+                    isTargeting = true;
+                    return;
+                }
+            }
+        }
+    
+        /// <summary>
+        /// 선택한 스킬을 타겟팅하고 클릭한 위치에 스킬을 등록
+        /// </summary>
+        private void HandleSkillTargeting()
+        {
+            //우클릭으로 타켓팅 취소
+            if (Input.GetMouseButtonDown(1))
+            {
+                CancelTargeting();
                 return;
             }
-        }
-    }
-    
-    /// <summary>
-    /// 선택한 스킬을 타겟팅하고 클릭한 위치에 스킬을 등록
-    /// </summary>
-    private void HandleSkillTargeting()
-    {
-        //우클릭으로 타켓팅 취소
-        if (Input.GetMouseButtonDown(1))
-        {
-            CancelTargeting();
-            return;
-        }
 
-        Tile _tile = null;
+            Tile _tile = null;
         
-        if (curTargetType == TargetType.Area)
-        {
-            var ray = _camera.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-            if (!hit.transform.TryGetComponent(out Tile tile)) return;
-            else _tile = tile;
-        }
+            if (curTargetType == TargetType.Area)
+            {
+                var ray = _camera.ScreenPointToRay(Input.mousePosition);
+                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+                if (!hit.transform.TryGetComponent(out Tile tile)) return;
+                else _tile = tile;
+            }
       
 
-        // 타일 선택 확정
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (TryExecuteSkill(_tile))
+            // 타일 선택 확정
+            if (Input.GetMouseButtonDown(0))
             {
-                ClearTargetTiles();
-                isTargeting = false;
+                if (TryExecuteSkill(_tile))
+                {
+                    ClearTargetTiles();
+                    isTargeting = false;
+                }
+                return;
             }
-            return;
-        }
 
-        // 타일 하이라이트 업데이트
-        if (lastTile != _tile)
+            // 타일 하이라이트 업데이트
+            if (lastTile != _tile)
+            {
+                UpdateTargetHighlight(_tile);
+            }
+        }
+        private void UpdateTargetHighlight(Tile tile)
         {
-            UpdateTargetHighlight(_tile);
-        }
-    }
-    private void UpdateTargetHighlight(Tile tile)
-    {
-        lastTile = tile;
-        ClearTargetTiles();
+            lastTile = tile;
+            ClearTargetTiles();
 
-        var data = curIcon.GetSkillBase().GetData();
-        var targetTiles = TileManager.Inst.GetTiles(tile, data.RowCount, data.ColumnCount);
+            var data = curIcon.GetSkillBase().GetData();
+            var targetTiles =ApplicationManager.Inst.GetModule<TileController>().GetTiles(tile, data.RowCount, data.ColumnCount);
         
-        lastTiles.AddRange(targetTiles);
-        foreach (var targetTile in targetTiles)
+            lastTiles.AddRange(targetTiles);
+            foreach (var targetTile in targetTiles)
+            {
+                targetTile.Target();
+            }
+        }
+        private bool TryExecuteSkill(Tile targetTile)
         {
-            targetTile.Target();
+            var originalSkillBase = curIcon?.GetSkillBase();
+            if (originalSkillBase == null) return false;
+
+            var skillStackInfo = new SkillStackInfo(originalSkillBase);
+            var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
+        
+            // 턴 게이지 체크
+            if (reqTurn + curTurnStack > maxTurnStack) return false;
+
+            curTurnStack += reqTurn;
+            skillStackInfo.stackTurn = curTurnStack;
+            turnGauage.SetBaseValue(curTurnStack);
+
+            var skill = skillStackInfo.skill;
+            if(skill.GetSkillContext().SourceTile== null)Debug.LogError("skillStackInfo.sourceTile is null");
+            //시전자와 타겟의 위치를 입력
+            //skill.InitSource(skillStackInfo.sourceTile);
+            if(targetTile!=null) skill.InitTarget(targetTile);
+
+            ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+        
+            return true;
         }
-    }
-    private bool TryExecuteSkill(Tile targetTile)
-    {
-        var originalSkillBase = curIcon?.GetSkillBase();
-        if (originalSkillBase == null) return false;
-
-        var skillStackInfo = new SkillStackInfo(originalSkillBase);
-        var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
-        
-        // 턴 게이지 체크
-        if (reqTurn + curTurnStack > maxTurnStack) return false;
-
-        curTurnStack += reqTurn;
-        skillStackInfo.stackTurn = curTurnStack;
-        turnGauage.SetBaseValue(curTurnStack);
-
-        var skill = skillStackInfo.skill;
-        if(skill.GetSkillContext().SourceTile== null)Debug.LogError("skillStackInfo.sourceTile is null");
-        //시전자와 타겟의 위치를 입력
-        //skill.InitSource(skillStackInfo.sourceTile);
-        if(targetTile!=null) skill.InitTarget(targetTile);
-
-        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
-        
-        return true;
-    }
-    private void ClearTargetTiles()
-    {
-        foreach(var tile in lastTiles)tile.UnTarget();
-        lastTiles.Clear();
-    }
-    private void CancelTargeting()
-    {
-        ClearTargetTiles();
-        curIcon = null;
-        isTargeting = false;
-    }
-    public void Show()
-    {
-        isShow = true;
-        _characterInfoCanvas.ChangeState(true,true,true);
-        _characterInfoCanvas.SetPos(Vector2.zero,true,0.25f);
-    }
-    public void Hide()
-    {
-        isShow = false;
-        _characterInfoCanvas.ChangeState(false,true);
-        _characterInfoCanvas.SetPos(InitializePos,true,0.25f);
-    }
+        private void ClearTargetTiles()
+        {
+            foreach(var tile in lastTiles)tile.UnTarget();
+            lastTiles.Clear();
+        }
+        private void CancelTargeting()
+        {
+            ClearTargetTiles();
+            curIcon = null;
+            isTargeting = false;
+        }
+        public void Show()
+        {
+            isShow = true;
+            _characterInfoCanvas.ChangeState(true,true,true);
+            _characterInfoCanvas.SetPos(Vector2.zero,true,0.25f);
+        }
+        public void Hide()
+        {
+            isShow = false;
+            _characterInfoCanvas.ChangeState(false,true);
+            _characterInfoCanvas.SetPos(InitializePos,true,0.25f);
+        }
     
     
+    }
 }

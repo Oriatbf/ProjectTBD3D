@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SkillData;
+using SkillData.SkillEffects;
 using UnityEngine;
 using static ColorText;
 
@@ -39,14 +40,9 @@ public class BloodSuck : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.SourceUnit.GetActionContainer().attackAction += Action;
+        ActionStateExamples.BloodSuck(skillContext.SourceUnit);
     }
-
-    private void Action(SkillContext skillContext)
-    {
-        int finalValue = 1;//(int)Mathf.Clamp(value * 0.1f,1,Mathf.Infinity);
-        skillContext.SourceUnit.GetDamage(-finalValue,skillContext,SkillType);
-    }
+    
 
     public override string ReturnInformation()
     {

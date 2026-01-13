@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Pooling;
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -60,7 +62,10 @@ public class ApplicationManager : Singleton<ApplicationManager>
 
     private async UniTask InitializeModules()
     {
+        _modulesByType.Clear();
+        _modulesByType.Add(typeof(PoolController), new PoolController());
         _modulesByType.Add(typeof(CanvasController), new CanvasController());
+        _modulesByType.Add(typeof(TileController), new TileController());
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
@@ -78,6 +83,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(CameraController), new CameraController());
         _modulesByType.Add(typeof(MapCameraMoveController), new MapCameraMoveController());
         _modulesByType.Add(typeof(MapController), new MapController());
+        _modulesByType.Add(typeof(GameFlowController), new GameFlowController());
     }
 
     private void UnRegisterModule(Type type)

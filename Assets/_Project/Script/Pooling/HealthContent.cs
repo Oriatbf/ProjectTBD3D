@@ -1,3 +1,4 @@
+using _Project.Pooling;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,6 +39,7 @@ public class HealthContent : MonoBehaviour,IPoolable
 
     public void SetPos(Vector3 targetPos)
     {
+        if(_camera == null)Debug.Log("HealthContent camera is null");
         Vector3 screenPos = _camera.WorldToScreenPoint(targetPos);
         screenPos += new Vector3(0, posY);
         transform.position = screenPos;
@@ -60,6 +62,7 @@ public class HealthContent : MonoBehaviour,IPoolable
     
     public void OnSpawnFromPool()
     {
+        Debug.Log("OnSpawnFromPool");
         _camera = Camera.main;
     }
 
