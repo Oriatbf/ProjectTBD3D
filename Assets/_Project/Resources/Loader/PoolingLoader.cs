@@ -20,6 +20,7 @@ namespace _Project.Resources.Loader
             [Tooltip("ScriptName")]public string Key;
             public GameObject Prefab;
             public PoolType poolType;
+            public int canvasOrder = 0;
         }
   
         public List<PoolInfo> PoolList = new List<PoolInfo>();

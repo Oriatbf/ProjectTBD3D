@@ -25,3 +25,6 @@ MonoBehaviour:
   - Key: UnitInfoCardCanvas
     Prefab: {fileID: 8889348253450800113, guid: 5cc978187e651d243949c21064e13f03, type: 3}
     SceneName: GamePlay
+  - Key: DebugCanvas
+    Prefab: {fileID: 6315807230441473441, guid: bdae0bb521d82774fbd47311288a9211, type: 3}
+    SceneName: GamePlay
