@@ -63,13 +63,14 @@ public class ApplicationManager : Singleton<ApplicationManager>
     private async UniTask InitializeModules()
     {
         _modulesByType.Clear();
+        _modulesByType.Add(typeof(AudioController), new AudioController());
         _modulesByType.Add(typeof(PoolController), new PoolController());
         _modulesByType.Add(typeof(CanvasController), new CanvasController());
         _modulesByType.Add(typeof(TileController), new TileController());
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
-        _modulesByType.Add(typeof(CharacterInfoController), new CharacterInfoController());
+        _modulesByType.Add(typeof(CharacterSkillController), new CharacterSkillController());
         _modulesByType.Add(typeof(PopUpUIController), new PopUpUIController());
         _modulesByType.Add(typeof(SkillStackController),new SkillStackController());
         _modulesByType.Add(typeof(PlayerSpawnController),new PlayerSpawnController());
@@ -80,6 +81,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(BuffInfoController), new BuffInfoController());
         _modulesByType.Add(typeof(TopInfoController), new TopInfoController());
         _modulesByType.Add(typeof(SkillChangeController), new SkillChangeController());
+        _modulesByType.Add(typeof(DebugController), new DebugController());
         _modulesByType.Add(typeof(CameraController), new CameraController());
         _modulesByType.Add(typeof(MapCameraMoveController), new MapCameraMoveController());
         _modulesByType.Add(typeof(MapController), new MapController());

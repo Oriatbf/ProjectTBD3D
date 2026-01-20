@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Project.Resources.Loader;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,9 +13,6 @@ namespace _Project.Pooling
     /// </summary>
     public class PoolController : BaseController
     {
-        // Type 기반 풀 저장소
-        private readonly Dictionary<Type, object> typePools = new Dictionary<Type, object>();
-        
         // Key(string) 기반 풀 저장소 - PoolingLoader와 호환
         private readonly Dictionary<string, ObjectPool<Component>> keyPools = new Dictionary<string, ObjectPool<Component>>();
         
@@ -78,42 +76,9 @@ namespace _Project.Pooling
             var pool = new ObjectPool<Component>(component, parent, initialSize, maxSize);
             keyPools[key] = pool;
         }
+        
 
-      
 
-      
-        /// <summary>
-        /// Type 기반으로 오브젝트 스폰
-        /// </summary>
-        public T Spawn<T>() where T : Component
-        {
-            Type type = typeof(T);
-            
-            if (typePools.TryGetValue(type, out object poolObj))
-            {
-                ObjectPool<T> pool = (ObjectPool<T>)poolObj;
-                Debug.Log(pool.Get());
-                return pool.Get();
-            }
-            
-
-            Debug.LogError($"Pool for type {type.Name} not found. Create pool first using CreatePool<T>()");
-            return null;
-        }
-
-        /// <summary>
-        /// Type 기반으로 위치와 회전 지정하여 스폰
-        /// </summary>
-        public T Spawn<T>(Vector3 position, Quaternion rotation) where T : Component
-        {
-            T obj = Spawn<T>();
-            if (obj != null)
-            {
-                obj.transform.position = position;
-                obj.transform.rotation = rotation;
-            }
-            return obj;
-        }
 
         /// <summary>
         /// Key 기반으로 오브젝트 스폰 (PoolingLoader 사용)
@@ -148,64 +113,19 @@ namespace _Project.Pooling
             }
             return obj;
         }
-
-        /// <summary>
-        /// GameObject 스폰 (Key 기반)
-        /// </summary>
-        public GameObject SpawnGameObject(string key)
+        
+        public T Spawn<T>(string key, Vector3 position) where T : Component
         {
-            if (keyPools.TryGetValue(key, out ObjectPool<Component> pool))
-            {
-                Component obj = pool.Get();
-                return obj.gameObject;
-            }
-
-            Debug.LogError($"Pool with key '{key}' not found");
-            return null;
-        }
-
-        /// <summary>
-        /// GameObject 스폰 (위치, 회전 지정)
-        /// </summary>
-        public GameObject SpawnGameObject(string key, Vector3 position, Quaternion rotation)
-        {
-            GameObject obj = SpawnGameObject(key);
+            T obj = Spawn<T>(key);
             if (obj != null)
             {
                 obj.transform.position = position;
-                obj.transform.rotation = rotation;
             }
             return obj;
         }
 
-        /// <summary>
-        /// Type 기반 오브젝트 반환
-        /// </summary>
-        public void Despawn<T>(T obj) where T : Component
-        {
-            if (obj == null)
-            {
-                Debug.LogWarning("Trying to despawn null object");
-                return;
-            }
-
-            Type type = typeof(T);
-            
-            if (typePools.TryGetValue(type, out object poolObj))
-            {
-                ObjectPool<T> pool = (ObjectPool<T>)poolObj;
-                pool.Return(obj);
-                return;
-            }
-
-            Debug.LogWarning($"Pool for type {type.Name} not found. Destroying object instead.");
-            UnityEngine.Object.Destroy(obj.gameObject);
-        }
-
-        /// <summary>
-        /// Key 기반 오브젝트 반환
-        /// </summary>
-        public void Despawn(string key, Component obj)
+        
+        public void ReturnToPool(string key,Transform obj)
         {
             if (obj == null)
             {
@@ -218,25 +138,26 @@ namespace _Project.Pooling
                 pool.Return(obj);
                 return;
             }
-
-            Debug.LogWarning($"Pool with key '{key}' not found. Destroying object instead.");
-            UnityEngine.Object.Destroy(obj.gameObject);
         }
-
-       
-
-        /// <summary>
-        /// 특정 풀 가져오기 (Type 기반)
-        /// </summary>
-        public ObjectPool<T> GetPool<T>() where T : Component
+        
+        public async void ReturnToPoolDelay(string key,Transform obj,float delay = 0.2f)
         {
-            Type type = typeof(T);
-            if (typePools.TryGetValue(type, out object pool))
+            await UniTask.WaitForSeconds(delay);
+            if (obj == null)
             {
-                return (ObjectPool<T>)pool;
+                Debug.LogWarning("Trying to despawn null object");
+                return;
             }
-            return null;
+
+            if (keyPools.TryGetValue(key, out ObjectPool<Component> pool))
+            {
+                pool.Return(obj);
+                return;
+            }
         }
+        
+       
+        
 
         /// <summary>
         /// 특정 풀 가져오기 (Key 기반)
@@ -268,7 +189,7 @@ namespace _Project.Pooling
                     parentObj = new GameObject($"Pool_{key}_Canvas");
                     var canvas = parentObj.AddComponent<Canvas>();
                     canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
+                    canvas.sortingOrder = poolInfo.canvasOrder;
                     var scaler = parentObj.AddComponent<CanvasScaler>();
                     scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                     scaler.referenceResolution = new Vector2(1920, 1080);
@@ -296,20 +217,6 @@ namespace _Project.Pooling
         }
 
         /// <summary>
-        /// 특정 풀 클리어 (Type 기반)
-        /// </summary>
-        public void ClearPool<T>() where T : Component
-        {
-            Type type = typeof(T);
-            if (typePools.TryGetValue(type, out object poolObj))
-            {
-                ObjectPool<T> pool = (ObjectPool<T>)poolObj;
-                pool.Clear();
-                typePools.Remove(type);
-            }
-        }
-
-        /// <summary>
         /// 특정 풀 클리어 (Key 기반)
         /// </summary>
         public void ClearPool(string key)
@@ -326,14 +233,6 @@ namespace _Project.Pooling
         /// </summary>
         public void ClearAllPools()
         {
-            foreach (var pool in typePools.Values)
-            {
-                if (pool is ObjectPool<Component> componentPool)
-                {
-                    componentPool.Clear();
-                }
-            }
-            typePools.Clear();
 
             foreach (var pool in keyPools.Values)
             {

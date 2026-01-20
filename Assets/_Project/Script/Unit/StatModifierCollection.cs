@@ -18,6 +18,7 @@ public readonly struct StatModifier
 [Serializable]
 public class StatModifierCollection
 {
+    [Serializable]
     private struct ModifierEntry
     {
         public float Value;

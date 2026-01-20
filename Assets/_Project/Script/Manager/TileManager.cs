@@ -98,7 +98,6 @@ public class TileController : BaseController
         rowCount = Mathf.Clamp(rowCount,1,rowCount);
         columnCount = Mathf.Clamp(columnCount,1,columnCount);
         
-        //TODO 중복 버그 존재
         if(targetTile == null)Debug.LogError("targetTile is null");
         HashSet<Tile> _tiles = new HashSet<Tile>();
         int xPos = (int)targetTile.GetIndex().x;

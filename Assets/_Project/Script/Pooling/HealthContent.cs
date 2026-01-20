@@ -8,11 +8,14 @@ public class HealthContent : MonoBehaviour,IPoolable
     [SerializeField] private TextMeshProUGUI hpTxt,barrierTxt;
     [SerializeField] private Image charmBar_value;
     private Camera _camera;
-    [SerializeField]bool isShow = false;
+    private StatContainer _statContainer;
+    bool isShow = false;
     const float posY = 300f;
+    
 
     public void Init(StatContainer statContainer)
     {
+        _statContainer = statContainer;
         statContainer.hp.OnValueChanged += SetHpTxt;
         statContainer.barrier.OnValueChanged += SetBarrierTxt;
         statContainer.charmResist.OnValueChanged += SetCharmBar;
@@ -33,8 +36,8 @@ public class HealthContent : MonoBehaviour,IPoolable
 
     private void SetCharmBar(float value)
     {
-       // Debug.Log(value);
-        charmBar_value.fillAmount = value;
+        Debug.Log($"매혹도 : {value} {_statContainer.charmResist._originalValue} {_statContainer.charmResist._baseValue} {_statContainer.charmResist._maxValue}");
+        charmBar_value.fillAmount = value/_statContainer.charmResist._maxValue;
     }
 
     public void SetPos(Vector3 targetPos)

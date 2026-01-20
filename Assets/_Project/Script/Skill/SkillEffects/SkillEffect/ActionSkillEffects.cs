@@ -34,6 +34,7 @@ public class Damage : SkillEffect
     }
 }
 
+
 public class BloodSuck : SkillEffect
 {
     protected override SkillType SkillType  => SkillType.Utility;
@@ -139,15 +140,16 @@ public class InCreaseCharm : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
+        int finalValue = (int)skillContext.SourceUnit.GetStatContainer().charm.FinalValue() + values[0];
         skillContext.ForEachTarget(unit =>
         {
-            unit.GetStatContainer().charmResist.AddBaseValue(values[0]);
+            unit.GetStatContainer().charmResist.AddBaseValue(finalValue);
         });
     }
 
     public override string ReturnInformation()
     {
-        return $"적에게 {GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 매혹도를 줍니다";
+        return $"적에게 {GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 매혹을 줍니다";
     }
 }
 
@@ -157,11 +159,13 @@ public class BloodHeal : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        var bloodBuff = skillContext.SourceUnit.GetBuffDebuff("Blood");
+        
+        var bloodBuff = skillContext.SourceUnit.GetActionStateContainer().GetActionState(ActionTrigger.None,"BloodBuff");
         if (bloodBuff == null) return;
-        int value =  bloodBuff.stackCount;
+        int value =  bloodBuff.GetData().stack;
         skillContext.SourceUnit.GetDamage(-value,skillContext, SkillType);
-        bloodBuff.stackCount = 0;
+        bloodBuff.Finish();
+        
     }
 
     public override string ReturnInformation()

@@ -51,8 +51,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpTxt: {fileID: 3045669704081155112}
   barrierTxt: {fileID: 7772200026465920927}
-  charmBar_value: {fileID: 1043073629643606891}
-  isShow: 1
+  charmBar_value: {fileID: 8561017074234655831}
 --- !u!1 &2286094712130834445
 GameObject:
   m_ObjectHideFlags: 0

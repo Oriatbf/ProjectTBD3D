@@ -11,6 +11,7 @@ namespace _Project.Script.Controller
         public override void OnInitialize()
         {
             base.OnInitialize();
+            _curRoomType = DataManager.Inst.GetCurRoomType();
             SetFLow();
         }
 
@@ -46,8 +47,9 @@ namespace _Project.Script.Controller
 
         private void SetEnemy()
         {
+            ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("BattleBGM");
             ApplicationManager.Inst.GetModule<TileController>().InstanceTile();
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().SetCanvas();
+            ApplicationManager.Inst.GetModule<CharacterSkillController>().SetCanvas();
             ApplicationManager.Inst.GetModule<PlayerSpawnController>().SetCanvas();
             FactoryManager.Inst.EnemySpawn();
         }

@@ -31,6 +31,16 @@ public class CanvasController : BaseController
         return _canvasDictionary[canvasName];
     }
 
+    public T GetCanvas<T>(string canvasName)
+    {
+        if(!_canvasDictionary.ContainsKey(canvasName))Debug.LogError($"{canvasName}의 이름을 가진 canvas프래팹이 없음");
+        var obj = _canvasDictionary[canvasName];
+        if(obj.TryGetComponent(out T canvas))
+            return canvas;
+        else Debug.LogError($"{canvas}가 없음");
+        return default;
+    }
+
     public void LoadSceneCanvas(string sceneName)
     {
         if (_canvasLoader == null) return;

@@ -35,8 +35,9 @@ public class TurnController : BaseController
     private async void PlayerTurnEndAction()
     {
         if (AttackTurn == Team.EnemyTeam) return;
-        ApplicationManager.Inst.GetModule<CharacterInfoController>().Hide();
-        await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill().AsAsyncUnitUniTask();
+        ApplicationManager.Inst.GetModule<CharacterSkillController>().CancelTargeting();
+        ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
+        await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill();
         
         ChangeStates(State.Idle, Team.PlayerTeam);
         ChangeStates(State.Attack, Team.EnemyTeam);
@@ -50,6 +51,7 @@ public class TurnController : BaseController
     
     public void Reset()
     {
+        Debug.Log("UnitResets");
         foreach (var unit in allUnits)
         {
             unit.Reset();

@@ -54,37 +54,47 @@ public class SkillTurnCounterController : BaseController
         for (int i = 0; i < _count; i++)
         {
             RectTransform _rect = null;
-            if (turnQueue.Count <= 0 || turnImageQueue.Count<=0) return;
+            if (turnQueue.Count <= 0 || turnImageQueue.Count <= 0) break;
             //실행할(삭제될) 스킬TurnImage 받기
             var image = turnImageQueue.Dequeue();
+            Debug.Log($"Dequeue");
             destroyObj.Add(image.gameObject);
             if(image.TryGetComponent(out RectTransform rect)) _rect = rect;
             var curPos  = rect.anchoredPosition;
             //실행할(삭제될) 스킬 받기
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
-            if (_rect != null)
-            {
-                int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
-                //UI이미지 이동 + 투명화
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion* imageMoveDistance, 0), 0.2f));
-                image.ArrowAlpha();
-                await sequence.Play().AsyncWaitForCompletion();
-            }
             
             var sourceUnit = skill.GetSkillContext().SourceUnit;
-            //스킬 실행
-            sourceUnit.AttackAnim();
-            skill.SkillAction();
+            
+          
+            
             await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
+            sourceUnit.AttackAnim();
             if(skill.GetSkillContext().TargetUnit!=null)
                 await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().TargetUnit);
+            // 스킬 실행 후 UI 애니메이션 시작
+            if (_rect != null)
+            {
+                Sequence seq = DOTween.Sequence();
+                int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
+
+                //UI이미지 이동 + 투명화
+                seq.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion * imageMoveDistance, 0), 0.2f));
+                seq.JoinCallback(() => image.ArrowAlpha());
+                await seq.Play().AsyncWaitForCompletion();
+
+            }
+            //스킬 실행
+            skill.SkillAction();
+
+            
             //몬스터 위에 스킬 스택되어있던거 삭제
             ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
         }
         //한 턴에 해당하는 UI gameObject 삭제
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
+        Debug.Log("SkillTurnCounterOriginLook");
         ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();

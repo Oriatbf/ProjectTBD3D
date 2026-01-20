@@ -10,14 +10,14 @@ public class PlayerController : UnitController
     {
         if (!infoShow)
         {
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Show();
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Init
+            ApplicationManager.Inst.GetModule<CharacterSkillController>().Show();
+            ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
                 (_unit.GetStatContainer().turnGauge,_unit.GetSkillList(),curTile);
             infoShow = true;
         }
         else
         {
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Hide();
+            ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
             infoShow = false;
         }
     }

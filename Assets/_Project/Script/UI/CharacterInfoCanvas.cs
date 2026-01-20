@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VInspector;
 
-public class CharacterInfoCanvas : BaseCanvas
+public class CharacterSkillCanvas : BaseCanvas
 {
     [Foldout("Serialize")]
     [SerializeField] private Transform skillContent;

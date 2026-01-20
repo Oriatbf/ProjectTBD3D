@@ -62,6 +62,9 @@ public class MapController : BaseController
 
     public void EnterRoom(RoomTile roomTile)
     {
+        DataManager.Inst.SaveStageIndex(roomTile.GetRoom().GetIndex());
+        FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
+        /*
         switch (roomTile.GetRoom().GetRoomType())
         {
             case RoomType.Village:
@@ -85,7 +88,7 @@ public class MapController : BaseController
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
-        }
+        }*/
     }
 
     public void ResetAllRoomTileState()

@@ -25,6 +25,6 @@ public class StatContainer
         turnGauge = Stat.Create(0,data.TurnGauge);
         avoidance = Stat.Create(data.Avoidance);
         charm = Stat.Create(data.Charm);
-        charmResist = Stat.Create(data.CharmResist);
+        charmResist = Stat.Create(0,data.CharmResist);
     }
 }

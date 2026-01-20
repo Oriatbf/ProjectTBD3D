@@ -147,4 +147,10 @@ public class PlayerSpawnController : BaseController
         lastTile.UnTarget();
         lastTile = null;
     }
+
+    #region API
+
+    public UnitIcon GetUnitIcon() => _curUnitIcon;
+
+    #endregion
 }

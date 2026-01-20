@@ -33,6 +33,7 @@ public enum ActionTargetType
 /// </summary>
 public enum ActionTrigger
 {
+    None,
     OnGet,
     OnTurnStart,    // 턴 시작 시
     OnTurnEnd,      // 턴 종료 시
@@ -53,6 +54,7 @@ public class ActionData
     public int stack;                           // 스택 값
     public int turn;                            // 턴 수
     public bool isExist = true;                 // 작동 여부
+    public bool isVisualized = false;
     public DecreaseType decreaseType;           // 감소 타입
     public ActionTargetType targetType;         // 타겟 타입
     public int randomCount = 1;                 // 랜덤 타겟 개수 (RandomEnemy용)
@@ -108,6 +110,7 @@ public class ActionState
     public ActionData GetData() => data;
     public string GetId() => data.id;
     public bool IsExist() => data.isExist;
+    public bool IsVisualized() => data.isVisualized;
 
     /// <summary>
     /// 액션 실행 (트리거 발동 시)

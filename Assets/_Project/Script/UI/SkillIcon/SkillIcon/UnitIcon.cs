@@ -15,18 +15,19 @@ public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoint
     
     public void OnPointerMove(PointerEventData eventData)
     {
+        if(_unitSaveData ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().InitUnitData(_unitSaveData,Input.mousePosition);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        //if(skill ==null) return;
+        if(_unitSaveData ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Unit);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        //if(skill ==null) return;
+        if(_unitSaveData ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Unit);
     }
 

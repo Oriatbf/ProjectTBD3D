@@ -35,7 +35,7 @@ namespace SkillData.SkillEffects
 
             // ActionState 생성 및 추가
             ActionState burnState = new ActionState(burnData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, burnState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, burnState);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState counterState = new ActionState(counterData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnHit, counterState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnHit, counterState);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState regenState = new ActionState(regenData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnTurnStart, regenState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnStart, regenState);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState splashState = new ActionState(splashData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnAttack, splashState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnAttack, splashState);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState poisonState = new ActionState(poisonData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
         }
 
         public static void BloodSuck(Unit ownerUnit)
@@ -173,7 +173,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState bloodSuckState = new ActionState(bloodSuckData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnAttack, bloodSuckState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnAttack, bloodSuckState);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState deathBuffState = new ActionState(deathBuffData);
-            ownerUnit.GetActionContainer().AddActionState(ActionTrigger.OnDeath, deathBuffState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnDeath, deathBuffState);
         }
     }
 }

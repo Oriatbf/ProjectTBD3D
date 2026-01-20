@@ -35,7 +35,7 @@ public class Fire : SkillEffect
             };
 
             ActionState fireState = new ActionState(fireData);
-            unit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, fireState);
+            unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, fireState);
         });
        
     }
@@ -71,7 +71,7 @@ public class Poison : SkillEffect
             };
 
             ActionState poisonState = new ActionState(poisonData);
-            unit.GetActionContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
+            unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
         });
     }
 
@@ -109,7 +109,7 @@ public class Ice : SkillEffect
             };
 
             ActionState freezeState = new ActionState(freezeData);
-            unit.GetActionContainer().AddActionState(
+            unit.GetActionStateContainer().AddActionState(
                 ActionTrigger.OnTurnStart, freezeState);
         });
     }
@@ -127,31 +127,27 @@ public class DamageBuff : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        skillContext.ForEachTarget(unit =>
+        var unit = skillContext.SourceUnit;
+        ActionData damageBuffData = new ActionData(
+            id: "DamageBuff",
+            owner: unit,
+            stack: values[0],
+            turn: 999,
+            decreaseType: DecreaseType.None,
+            targetType: ActionTargetType.Self
+        );
+
+        damageBuffData.action = (data, context) =>
         {
-            ActionData damageBuffData = new ActionData(
-                id: "DamageBuff",
-                owner: unit,
-                stack: values[0],
-                turn: 999,
-                decreaseType: DecreaseType.None,
-                targetType: ActionTargetType.Self
-            );
+            skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add, data.stack));
+            Debug.Log("데미지 증가 실행");
+            data.isExist = false;
+        };
 
-            damageBuffData.action = (data, context) =>
-            {
-                context.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
-                data.isExist = false;
-            };
-
-            ActionState damageBuffState = new ActionState(damageBuffData);
-            unit.GetActionContainer().AddActionState(
-                ActionTrigger.OnTurnStart, damageBuffState);
-        });
-        
-        
-        
-      //  skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add,2));
+        ActionState damageBuffState = new ActionState(damageBuffData);
+        unit.GetActionStateContainer().AddActionState(
+            ActionTrigger.None, damageBuffState);
+        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,damageBuffState);
     }
 
     public override string ReturnInformation()
@@ -167,16 +163,27 @@ public class BloodBuff : SkillEffect
     protected override void SkillAction(SkillContext skillContext)
     {
         var unit = skillContext.SourceUnit;
-        BuffDebuff debuff = new BuffDebuff(
-            unit,"Blood",999,DecreaseType.None,values[0]
+        ActionData bloodBuffData = new ActionData(
+            id: "BloodBuff",
+            owner: unit,
+            stack: values[0],
+            turn: 999,
+            decreaseType: DecreaseType.None,
+            targetType: ActionTargetType.Self
         );
-        debuff.AddBuffAction(null,skillContext);
-        unit.AddBuff("Blood",debuff);
-    }
 
-    private void Action(BuffDebuff buffDebuff,SkillContext skillContext)
-    {
+        bloodBuffData.action = (data, context) =>
+        {
+            data.isExist = false;
+        };
+
+        ActionState bloodBuffState = new ActionState(bloodBuffData);
+        unit.GetActionStateContainer().AddActionState(
+            ActionTrigger.None, bloodBuffState);
+        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,bloodBuffState);
+        
     }
+    
 
     public override string ReturnInformation()
     {

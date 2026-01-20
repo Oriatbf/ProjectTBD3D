@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using SkillData;
+using UnityEngine;
 
 /// <summary>
 /// ActionState 컨테이너 (Unit에 부착)
@@ -35,6 +37,9 @@ public class ActionStateContainer
         {
             actionStates[trigger][id] = state;
         }
+        
+        if(trigger == ActionTrigger.None)
+            state.Execute();
     }
 
     /// <summary>
@@ -105,5 +110,12 @@ public class ActionStateContainer
         if (actionStates[trigger].ContainsKey(id))
             return actionStates[trigger][id];
         return null;
+    }
+
+    public bool ContainActionState(ActionState actionState)
+    {
+        string id = actionState.GetId();
+        return actionStates.Values
+            .Any(dict => dict.ContainsKey(id));
     }
 }

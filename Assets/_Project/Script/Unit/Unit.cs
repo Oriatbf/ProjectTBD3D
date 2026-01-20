@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using _Project.Pooling;
+using _Project.Script.Controller;
+using DG.Tweening;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -16,7 +18,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private int constID;
     [EndFoldout]
     
-    private Dictionary<string,BuffDebuff> buffDebuffs = new Dictionary<string,BuffDebuff>();
     
     private Team team; 
     private Tile tile; 
@@ -82,27 +83,23 @@ public class Unit : MonoBehaviour
     public virtual void Reset()
     {
         _statContainer.turnGauge.SetBaseValue(0);
+        _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnStart);
         List<string> removeList = new List<string>();
 
-        foreach (var buff in buffDebuffs.Values)
-        {
-            buff.Execute();
-            if (!buff.isExist)
-                removeList.Add(buff.id);
-        }
-
-        foreach (var id in removeList)
-        {
-            buffDebuffs.Remove(id);
-        }
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Space))
+            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnStart);
+    }
 
 
     private void SetAction()
     {
         _statContainer.hp.OnValueChanged += OnHpChange;
         _statContainer.turnGauge.OnValueChanged += OnCostChange;
+        _statContainer.charmResist.OnValueChanged += OnCharmResistChange;
     }
 
     private void SetHealthContent()
@@ -129,8 +126,7 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
-    public BuffDebuff GetBuffDebuff(string id) => buffDebuffs[id];
-    public ActionStateContainer GetActionContainer() => _actionStateContainer;
+    public ActionStateContainer GetActionStateContainer() => _actionStateContainer;
     public Animator GetAnimator() => animator;
     
     public UnitSaveData GetUnitData() => unitData;
@@ -146,33 +142,23 @@ public class Unit : MonoBehaviour
         Debug.Log("스킬 애니메이션");
         animator.Play(Attack);
     }
-
-    public void AddBuff(string key,BuffDebuff buffDebuff)
-    {
-        if (buffDebuffs.ContainsKey(key))
-        {
-            buffDebuffs[key].InitExtraData( buffDebuff);
-        }
-        else
-        {
-            buffDebuffs[buffDebuff.id]=buffDebuff;   
-            ApplicationManager.Inst.GetModule<BuffStackController>().StackBuff(buffDebuff);
-        }
-       
-    }
+    
     public void GetDamage(float damage,SkillContext skillContext,SkillType skillType)
     {
         if(isDead) return;
         Debug.Log($"{damage} 만큼 데미지를 받음");
         if (damage > 0)
         {
+            ApplicationManager.Inst.GetModule<PoolController>().Spawn<HitEffect>("HitEffect",transform.position + new Vector3(0,2,-1),Quaternion.identity);
+            
             var remainDamage = damage - _statContainer.barrier._baseValue;
             _statContainer.barrier.AddBaseValue(-damage);
             if(remainDamage > 0)
                 _statContainer.hp.AddBaseValue( -remainDamage);
-            skillContext.SourceUnit.GetActionContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 
+            skillContext.SourceUnit.GetActionStateContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 
             
             _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHit,skillContext); 
+            DamagedEffect();
         }
         else
         {
@@ -181,12 +167,42 @@ public class Unit : MonoBehaviour
         }
         ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }
+
+    /// <summary>
+    /// 데미지를 받았을 때 실행할 애니메이션
+    /// </summary>
+    private void DamagedEffect()
+    {
+        transform.DOKill();
+        
+        ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("Hit");
+        
+        var originPos = tile.GetPos();
+        Sequence seq = DOTween.Sequence();
+        var endValue = team == Team.PlayerTeam? originPos.x-1.5f : originPos.x+1.5f;
+        
+        seq.Append(transform.DOMoveX(endValue, 0.25f).SetEase(Ease.OutCubic));
+        seq.AppendInterval(0.25f);
+        seq.Append(transform.DOMoveX(originPos.x,0.5f ).SetEase(Ease.OutSine));
+        seq.Play();
+    }
     
     private void OnHpChange(float value)
     {
         if (value <= 0)
         {
             isDead = true;
+            OnDispos();
+        }
+    }
+
+    private void OnCharmResistChange(float value)
+    {
+        if (value >= _statContainer.charmResist._maxValue)
+        {
+            ApplicationManager.Inst.GetModule<PoolController>()
+                .Spawn<CharmEffect>("CharmEffect",transform.position + new Vector3(0,0.3f));
+            DataManager.Inst.SaveUnit(unitData);
             OnDispos();
         }
     }
@@ -199,7 +215,7 @@ public class Unit : MonoBehaviour
     private void OnDispos()
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
-        ApplicationManager.Inst.GetModule<PoolController>().Despawn(healthContent);
+        ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
         ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllUnitSkills(tile);
         ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
         ApplicationManager.Inst.GetModule<BuffStackController>().UnstackAllUnitBuffs(tile);

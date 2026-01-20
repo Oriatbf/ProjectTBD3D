@@ -209,6 +209,23 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void SetConstID(int id) => Data.constId = id;
     
     public int GetGold()=>Data.gold;
+
+    public RoomType GetCurRoomType()
+    {
+        if (!Data.mapData.isMapGenerated)
+        {
+            Debug.LogError("현재 맵이 생성되어 있지 않음");
+            return RoomType.Enemy;
+        }
+        var curIndex = Data.mapData.curStageIndex;
+        var targetRoom = Data.mapData.mapDict.Find(s => s._index == curIndex);
+        if (targetRoom == null)
+        {
+            Debug.LogError("현재 룸 데이터가 없음");
+            return RoomType.Enemy;
+        }
+        return targetRoom._roomType;
+    }
     
     public void SetGold(int value)
     {
