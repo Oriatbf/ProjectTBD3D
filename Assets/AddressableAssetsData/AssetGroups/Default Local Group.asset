@@ -25,18 +25,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 18f87c6d50cf998459ef462c4df98923
-    m_Address: Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1cb6dc90bfb4eff4b9bddf8e1a2ec16d
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Samurai.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1e7faa63a5c481842b65ecb547b4a549
-    m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/PlayerSpawnCanvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -67,6 +57,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 31e13a68c68ecbe47a3c4059aa97d223
     m_Address: Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35a7dc817efc7b54f9e62b17ecb12e11
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Counter.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -116,7 +111,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6faaf0995581ef1459a7c75cc07bc331
-    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Blood.png
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/BloodBuff.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -160,6 +155,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2d7b7ab7b42d344988ec46ad967ab9a
+    m_Address: Assets/_Project/Art/Animator/Cat.controller
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b36e9ecb90c95d945bb97fe52148c72f
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Bomb.png
     m_ReadOnly: 0
@@ -167,11 +167,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b3f30010fd7932f42b5666256cf6536b
     m_Address: Assets/_Project/Prefab/UI/TopInfoCanvas.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: baac153ac28d3d34ebae206dc0d552c7
-    m_Address: Assets/_Project/Prefab/UI/Loot/SkillChangeUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -195,6 +190,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d9327b4d288252e4c8baa7592b16370a
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Ice.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dd48b19d60b33fe448f31096f965d98f
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Poison.png
     m_ReadOnly: 0
@@ -202,11 +202,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e7fad9e6470e3d842b519cbb9dd71144
-    m_Address: Assets/_Project/Prefab/UI/Loot/SkillChangeInventory.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

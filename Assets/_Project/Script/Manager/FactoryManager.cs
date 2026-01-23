@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,36 +11,14 @@ public class FactoryManager : Singleton<FactoryManager>
      
      [Foldout("Debugging")]
      [SerializeField] List<Unit> playerUnits = new List<Unit>();
-     [SerializeField] List<Unit> enemyUnits = new List<Unit>();
-     [SerializeField] private List<EnemyArrangeSO> enemyArrangeSOs = new List<EnemyArrangeSO>();
+     [SerializeField] List<Unit> enemyUnits = new List<Unit>(); 
+     private List<EnemyArrangeSO> enemyArrangeSOs = new List<EnemyArrangeSO>();
      [EndFoldout] 
      private EnemyArrangeSO curEnemyArrange;
      
      private readonly string SOLabel = "EnemySO";
      
-
-     private async void Awake()
-     {
-        
-     }
      
-     /// <summary>
-     /// EnemyArrageSO 어드레서블로 불러오기
-     /// </summary>
-     private async UniTask LoadAllScriptableObjects()
-     {
-          try
-          {
-               // 라벨로 모든 ScriptableObject 로드
-               var handle = Addressables.LoadAssetsAsync<EnemyArrangeSO>(SOLabel);
-               var objects = await handle.Task;
-               enemyArrangeSOs.AddRange(objects);
-          }
-          catch (System.Exception e)
-          {
-               Debug.LogError($"ScriptableObject 로드 실패: {e.Message}");
-          }
-     }
 
      public void RegisterDeadUnit(Unit _unit)
      {
@@ -115,9 +94,10 @@ public class FactoryManager : Singleton<FactoryManager>
      /// <summary>
      /// id에 기반해 적군 유닛 소환
      /// </summary>
-     public async void EnemySpawn()
+     public void EnemySpawn(EnemyArrangeType enemyArrangeType)
      {
-          await LoadAllScriptableObjects();
+          enemyArrangeSOs = Resources.LoadAll<EnemyArrangeSO>("SO/EnemyArrange")
+               .Where(s => s.enemyArrangeType == enemyArrangeType).ToList();
           var random = Random.Range(0,enemyArrangeSOs.Count);
           curEnemyArrange = enemyArrangeSOs[random];
           var so = curEnemyArrange;

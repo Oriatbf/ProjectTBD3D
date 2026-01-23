@@ -12,6 +12,7 @@ public class Fire : SkillEffect
     {
        skillContext.ForEachTarget(unit =>
         {
+            Debug.Log($"fire {unit.name}");
             ActionData fireData = new ActionData(
                 id: "Fire",
                 owner: unit,
@@ -36,6 +37,7 @@ public class Fire : SkillEffect
 
             ActionState fireState = new ActionState(fireData);
             unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, fireState);
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnEnd,fireState);
         });
        
     }
@@ -72,6 +74,8 @@ public class Poison : SkillEffect
 
             ActionState poisonState = new ActionState(poisonData);
             unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnEnd,poisonState);
+            
         });
     }
 
@@ -89,8 +93,8 @@ public class Ice : SkillEffect
     {
         skillContext.ForEachTarget(unit =>
         {
-            ActionData freezeData = new ActionData(
-                id: "Freeze",
+            ActionData iceData = new ActionData(
+                id: "Ice",
                 owner: unit,
                 stack: values[0],
                 turn: 999,
@@ -98,7 +102,7 @@ public class Ice : SkillEffect
                 targetType: ActionTargetType.Self
             );
 
-            freezeData.action = (data, context) =>
+            iceData.action = (data, context) =>
             {
                 if (data.stack >= 3)
                 {
@@ -108,9 +112,10 @@ public class Ice : SkillEffect
                 }
             };
 
-            ActionState freezeState = new ActionState(freezeData);
+            ActionState freezeState = new ActionState(iceData);
             unit.GetActionStateContainer().AddActionState(
                 ActionTrigger.OnTurnStart, freezeState);
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnStart,freezeState);
         });
     }
 

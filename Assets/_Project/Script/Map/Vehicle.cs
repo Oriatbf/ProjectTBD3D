@@ -10,6 +10,7 @@ public class Vehicle : MonoBehaviour
     
     private List<Transform> wheels = new List<Transform>();
     bool isMoving = false;
+    private bool isTargeting = false;
 
     private void Awake()
     {
@@ -17,6 +18,22 @@ public class Vehicle : MonoBehaviour
         {
             wheels.Add(wheel);
         }
+    }
+
+    private void Start()
+    {
+        if (DataManager.Inst.GetMapData().isMapGenerated)
+        {
+            var index = DataManager.Inst.GetMapData().curStageIndex;
+            curIndex = new Vector2Int((int)index.x, (int)index.y);
+            transform.position = new Vector3(index.x*5, 0,index.y*5);
+        }
+        else
+        {
+            transform.position = Vector2.zero;
+        }
+    
+        
     }
 
     private void Update()
@@ -27,7 +44,7 @@ public class Vehicle : MonoBehaviour
 
     private void ClickRoomTile()
     {
-        if (Input.GetMouseButtonDown(0)) // 좌클릭
+        if (Input.GetMouseButtonDown(0) &&  isTargeting ) // 좌클릭
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -51,6 +68,7 @@ public class Vehicle : MonoBehaviour
     private void OnMouseDown()
     {
         ApplicationManager.Inst.GetModule<MapController>().ShowReachableMap(curIndex,2);
+        isTargeting = true;
     }
 
     public void SetMoving(bool isMoving)=> this.isMoving = isMoving;

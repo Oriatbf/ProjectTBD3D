@@ -128,6 +128,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeba0957756c5344e816b01496afdd3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 2628806540395168922}
+  isShow: 0
   content: {fileID: 61476880213722464}
 --- !u!1 &648374146637028562
 GameObject:
@@ -325,7 +327,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6400333177398150949}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99994975
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -565,7 +567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00040351067}
+  m_AnchoredPosition: {x: 0, y: 0.00007500361}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3497185973878010624

@@ -1,10 +1,17 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum EnemyArrangeType
+{
+    enemy,strongEnemy,Boss
+}
+
 [CreateAssetMenu(fileName = "EnemyArrangeSO",menuName = "Scriptable Enemy/EnemyArrange",order = 1)]
 public class EnemyArrangeSO : ScriptableObject
 {
     [Tooltip("소환될 Act")]public int appearAct;
+    public EnemyArrangeType enemyArrangeType;
     public List<LootData> lootDatas;
 
     [Serializable]

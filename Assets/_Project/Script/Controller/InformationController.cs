@@ -48,7 +48,7 @@ public class InformationController : BaseController
     public void InitUnitData(UnitSaveData unitSaveData, Vector3 targetPos)
     {
         var unitData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
-        _unitInfoCardCanvas.InitData(unitData, targetPos);
+        _unitInfoCardCanvas.InitData(unitData,unitSaveData, targetPos);
         //Show();
     }
     

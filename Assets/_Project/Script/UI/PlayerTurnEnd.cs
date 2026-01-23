@@ -1,35 +1,33 @@
 using System;
+using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class PlayerTurnEnd : MonoBehaviour
+public class TurnEndCanvas : BaseCanvas
 {
     [SerializeField] Button turnEndBtn, nextStageBtn;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         nextStageBtn.gameObject.SetActive(false);
         turnEndBtn.gameObject.SetActive(true);
+        SetNextStageAction();
+        SetTurnEndAction();
     }
 
-    public void SetTurnEndAction( Action action )
+    public void SetTurnEndAction()
     {
-        if (action != null)
-        {
-            turnEndBtn.onClick.RemoveAllListeners();
-            turnEndBtn.onClick.AddListener(action.Invoke);
-        }
+        turnEndBtn.onClick.AddListener(() => ApplicationManager.Inst.GetModule<TurnController>().PlayerTurnEndAction().Forget());
        
     }
 
-    public void SetNextStageAction(Action action)
+    public void SetNextStageAction()
     {
-        if (action != null)
-        {
-            nextStageBtn.onClick.RemoveAllListeners();
-            nextStageBtn.onClick.AddListener(action.Invoke);
-        }
+        nextStageBtn.onClick.AddListener(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
+        nextStageBtn.onClick.AddListener(()=>DataManager.Inst.JsonSave());
     }
 
     public void NextStageActive()

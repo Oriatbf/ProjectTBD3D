@@ -38,7 +38,7 @@ public enum ActionTrigger
     OnTurnStart,    // 턴 시작 시
     OnTurnEnd,      // 턴 종료 시
     OnAttack,       // 공격 시
-    OnHit,          // 피격 시
+    OnHitted,          // 피격 시
     OnHeal,         // 힐 받을 시
     OnDeath         // 사망 시
 }

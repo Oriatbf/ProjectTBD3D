@@ -6,7 +6,7 @@ namespace _Project.Script.Controller
 {
     public class GameFlowController : BaseController
     {
-        private RoomType _curRoomType = RoomType.Enemy;
+        private RoomType _curRoomType = RoomType.Shop;
 
         public override void OnInitialize()
         {
@@ -22,13 +22,13 @@ namespace _Project.Script.Controller
                 case RoomType.Village:
                     break;
                 case RoomType.Enemy:
-                    SetEnemy();
+                    SetEnemy(EnemyArrangeType.enemy);
                     break;
                 case RoomType.StrongEnemy:
-                    SetEnemy();
+                    SetEnemy(EnemyArrangeType.strongEnemy);
                     break;
                 case RoomType.Boss:
-                    SetEnemy();
+                    SetEnemy(EnemyArrangeType.Boss);
                     break;
                 case RoomType.Event:
                     SetEvent();
@@ -45,26 +45,27 @@ namespace _Project.Script.Controller
             }
         }
 
-        private void SetEnemy()
+        private void SetEnemy(EnemyArrangeType enemyArrangeType)
         {
             ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("BattleBGM");
             ApplicationManager.Inst.GetModule<TileController>().InstanceTile();
             ApplicationManager.Inst.GetModule<CharacterSkillController>().SetCanvas();
             ApplicationManager.Inst.GetModule<PlayerSpawnController>().SetCanvas();
-            FactoryManager.Inst.EnemySpawn();
+            FactoryManager.Inst.EnemySpawn(enemyArrangeType);
         }
 
         private void SetShop()
         {
             var shop = UnityEngine.Resources.Load<GameObject>("Shop");
             Object.Instantiate(shop,Vector3.zero + new Vector3(0,3,0),Quaternion.identity);
+            ApplicationManager.Inst.GetModule<TurnController>().MapStage();
         }
 
         private void SetEvent()
         {
             var demon =  UnityEngine.Resources.Load<GameObject>("Demon");
             var a = Object.Instantiate(demon,Vector3.zero + new Vector3(0,.7f,0),Quaternion.identity);
-            //a.GetComponent<Demon>().SetEvent();
+            ApplicationManager.Inst.GetModule<TurnController>().MapStage();
         }
     }
 }

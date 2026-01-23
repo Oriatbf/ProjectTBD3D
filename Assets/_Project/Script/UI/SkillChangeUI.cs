@@ -2,11 +2,9 @@ using SkillData;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class SkillChangeUI : MonoBehaviour
+public class SkillChangeUICanvas : BaseCanvas
 {
-    [SerializeField] private Panel panel;
     [FormerlySerializedAs("changeSkillIcon")] [SerializeField] private ChangeIcon changeIcon;
-    private bool isShow = false;
     
     public void Init(SkillBase skillBase)
     {
@@ -16,14 +14,14 @@ public class SkillChangeUI : MonoBehaviour
     public void Show()
     {
         if (isShow) return;
-        panel.SetPosition(PanelStates.Show,true);
+        ChangeState(true,true,true);
         isShow = true;
     }
 
     public void Hide()
     {
         if(!isShow) return;
-        panel.SetPosition(PanelStates.Hide,true);
+        ChangeState(false,true,false);
         isShow = false;
     }
 }

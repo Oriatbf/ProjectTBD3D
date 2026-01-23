@@ -10,7 +10,7 @@ public class CanvasController : BaseController
    
     public override ControllerInfo ControllerInfo { get; } = new()
     {
-        ContainSceneNames = new string[] {"MapScene","GamePlay" },
+        ContainSceneNames = new string[] {"All" },
         Priority = 0,
         UpdateInterval = 1,
         LateUpdateInterval = 1,

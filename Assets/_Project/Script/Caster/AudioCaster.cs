@@ -18,8 +18,6 @@ namespace _Project.Script.Caster
             if(_audioLoader==null)Debug.LogError("AudioLoader is null");
             _audioDatas = _audioLoader.AudioDatas;
             if(_audioDatas==null)Debug.LogError("AudioDatas is null");
-            ChangeSFXVolume(1);
-            ChangeBGMVolume(1);
         }
 
         public void PlayAudio(string audioName)
@@ -40,14 +38,24 @@ namespace _Project.Script.Caster
             }
         }
         
-        private void ChangeBGMVolume(float value)
+        public void ChangeMasterVolume(float value)
         {
+            DataManager.Inst.SaveMasterVolume(value);
+            float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
+            audioMixer.SetFloat("Master", _volume);
+        }
+        
+        public void ChangeBGMVolume(float value)
+        {
+            DataManager.Inst.SaveBGMVolume(value);
             float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
             audioMixer.SetFloat("BGM", _volume);
         }
+        
     
-        private void ChangeSFXVolume(float value)
+        public void ChangeSFXVolume(float value)
         {
+            DataManager.Inst.SaveSFXVolume(value);
             float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
             audioMixer.SetFloat("SFX", _volume);
         }

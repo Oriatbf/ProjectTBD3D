@@ -1,3 +1,5 @@
+using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -8,9 +10,14 @@ public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoint
     {
         _unitSaveData = unitSaveData;
         Debug.Log(_unitSaveData.iconKey);
-        SetSprite(_unitSaveData.iconKey);
+        SetSprite(_unitSaveData.iconKey).Forget();
     }
-    
+
+    private void Start()
+    {
+        if(_unitSaveData == null)AlphaIcon(0);
+    }
+
     public UnitSaveData GetUnitData() =>_unitSaveData;
     
     public void OnPointerMove(PointerEventData eventData)

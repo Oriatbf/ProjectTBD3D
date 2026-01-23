@@ -8,7 +8,6 @@ using UnityEngine.EventSystems;
 
 public class PlayerSpawnController : BaseController
 {
-    private readonly string canvasPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/PlayerSpawnCanvas.prefab";
     private bool isTargeting = false;
 
     private Camera _camera;
@@ -37,24 +36,23 @@ public class PlayerSpawnController : BaseController
     /// <summary> 
     /// 플레이어 유닛 소환 UI 생성
     /// </summary>
-    public async void SetCanvas()
+    public  void SetCanvas()
     {
         var datas = _allSavedUnits;
-        var canvas = await Addressables.LoadAssetAsync<GameObject>(canvasPath).ToUniTask();
-        var obj = GameObject.Instantiate(canvas);
-        if (obj.TryGetComponent(out PlayerSpawnCanvas  playerSpawnCanvas))
-        {
-            _playerSpawnCanvas = playerSpawnCanvas;
-            _playerSpawnCanvas.Init(datas);
-            _playerSpawnCanvas.SetPos(Vector2.zero,true);
-            _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
-        }
+        _playerSpawnCanvas = ApplicationManager.Inst
+            .GetModule<CanvasController>().GetCanvas<PlayerSpawnCanvas>("PlayerSpawnCanvas");
+        _playerSpawnCanvas.ChangeState(true,true,true);
+        _playerSpawnCanvas.Init(datas);
+        _playerSpawnCanvas.SetPos(Vector2.zero,true);
+        _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
+        
     }
 
     private void SpawnEndAction()
     {
         if (spawnedUnits.Count <= 0) return;
         _playerSpawnCanvas.SetPos(new Vector2(0,-300),true);
+        _playerSpawnCanvas.ChangeState(false,true);
          FactoryManager.Inst.GameStart();
     }
 
@@ -62,6 +60,7 @@ public class PlayerSpawnController : BaseController
     {
         base.OnUpdate();
 
+        if (!_playerSpawnCanvas.isShow) return;
         if (isTargeting)
         {
             HandleSpawnTargeting();

@@ -35,10 +35,24 @@ public class MapData
 }
 
 [Serializable]
+public class SoundData
+{
+    public float masterVolume,bgmVolume,sfxVolume;
+
+    public SoundData()
+    {
+        masterVolume = 0.5f;
+        bgmVolume = 0.5f;
+        sfxVolume = 0.5f;
+    }
+}
+
+[Serializable]
 public class GameData
 {
     public List<UnitSaveData> units = new List<UnitSaveData>();
     public MapData mapData = new MapData();
+    public SoundData SoundData = new SoundData();
     public int gold;
     public int constId = 0;
 }
@@ -47,7 +61,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 {
     string path;
     public GameData Data;
+    private Action saveAction;
     private string fileName = "GameData.json";
+    private bool isNewData = false;
 
 
     protected override void Awake()
@@ -55,6 +71,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         base.Awake();
         path = Path.Combine(Application.persistentDataPath, fileName);
         JsonLoad();
+        saveAction = JsonSave;
     }
     
 
@@ -72,6 +89,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         if (!File.Exists(path))
         {
+            isNewData = false;
             Data = new GameData();
             for (int i = 0; i < 2; i++)
             {
@@ -90,6 +108,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         }
         else
         {
+            isNewData = true;
             string loadJson = File.ReadAllText(path);
             Data = JsonUtility.FromJson<GameData>(loadJson);
             //Data = JsonConvert.DeserializeObject<GameData>(loadJson);
@@ -187,7 +206,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         Data.mapData.mapDict = mapData;
         Data.mapData.isMapGenerated = true;
-        JsonSave();
+        saveAction?.Invoke();
     }
 
     /// <summary>
@@ -200,10 +219,36 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         JsonSave();
     }
     
-    public void SaveStageIndex(Vector2Int index)=>Data.mapData.curStageIndex = index;
+    public void SaveStageIndex(Vector2Int index)
+    {
+        Data.mapData.curStageIndex = index;
+    }
+
     public MapData GetMapData() => Data.mapData;
-    
-    
+
+    #region SoundDataAPI
+
+    public SoundData GetSoundData() => Data.SoundData;
+    public void SaveMasterVolume(float value)
+    {
+        Data.SoundData.masterVolume = value;
+
+    }
+
+    public void SaveBGMVolume(float value)
+    {
+        Data.SoundData.bgmVolume = value;
+   
+    }
+
+    public void SaveSFXVolume(float value)
+    {
+        Data.SoundData.sfxVolume = value;
+    }
+
+    #endregion
+
+    public bool IsNewData() => isNewData;
     
     public int GetConstId() => Data.constId;
     public void SetConstID(int id) => Data.constId = id;

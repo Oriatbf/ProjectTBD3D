@@ -7,12 +7,33 @@ public class Counter : SkillEffect
 
     protected override void SkillAction(SkillContext skillContext)
     {
-        /*
-        if(skillContext == null)Debug.LogError("no skill context");
-        if(skillContext.SourceUnit == null)Debug.LogError("no source unit");
-        if(skillContext.SourceUnit.GetActionContainer() == null)Debug.LogError("no ActionContainer");
-        skillContext.SourceUnit.GetActionContainer().AddActionState(Action,A); += Action;
-        */
+        var unit = skillContext.SourceUnit;
+        ActionData counterData = new ActionData(
+            id: "Counter",
+            owner: unit,
+            stack: values[0],      // 데미지
+            turn: 1,       // 턴 수
+            decreaseType: DecreaseType.OnlyTurn,
+            targetType: ActionTargetType.Self
+        );
+
+        // 시전자 정보 저장
+        counterData.sourceUnit = skillContext.SourceUnit;
+
+        counterData.action = (data, context) =>
+        {
+            context.SourceUnit?.GetDamage(data.stack, null, SkillType.Utility);
+        };
+
+        counterData.finishAction = (data) =>
+        {
+            
+        };
+
+        ActionState counterState = new ActionState(counterData);
+        unit.GetActionStateContainer().AddActionState(ActionTrigger.OnHitted, counterState);
+        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnHitted,counterState);
+   
     }
     
     private void Action(SkillContext skillContext,SkillType targetSkillType)

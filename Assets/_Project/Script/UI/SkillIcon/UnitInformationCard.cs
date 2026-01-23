@@ -26,7 +26,7 @@ public class UnitInfoCardCanvas : BaseCanvas
     }
 
 
-    public void InitData(UnitData.Data unitData,Vector3 targetPos)
+    public void InitData(UnitData.Data unitData,UnitSaveData unitSaveData,Vector3 targetPos)
     {
         var _unitData = unitData;
         nameTxt.text = _unitData.Name;
@@ -34,7 +34,7 @@ public class UnitInfoCardCanvas : BaseCanvas
         // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
         //  arrtibuteTxt.text = attribute;
         descriptionTxt.text = _unitData.Infor;
-        SetIcon(_unitData.BringSkill);
+        SetIcon(unitSaveData.bringSkills);
         SetPos(targetPos);
     }
 

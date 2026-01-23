@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
-        _actionStateContainer = new ActionStateContainer();
+        _actionStateContainer = new ActionStateContainer(this);
         unitController = GetComponent<UnitController>();
     }
     private void Start()
@@ -87,12 +87,7 @@ public class Unit : MonoBehaviour
         List<string> removeList = new List<string>();
 
     }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Space))
-            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnStart);
-    }
+    
 
 
     private void SetAction()
@@ -126,6 +121,11 @@ public class Unit : MonoBehaviour
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
+
+    public void OnTurnEnd()
+    {
+        _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnEnd);
+    }
     public ActionStateContainer GetActionStateContainer() => _actionStateContainer;
     public Animator GetAnimator() => animator;
     
@@ -155,15 +155,21 @@ public class Unit : MonoBehaviour
             _statContainer.barrier.AddBaseValue(-damage);
             if(remainDamage > 0)
                 _statContainer.hp.AddBaseValue( -remainDamage);
-            skillContext.SourceUnit.GetActionStateContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 
-            
-            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHit,skillContext); 
+            if (skillContext != null)
+            {
+                skillContext.SourceUnit.GetActionStateContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 
+                _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHitted,skillContext);      
+            }
+           
             DamagedEffect();
         }
         else
         {
             _statContainer.hp.AddBaseValue( -damage);
-            _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHeal,skillContext);
+            if (skillContext != null)
+            {
+                _actionStateContainer.ExecuteTrigger(ActionTrigger.OnHeal, skillContext);
+            }
         }
         ApplicationManager.Inst.GetModule<PopUpUIController>().SpawnDamagePopUp(damage,transform);
     }

@@ -23,11 +23,11 @@ public class BuffStackController : BaseController
     {
         base.OnInitialize();
         _camera = Camera.main;
-        SetPrefab();
+        SetPrefab().Forget();
     }
     
     
-    private async void SetPrefab()
+    private async UniTask SetPrefab()
     {
         
         var _canvas = await Addressables.LoadAssetAsync<GameObject>(buffStackCanvasPath).ToUniTask();

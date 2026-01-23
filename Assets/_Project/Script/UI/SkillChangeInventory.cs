@@ -1,15 +1,16 @@
+
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SkillChangeInventory : MonoBehaviour
+public class SkillChangeInventoryCanvas : BaseCanvas
 {
     [SerializeField] private Transform skillContent;
     [SerializeField] private Transform unitContent;
-    [SerializeField] private Panel panel;
-    [SerializeField] private List<ChangeIcon> skillIcons = new List<ChangeIcon>();
+    [SerializeField] private Button closeBtn;
+    private List<ChangeIcon> skillIcons = new List<ChangeIcon>();
     private List<int> curSkillIds = new List<int>();
     private List<UnitIcon> unitIcons = new List<UnitIcon>();
     
@@ -21,8 +22,9 @@ public class SkillChangeInventory : MonoBehaviour
     private bool isActive = false;
     private ChangeIcon curIcon,targetIcon;
     
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _pointerEventData = new PointerEventData(EventSystem.current);
         foreach (Transform icon in skillContent)
         {
@@ -175,12 +177,18 @@ public class SkillChangeInventory : MonoBehaviour
     {
         isActive = true;
         SetUnitIcon();
-        panel.SetPosition(PanelStates.Show,true);
+        ChangeState(true,true,true);
     }
 
     public void Hide()
     {
         isActive = false;
-        panel.SetPosition(PanelStates.Hide,true);
+        ChangeState(false,true,false);
+    }
+
+    public void SetCloseAction(Action closeAction)
+    {
+        closeBtn.onClick.RemoveAllListeners();
+        closeBtn.onClick.AddListener(()=>closeAction?.Invoke());
     }
 }

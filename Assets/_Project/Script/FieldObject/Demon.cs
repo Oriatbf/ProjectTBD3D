@@ -22,14 +22,11 @@ public class Demon : FieldObject
         _animator.Play(Idle);
         SetEvent();
     }
-
-    private void OnMouseDown()
-    {
-        SetChainSawDemon();
-    }
+    
 
     private void SetChainSawDemon()
     {
+        Debug.Log("체인소맨으로 변경");
         var savedUnits = DataManager.Inst.Data.units;
         var randomIndex = Random.Range(0, savedUnits.Count);
         var targetUnit = savedUnits[randomIndex];
@@ -40,13 +37,15 @@ public class Demon : FieldObject
     public void SetEvent()
     {
         var randomEvent = Extensions.GetRandomEnum<DemonEvent>();
-
+        EventDialogueSO eventDialogueSO = null;
         switch (randomEvent)
         {
             case DemonEvent.ChainSawContract:
-                var d = ApplicationManager.Inst.GetModule<PoolController>().Spawn<Dialogue>("Dialogue");
-                if(d==null)Debug.LogError("pool is null");
-                d.SetTxt("난 악마다 히히");
+                eventDialogueSO = Resources.Load<EventDialogueSO>("SO/DemonEventDialogue");
+                var dialogue = ApplicationManager.Inst.GetModule<PoolController>().Spawn<Dialogue>("Dialogue");
+                if(dialogue==null)Debug.LogError("dialogue pool is null");
+                eventDialogueSO.SetEventAction(SetChainSawDemon);
+                dialogue.SetEventDialogue(eventDialogueSO);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

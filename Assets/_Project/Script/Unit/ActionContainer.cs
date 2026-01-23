@@ -12,8 +12,11 @@ public class ActionStateContainer
     private Dictionary<ActionTrigger, Dictionary<string, ActionState>> actionStates 
         = new Dictionary<ActionTrigger, Dictionary<string, ActionState>>();
 
-    public ActionStateContainer()
+    private Unit _unit;
+
+    public ActionStateContainer(Unit unit)
     {
+        _unit = unit;
         // 각 트리거별 딕셔너리 초기화
         foreach (ActionTrigger trigger in Enum.GetValues(typeof(ActionTrigger)))
         {
@@ -64,6 +67,7 @@ public class ActionStateContainer
         foreach (var id in toRemove)
         {
             actionStates[trigger].Remove(id);
+            ApplicationManager.Inst.GetModule<BuffStackController>().UnStackBuff(_unit.GetTile(),id);
         }
     }
 

@@ -13,7 +13,7 @@ namespace _Project.Resources.Loader
         {
             public string Key;
             public GameObject Prefab;
-            public string SceneName;
+            public string[] SceneName;
         }
   
         public List<CanvasInfo> CanvasDictionary = new List<CanvasInfo>();
@@ -25,7 +25,7 @@ namespace _Project.Resources.Loader
 
         public List<CanvasInfo> GetCanvasListForScene(string sceneName)
         {
-            return CanvasDictionary.Where(x=>x.SceneName==sceneName ).ToList();
+            return CanvasDictionary.Where(x=>x.SceneName.Contains(sceneName)||x.SceneName.Contains("All")).ToList();
         }
     }
 }

@@ -6,11 +6,19 @@ using UnityEngine.AddressableAssets;
 
 public class SkillChangeController : BaseController
 {
-    private readonly string skillChangeInvenCanvasPath = "Assets/_Project/Prefab/UI/Loot/SkillChangeInventory.prefab";
-    private readonly string SkillChangeUICanvasPath = "Assets/_Project/Prefab/UI/Loot/SkillChangeUI.prefab";
-    SkillChangeInventory skillChangeInventory;
-    SkillChangeUI skillChangeUI;
 
+    SkillChangeInventoryCanvas _skillChangeInventoryCanvas;
+    SkillChangeUICanvas _skillChangeUICanvas;
+    
+    public override ControllerInfo ControllerInfo { get; } = new()
+    {
+        ContainSceneNames = new string[] {"GamePlay" },
+        Priority = 0,
+        UpdateInterval = 0,
+        LateUpdateInterval = 0,
+        FixedUpdateInterval = 0,
+    };
+    
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -18,15 +26,19 @@ public class SkillChangeController : BaseController
      
     }
 
-    private async void SetCanvas()
+    private  void SetCanvas()
     {
-        var invenCanvas =  await Addressables.LoadAssetAsync<GameObject>(skillChangeInvenCanvasPath).ToUniTask();
-        var invenObj = GameObject.Instantiate(invenCanvas);
-        skillChangeInventory = invenObj.GetComponent<SkillChangeInventory>();
-        
-        var changeCanvas = await Addressables.LoadAssetAsync<GameObject>(SkillChangeUICanvasPath).ToUniTask();
-        var changeObj = GameObject.Instantiate(changeCanvas);
-        skillChangeUI = changeObj.GetComponent<SkillChangeUI>();
+        var canvasController = ApplicationManager.Inst.GetModule<CanvasController>();
+        _skillChangeInventoryCanvas =
+            canvasController.GetCanvas<SkillChangeInventoryCanvas>("SkillChangeInventoryCanvas");
+        _skillChangeUICanvas = canvasController.GetCanvas<SkillChangeUICanvas>("SkillChangeUICanvas");
+        _skillChangeInventoryCanvas.SetCloseAction(Hide);
+    }
+
+    private void Hide()
+    {
+        _skillChangeInventoryCanvas.Hide();
+        _skillChangeUICanvas.Hide();
     }
     
     
@@ -35,9 +47,9 @@ public class SkillChangeController : BaseController
     /// </summary>
     public void SetLootSkill(SkillBase skillBase)
     {
-        skillChangeInventory.Show();
-        skillChangeUI.Init(skillBase);
-        skillChangeUI.Show();
+        _skillChangeInventoryCanvas.Show();
+        _skillChangeUICanvas.Init(skillBase);
+        _skillChangeUICanvas.Show();
     }
 
   

@@ -1,4 +1,4 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
@@ -88,6 +88,7 @@ public class SkillCheatCanvas : BaseCanvas
         if (!Input.GetKeyDown(KeyCode.KeypadEnter)) return;
         var list = _selectedSkills.Select(x=>x.GetData().ID).ToList();
         FactoryManager.Inst.GetPlayerUnits()[0].SetBringSkills(list);
+        Debug.Log("치트 스킬 변경");
     }
 
     private async UniTask SetIconPrefab()

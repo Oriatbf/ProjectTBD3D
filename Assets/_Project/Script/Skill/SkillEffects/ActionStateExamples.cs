@@ -69,7 +69,7 @@ namespace SkillData.SkillEffects
             };
 
             ActionState counterState = new ActionState(counterData);
-            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnHit, counterState);
+            ownerUnit.GetActionStateContainer().AddActionState(ActionTrigger.OnHitted, counterState);
         }
 
         /// <summary>

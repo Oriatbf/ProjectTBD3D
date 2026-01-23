@@ -7,12 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class TurnController : BaseController
 {
-    private readonly string turnEndCanvasPath = "Assets/_Project/Prefab/UI/PlayerTurnEndCanvas.prefab";
     private List<StateControllerBase> players = new List<StateControllerBase>();
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
     private List<Unit> allUnits = new List<Unit>();
     private Team AttackTurn = Team.EnemyTeam;
-    PlayerTurnEnd playerTurnEnd;
+    TurnEndCanvas turnEndCanvas;
 
     public override void OnInitialize()
     {
@@ -20,24 +19,25 @@ public class TurnController : BaseController
         SetCanvas();
     }
 
-    private async void SetCanvas()
+    private void SetCanvas()
     {
-        var canvas = await Addressables.LoadAssetAsync<GameObject>(turnEndCanvasPath).Task;
-        var obj = GameObject.Instantiate(canvas);
-        if (obj.TryGetComponent(out PlayerTurnEnd playerTurnEnd)) this.playerTurnEnd = playerTurnEnd;
-        playerTurnEnd.SetTurnEndAction(PlayerTurnEndAction);
-        playerTurnEnd.SetNextStageAction(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
+        turnEndCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<TurnEndCanvas>("TurnEndCanvas");
+        turnEndCanvas.ChangeState(true,true,true);
     }
 
     /// <summary>
     /// playerTurnEnd 버튼에 들어갈 액션
     /// </summary>
-    private async void PlayerTurnEndAction()
+    public async UniTask PlayerTurnEndAction()
     {
         if (AttackTurn == Team.EnemyTeam) return;
         ApplicationManager.Inst.GetModule<CharacterSkillController>().CancelTargeting();
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
         await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill();
+        foreach (var unit in allUnits)
+        {
+            unit.OnTurnEnd();
+        }
         
         ChangeStates(State.Idle, Team.PlayerTeam);
         ChangeStates(State.Attack, Team.EnemyTeam);
@@ -47,8 +47,16 @@ public class TurnController : BaseController
     /// <summary>
     /// 맵 선택창으로 이동
     /// </summary>
-    public void MapStage() => playerTurnEnd.NextStageActive();
-    
+    public void MapStage()
+    {
+        if (turnEndCanvas == null)
+        {
+            Debug.LogError("PlayerTurnEnd is Null");
+            return;
+        }
+        turnEndCanvas.NextStageActive();
+    }
+
     public void Reset()
     {
         Debug.Log("UnitResets");
