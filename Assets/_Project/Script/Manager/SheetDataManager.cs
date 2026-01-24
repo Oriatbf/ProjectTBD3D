@@ -8,16 +8,24 @@ public class SheetDataManager : Singleton<SheetDataManager>
 {
     //전체 SkillBase 저장
     private List<SkillData.SkillBase> skillList = new List<SkillData.SkillBase>();
+    private List<RelicBase> relicList = new List<RelicBase>();
     private void Awake()
     {
         SkillData.Data.Load();
         UnitData.Data.Load();
+        RelicData.Data.Load();
         
         //엑셀의 데이터를 리스트에 저장
         foreach (var data in SkillData.Data.DataList)
         {
             SkillData.SkillBase newSkill = new SkillData.SkillBase(data);
             skillList.Add(newSkill);
+        }
+
+        foreach (var data in RelicData.Data.DataList)
+        {
+            RelicBase newRelic = new RelicBase(data);
+            relicList.Add(newRelic);
         }
         
     }
@@ -28,6 +36,8 @@ public class SheetDataManager : Singleton<SheetDataManager>
     //랜덤 유닛 엑셀데이터 가져오기
     public List<UnitData.Data> GetRandomUnitData(int count) => UnitData.Data.DataList.NonDupRandomT(count);
 
+    public List<RelicBase> GetRelicList => relicList;
+    
     #region Skills
 
     //특정 ID의 스킬베이스 가져오기

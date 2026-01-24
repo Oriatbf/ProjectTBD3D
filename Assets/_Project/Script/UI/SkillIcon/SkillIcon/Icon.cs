@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
 {
+    
     protected SkillBase skillBase;
    
     

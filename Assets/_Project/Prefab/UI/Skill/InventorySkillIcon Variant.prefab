@@ -638,6 +638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 8897958127562823984}
+  frame: {fileID: 2706024695208958729}
   nameTxt: {fileID: 4953864206503925894}
   turnTxt: {fileID: 3815315254927484742}
 --- !u!222 &705384131381803205

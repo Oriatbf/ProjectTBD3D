@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using SkillData;
@@ -9,6 +10,7 @@ public class SkillChangeController : BaseController
 
     SkillChangeInventoryCanvas _skillChangeInventoryCanvas;
     SkillChangeUICanvas _skillChangeUICanvas;
+    Action hideHandle;
     
     public override ControllerInfo ControllerInfo { get; } = new()
     {
@@ -39,17 +41,19 @@ public class SkillChangeController : BaseController
     {
         _skillChangeInventoryCanvas.Hide();
         _skillChangeUICanvas.Hide();
+        hideHandle?.Invoke();
     }
     
     
     /// <summary>
     /// 스킬 변경 UI 띄우기
     /// </summary>
-    public void SetLootSkill(SkillBase skillBase)
+    public void SetLootSkill(SkillBase skillBase,Action hideAction = null)
     {
         _skillChangeInventoryCanvas.Show();
         _skillChangeUICanvas.Init(skillBase);
         _skillChangeUICanvas.Show();
+        hideHandle = hideAction;
     }
 
   

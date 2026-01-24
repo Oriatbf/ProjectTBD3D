@@ -4,6 +4,31 @@ namespace SkillData.SkillEffects
 {
     public static class ActionStateExamples
     {
+        public static void DamageBuff(Unit targetUnit,int _stack)
+        {
+            var unit = targetUnit;
+            ActionData damageBuffData = new ActionData(
+                id: "DamageBuff",
+                owner: unit,
+                stack: _stack,
+                turn: 999,
+                decreaseType: DecreaseType.None,
+                targetType: ActionTargetType.Self
+            );
+
+            damageBuffData.action = (data, context) =>
+            {
+                unit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add, data.stack));
+                Debug.Log("데미지 증가 실행");
+                data.isExist = false;
+            };
+
+            ActionState damageBuffState = new ActionState(damageBuffData);
+            unit.GetActionStateContainer().AddActionState(
+                ActionTrigger.None, damageBuffState);
+            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,damageBuffState);
+        }
+        
             /// <summary>
         /// 예시 1: 3턴 동안 턴 종료 시 적 전체에게 1의 데미지
         /// </summary>

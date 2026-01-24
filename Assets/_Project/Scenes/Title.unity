@@ -340,7 +340,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 15
   m_TargetDisplay: 0
 --- !u!1 &467824175
 GameObject:
@@ -763,6 +763,7 @@ MonoBehaviour:
       sfxVolume: 0.5
     gold: 0
     constId: 0
+    mainCharacterID: 0
 --- !u!4 &1878071355
 Transform:
   m_ObjectHideFlags: 0

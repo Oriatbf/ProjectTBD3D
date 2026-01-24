@@ -11,4 +11,6 @@ public static class RandomID
         DataManager.Inst.SetConstID(id+1);
         return id++;
     }
+    
+    
 }

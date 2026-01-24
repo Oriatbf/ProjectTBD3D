@@ -20,11 +20,11 @@ namespace _Project.Script.Controller
         private Tile lastTile;
         //범위 공격일 경우
         private List<Tile> lastTiles = new List<Tile>();
-
-        private bool isShow = false;
+        
         private bool isTargeting = false;
         private float maxTurnStack = 0;
         private float curTurnStack = 0;
+        private int curConstId = -1;
 
         private Camera _camera;
         private PointerEventData _pointerEventData;
@@ -53,10 +53,18 @@ namespace _Project.Script.Controller
         /// <summary>
         /// 클릭한 캐릭터의 데이터와 타일정보를 받음
         /// </summary>
-        public void Init(Stat turnGauage,List<int> bringSkills,Tile curTile)
+        public void Init(Unit unit,List<int> bringSkills,Tile curTile)
         {
+            if (unit.GetUnitData().constId == curConstId)
+            {
+                Hide();
+                curConstId = -1;
+                return;
+            }
+            Show();
+            curConstId = unit.GetUnitData().constId;
             if(curTile == null)Debug.LogError("CurTile is null");
-            this.turnGauage = turnGauage;
+            this.turnGauage = unit.GetStatContainer().turnGauge;
             maxTurnStack = turnGauage._maxValue;
             curTurnStack = turnGauage._baseValue;
         
@@ -100,6 +108,7 @@ namespace _Project.Script.Controller
                 {
                     curIcon = skillIcon;
                     curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
+                    curIcon.SetFrameColor(Color.green,true);
                     isTargeting = true;
                     return;
                 }
@@ -134,8 +143,7 @@ namespace _Project.Script.Controller
             {
                 if (TryExecuteSkill(_tile))
                 {
-                    ClearTargetTiles();
-                    isTargeting = false;
+                    CancelTargeting();
                 }
                 return;
             }
@@ -199,6 +207,7 @@ namespace _Project.Script.Controller
         public void CancelTargeting()
         {
             ClearTargetTiles();
+            curIcon.SetFrameColor(Color.white,true);
             curIcon = null;
             isTargeting = false;
             lastTile = null;
@@ -209,13 +218,11 @@ namespace _Project.Script.Controller
 
         public void Show()
         {
-            isShow = true;
             characterSkillCanvas.ChangeState(true,true,true);
             characterSkillCanvas.SetPos(Vector2.zero,true,0.25f);
         }
         public void Hide()
         {
-            isShow = false;
             characterSkillCanvas.ChangeState(false,true);
             characterSkillCanvas.SetPos(InitializePos,true,0.25f);
         }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using VInspector;
 using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 public class TileController : BaseController
 {
@@ -75,7 +76,6 @@ public class TileController : BaseController
     public Tile GetEnemyTile(Vector2 vec) => Tiles[new Vector2(_halfCount+1,0) + vec];
     public Tile GetTile(Vector2 vec)
     {
-        
         return Tiles[vec];
     }
 
@@ -122,5 +122,12 @@ public class TileController : BaseController
             _tiles.Add(tile);
         }
         return _tiles;
+    }
+
+    public Tile GetRandomTile()
+    {
+        var random = Random.Range(0,Tiles.Count);
+        var tiles = Tiles.Values.ToArray();
+        return tiles[random];
     }
 }

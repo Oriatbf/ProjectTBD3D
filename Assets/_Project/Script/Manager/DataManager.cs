@@ -55,6 +55,7 @@ public class GameData
     public SoundData SoundData = new SoundData();
     public int gold;
     public int constId = 0;
+    public int mainCharacterID = 0;
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -252,7 +253,23 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     
     public int GetConstId() => Data.constId;
     public void SetConstID(int id) => Data.constId = id;
-    
+
+    public void SetMainCharcter(int id)
+    {
+        Reset();
+        JsonLoad();//Load안에 파일이 없으면 새로 생성하는 기능이 있음
+        Data.units.Add(new UnitSaveData()
+        {
+            iconKey = UnitData.Data.DataList[id].AnimatorName,
+            constId = RandomID.GetConstID(),
+            id = id,
+            bringSkills = UnitData.Data.DataList[id].BringSkill,
+            statContainer = new StatContainer(UnitData.Data.DataList[id])
+        });
+        JsonSave();
+        
+    }
+
     public int GetGold()=>Data.gold;
 
     public RoomType GetCurRoomType()

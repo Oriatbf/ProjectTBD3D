@@ -68,6 +68,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(CanvasController), new CanvasController());
         //--------------------------------------------------------------------
         _modulesByType.Add(typeof(TileController), new TileController());
+        _modulesByType.Add(typeof(RelicController), new RelicController());
         _modulesByType.Add(typeof(TitleFlowController), new TitleFlowController());
         _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());

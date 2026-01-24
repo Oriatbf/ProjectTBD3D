@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using SkillData;
+using SkillData.SkillEffects;
 using UnityEngine;
 using static ColorText;
 
@@ -133,26 +134,7 @@ public class DamageBuff : SkillEffect
     protected override void SkillAction(SkillContext skillContext)
     {
         var unit = skillContext.SourceUnit;
-        ActionData damageBuffData = new ActionData(
-            id: "DamageBuff",
-            owner: unit,
-            stack: values[0],
-            turn: 999,
-            decreaseType: DecreaseType.None,
-            targetType: ActionTargetType.Self
-        );
-
-        damageBuffData.action = (data, context) =>
-        {
-            skillContext.SourceUnit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add, data.stack));
-            Debug.Log("데미지 증가 실행");
-            data.isExist = false;
-        };
-
-        ActionState damageBuffState = new ActionState(damageBuffData);
-        unit.GetActionStateContainer().AddActionState(
-            ActionTrigger.None, damageBuffState);
-        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,damageBuffState);
+        ActionStateExamples.DamageBuff(unit, values[0]);
     }
 
     public override string ReturnInformation()

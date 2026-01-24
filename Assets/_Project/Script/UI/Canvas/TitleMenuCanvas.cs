@@ -7,6 +7,7 @@ namespace _Project.Script.UI.Canvas
     public class TitleMenuCanvas : BaseCanvas
     {
         [SerializeField] private Button newGameBtn,loadGameBtn,exitGameBtn;
+        private Action onNewGame;
 
         private void Start()
         {
@@ -27,12 +28,12 @@ namespace _Project.Script.UI.Canvas
 
         private void NewGamehandle()
         {
-            //캐릭터 선택
-            FadeInFadeOutManager.Inst.FadeOut("MapScene",true);
+            onNewGame?.Invoke();
         }
 
         private void LoadGamehandle()
         {
+            //캐릭터 선택
             FadeInFadeOutManager.Inst.FadeOut("MapScene",true);
         }
 
@@ -44,6 +45,11 @@ namespace _Project.Script.UI.Canvas
             #else
             Application.Quit();
             #endif
+        }
+
+        public void SetNewGameHandle(Action action)
+        {
+            onNewGame = action;
         }
         
         

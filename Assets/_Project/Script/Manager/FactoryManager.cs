@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -67,9 +69,12 @@ public class FactoryManager : Singleton<FactoryManager>
      /// </summary>
      public void GameStart()
      {
+          InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
           ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
           ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
+          ApplicationManager.Inst.GetModule<RelicController>().ExcuteAllRelic();
+          
           
           ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
           

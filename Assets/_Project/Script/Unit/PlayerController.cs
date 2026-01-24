@@ -8,17 +8,12 @@ public class PlayerController : UnitController
     
     private void OnMouseDown()
     {
-        if (!infoShow)
-        {
-            ApplicationManager.Inst.GetModule<CharacterSkillController>().Show();
-            ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
-                (_unit.GetStatContainer().turnGauge,_unit.GetSkillList(),curTile);
-            infoShow = true;
-        }
-        else
-        {
-            ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
-            infoShow = false;
-        }
+    
+        //ApplicationManager.Inst.GetModule<CharacterSkillController>().Show();
+        ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
+            (_unit,_unit.GetSkillList(),curTile);
+         
+
+
     }
 }

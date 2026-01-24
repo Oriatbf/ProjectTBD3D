@@ -9,8 +9,7 @@ using UnityEngine.EventSystems;
 public class PlayerSpawnController : BaseController
 {
     private bool isTargeting = false;
-
-    private Camera _camera;
+    
     private PointerEventData _pointerEventData;
     private List<RaycastResult> _raycastResults = new List<RaycastResult>();
     private Tile lastTile;
@@ -26,7 +25,6 @@ public class PlayerSpawnController : BaseController
     public override void OnInitialize()
     {
         base.OnInitialize();
-        _camera = Camera.main;
         _allSavedUnits = DataManager.Inst.GetAllSavedUnits();
         foreach (var data in _allSavedUnits)
             unitSaveDatas.Add(data.constId,data);
@@ -87,6 +85,7 @@ public class PlayerSpawnController : BaseController
                 if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
                 Debug.Log(unitIcon.name);
                 _curUnitIcon = unitIcon;
+                _curUnitIcon.SetFrameColor(Color.green,true);
                 isTargeting = true;
                 return;
             }
@@ -97,7 +96,7 @@ public class PlayerSpawnController : BaseController
     {
         if (Input.GetMouseButtonDown(1))
         {
-            CancelTargeting();
+            CancelTargeting(Color.white);
             return;
         }
         
@@ -110,7 +109,8 @@ public class PlayerSpawnController : BaseController
                 {
                     FactoryManager.Inst.PlayerSpawn(_curUnitIcon.GetUnitData(),tile);
                     RegisterUnit(_curUnitIcon.GetUnitData().constId);
-                    CancelTargeting();
+                    CancelTargeting(Color.red);
+                    
                 }
                 else
                 {
@@ -134,8 +134,9 @@ public class PlayerSpawnController : BaseController
         }
     }
 
-    private void CancelTargeting()
+    private void CancelTargeting(Color frameColor)
     {
+        _curUnitIcon.SetFrameColor(frameColor,true);
         _curUnitIcon = null;
         isTargeting = false;
         ClearTiles();
@@ -143,6 +144,7 @@ public class PlayerSpawnController : BaseController
 
     private void ClearTiles()
     {
+        if (lastTile == null) return;
         lastTile.UnTarget();
         lastTile = null;
     }
