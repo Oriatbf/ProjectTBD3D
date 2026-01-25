@@ -58,7 +58,7 @@ public class PlayerSpawnController : BaseController
     {
         base.OnUpdate();
 
-        if (!_playerSpawnCanvas.isShow) return;
+        if (_playerSpawnCanvas == null ||!_playerSpawnCanvas.isShow) return;
         if (isTargeting)
         {
             HandleSpawnTargeting();

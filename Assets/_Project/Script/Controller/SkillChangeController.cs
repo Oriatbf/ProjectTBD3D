@@ -9,7 +9,6 @@ public class SkillChangeController : BaseController
 {
 
     SkillChangeInventoryCanvas _skillChangeInventoryCanvas;
-    SkillChangeUICanvas _skillChangeUICanvas;
     Action hideHandle;
     
     public override ControllerInfo ControllerInfo { get; } = new()
@@ -33,14 +32,12 @@ public class SkillChangeController : BaseController
         var canvasController = ApplicationManager.Inst.GetModule<CanvasController>();
         _skillChangeInventoryCanvas =
             canvasController.GetCanvas<SkillChangeInventoryCanvas>("SkillChangeInventoryCanvas");
-        _skillChangeUICanvas = canvasController.GetCanvas<SkillChangeUICanvas>("SkillChangeUICanvas");
         _skillChangeInventoryCanvas.SetCloseAction(Hide);
     }
 
     private void Hide()
     {
         _skillChangeInventoryCanvas.Hide();
-        _skillChangeUICanvas.Hide();
         hideHandle?.Invoke();
     }
     
@@ -51,8 +48,7 @@ public class SkillChangeController : BaseController
     public void SetLootSkill(SkillBase skillBase,Action hideAction = null)
     {
         _skillChangeInventoryCanvas.Show();
-        _skillChangeUICanvas.Init(skillBase);
-        _skillChangeUICanvas.Show();
+        _skillChangeInventoryCanvas.InitChangeSkill(skillBase);
         hideHandle = hideAction;
     }
 

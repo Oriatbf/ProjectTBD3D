@@ -37,6 +37,7 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     public void OnPointerEnter(PointerEventData eventData)
     {
         //if(skill ==null) return;
+        Debug.Log("OnPointerEnter");
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
     }
 

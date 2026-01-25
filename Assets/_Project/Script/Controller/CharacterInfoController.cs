@@ -81,7 +81,7 @@ namespace _Project.Script.Controller
         {
             base.OnUpdate();
 
-            if (!isTargeting)
+            if (!isTargeting &&characterSkillCanvas != null &&characterSkillCanvas.isShow)
             {
                 HandleSkillSelection();
             }
@@ -207,7 +207,8 @@ namespace _Project.Script.Controller
         public void CancelTargeting()
         {
             ClearTargetTiles();
-            curIcon.SetFrameColor(Color.white,true);
+            if(curIcon != null)
+                curIcon.SetFrameColor(Color.white,true);
             curIcon = null;
             isTargeting = false;
             lastTile = null;

@@ -37,7 +37,7 @@ public class ShopController : BaseController
         }
     }
     
-    public void RerollAll()
+    private void RerollAll()
     {
         shopCanvas.Refresh();
     }

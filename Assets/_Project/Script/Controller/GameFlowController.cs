@@ -11,7 +11,7 @@ namespace _Project.Script.Controller
         public override void OnInitialize()
         {
             base.OnInitialize();
-            _curRoomType = DataManager.Inst.GetCurRoomType();
+           // _curRoomType = DataManager.Inst.GetCurRoomType();
             SetFLow();
         }
 

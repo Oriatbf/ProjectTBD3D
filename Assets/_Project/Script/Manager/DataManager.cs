@@ -83,6 +83,12 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             TBDLogger.CommandLog(KeyCode.F5,this);
             Reset();
         }
+        
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            TBDLogger.CommandLog(KeyCode.F7,this);
+            JsonSave();
+        }
     }
 
     #region 데이터 저장 관련
@@ -152,7 +158,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             id= unitSaveData.id,
             iconKey = unitSaveData.iconKey,
             statContainer = originalStatContainer,
-            bringSkills = unit.GetSkillList()
+            bringSkills = unit.GetOriginalBringSkills()
         };
         newUnitSaveData.statContainer.hp.SetBaseValue(unitSaveData.statContainer.hp._baseValue);
         

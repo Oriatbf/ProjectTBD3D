@@ -117,6 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 6189405357548361151}
+  isShow: 0
   skillContent: {fileID: 4183564899557842946}
   unitContent: {fileID: 3112907277238537986}
   exitBtn: {fileID: 4388267247530774167}
@@ -326,6 +327,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4680653310415392879, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6097746252652882573, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
       propertyPath: m_Name
       value: SkillContent
@@ -335,7 +340,9 @@ PrefabInstance:
       value: UnitContent
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3447423705081366117, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
+    - {fileID: 3104273376324256245, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3423155955852141665, guid: 95320c9fa8493e241b263583ee7a6db4, type: 3}
       insertIndex: -1

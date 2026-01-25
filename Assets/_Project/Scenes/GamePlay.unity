@@ -1091,6 +1091,7 @@ MonoBehaviour:
       sfxVolume: 0.5
     gold: 0
     constId: 0
+    mainCharacterID: 0
 --- !u!4 &2015289808
 Transform:
   m_ObjectHideFlags: 0

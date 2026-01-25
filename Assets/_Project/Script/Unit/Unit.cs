@@ -6,6 +6,7 @@ using DG.Tweening;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 using VInspector;
 
 public enum Team{PlayerTeam,EnemyTeam,neutralityTeam } //neutrality == 중립
@@ -14,11 +15,11 @@ public class Unit : MonoBehaviour
 {
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
-    [SerializeField] private List<int> bringSkills = new List<int>();
     [SerializeField] private int constID;
     [EndFoldout]
     
-    
+    private List<int> originalBringSkills = new List<int>();
+    private List<int> bringSkills = new List<int>();
     private Team team; 
     private Tile tile; 
     
@@ -54,6 +55,7 @@ public class Unit : MonoBehaviour
             (animatorPath+animatorName+".overrideController").Task;
         this.animator.runtimeAnimatorController = animator;
         _statContainer = unitData.statContainer;
+        originalBringSkills = unitData.bringSkills;
         bringSkills = unitData.bringSkills;
         this.unitData = unitData;
         this.team = team;
@@ -118,6 +120,12 @@ public class Unit : MonoBehaviour
         return bringSkills;
     }
 
+    public List<int> GetOriginalBringSkills()
+    {
+        if(originalBringSkills.Count <= 0 || originalBringSkills==null)Debug.LogError("NoSkills In Unit");
+        return originalBringSkills;
+    }
+
     public Team GetTeam() => team;
     public Tile GetTile() => tile;
     public StatContainer GetStatContainer() => _statContainer;
@@ -134,7 +142,6 @@ public class Unit : MonoBehaviour
     public void SetBringSkills(List<int> skills)
     {
         bringSkills = skills;
-       // unitController.OverWriteBringSkills(bringSkills);
     }
 
     public void AttackAnim()

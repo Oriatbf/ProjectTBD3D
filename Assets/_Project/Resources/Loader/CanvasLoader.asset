@@ -50,10 +50,6 @@ MonoBehaviour:
     Prefab: {fileID: 1168243791478800428, guid: d01f59c806a0e714dbe38448f0515a43, type: 3}
     SceneName:
     - Title
-  - Key: SkillChangeUICanvas
-    Prefab: {fileID: 6940636191231279462, guid: 7797ab1a346398c4c9eb96aed8bf5fa6, type: 3}
-    SceneName:
-    - GamePlay
   - Key: SkillChangeInventoryCanvas
     Prefab: {fileID: 2034335604620626173, guid: 587c2a2a79f6ae240b9ff2d384fd8078, type: 3}
     SceneName:

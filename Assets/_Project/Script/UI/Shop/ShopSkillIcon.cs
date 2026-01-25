@@ -19,8 +19,11 @@ public class ShopSkillIcon : Icon
     {
         var curGold = DataManager.Inst.GetGold();
         if (curGold < 100) return;
-        ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(-curGold);
-        ApplicationManager.Inst.GetModule<SkillChangeController>().SetLootSkill(skillBase);
+        var shopCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<ShopCanvas>("ShopCanvas");
+        shopCanvas.ChangeState(false,true);
+        ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(-100);
+        ApplicationManager.Inst.GetModule<SkillChangeController>()
+            .SetLootSkill(skillBase,()=>shopCanvas.ChangeState(true,true,true));
 
     }
 }

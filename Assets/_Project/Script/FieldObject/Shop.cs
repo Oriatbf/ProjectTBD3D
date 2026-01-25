@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.EventSystems;
 
 namespace _Project.Script.FieldObject
 {
@@ -6,7 +7,12 @@ namespace _Project.Script.FieldObject
     {
         private void OnMouseDown()
         {
-            ApplicationManager.Inst.GetModule<ShopController>().Show();
+            if (EventSystem.current.IsPointerOverGameObject())
+                return;
+
+            ApplicationManager.Inst
+                .GetModule<ShopController>()
+                .Show();
         }
     }
 }

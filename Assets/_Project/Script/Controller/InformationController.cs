@@ -42,14 +42,12 @@ public class InformationController : BaseController
     public void InitSkillData(SkillBase skillBase,Vector3 targetPos)
     {
         _skillInfoCardCanvas.InitData(skillBase, targetPos);
-        Show(DataType.Skill);
     }
 
     public void InitUnitData(UnitSaveData unitSaveData, Vector3 targetPos)
     {
         var unitData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         _unitInfoCardCanvas.InitData(unitData,unitSaveData, targetPos);
-        //Show();
     }
     
     public void Show(DataType dataType)
@@ -58,13 +56,13 @@ public class InformationController : BaseController
         {
             if(isSkillShow)return;
             isSkillShow = true;
-            _skillInfoCardCanvas.ChangeState(true,true,true);
+            _skillInfoCardCanvas.ChangeState(true,true,false);
         }
         else if (dataType == DataType.Unit)
         {
             if(isUnitShow)return;
             isUnitShow = true;
-            _unitInfoCardCanvas.ChangeState(true,true,true);
+            _unitInfoCardCanvas.ChangeState(true,true,false);
         }
     }
 

@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 5267759203153531707}
+  frame: {fileID: 1203153183510599746}
 --- !u!222 &8658752600935752047
 CanvasRenderer:
   m_ObjectHideFlags: 0

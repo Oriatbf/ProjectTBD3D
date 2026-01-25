@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using SkillData;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class SkillChangeInventoryCanvas : BaseCanvas
     [SerializeField] private Transform skillContent;
     [SerializeField] private Transform unitContent;
     [SerializeField] private Button closeBtn;
+    [SerializeField] private ChangeIcon changeIcon;
+    
     private List<ChangeIcon> skillIcons = new List<ChangeIcon>();
     private List<int> curSkillIds = new List<int>();
     private List<UnitIcon> unitIcons = new List<UnitIcon>();
@@ -51,6 +54,17 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         }
     }
     
+    private void SetUnitIcon()
+    {
+        var savedUnits = DataManager.Inst.GetAllSavedUnits();
+        Debug.Log(savedUnits.Count);
+        for (int i = 0; i < savedUnits.Count; i++)
+        {
+            unitIcons[i].Init(savedUnits[i]);
+        }
+    }
+
+    
      private void Update()
      {
          ClickUnitIcon();
@@ -67,17 +81,9 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             
      }
 
-     private void SetUnitIcon()
-     {
-         var savedUnits = DataManager.Inst.GetAllSavedUnits();
-         Debug.Log(savedUnits.Count);
-         for (int i = 0; i < savedUnits.Count; i++)
-         {
-             unitIcons[i].Init(savedUnits[i]);
-         }
-     }
+     #region IconSelect
 
-     private void ClickUnitIcon()
+      private void ClickUnitIcon()
      {
          if (!Input.GetMouseButtonDown(0) || !isActive) return;
          _pointerEventData.position = Input.mousePosition;
@@ -88,7 +94,12 @@ public class SkillChangeInventoryCanvas : BaseCanvas
          {
              if (result.gameObject.TryGetComponent(out UnitIcon unitIcon))
              {
-                 Debug.Log("sss");
+                 foreach (var u in unitIcons)
+                 {
+                     u.SetFrameColor(Color.white,true);
+                 }
+                 unitIcon.SetFrameColor(Color.green,true);
+                 CancelTargeting();
                  var unitSaveData = unitIcon.GetUnitData();
                  Initialize(unitSaveData.constId, unitSaveData.bringSkills);
              }
@@ -110,6 +121,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
             {
                 curIcon = skillIcon;
+                curIcon.SetFrameColor(Color.green,true);
                 isTargeting = true;
                 return;
             }
@@ -147,12 +159,22 @@ public class SkillChangeInventoryCanvas : BaseCanvas
 
     }
 
+
+     #endregion
+    
+    public void InitChangeSkill(SkillBase skillBase)
+    {
+        changeIcon.Init(skillBase);
+    }
+
     private void ChangeSkill()
     {
         var curSkillBase = curIcon.GetSkillBase();
         var targetSkillBase = targetIcon.GetSkillBase();
         targetIcon.Init(curSkillBase);
         curIcon.Init(targetSkillBase);
+        targetIcon.SetFrameColor(Color.white,true);
+        curIcon.SetFrameColor(Color.white,true);
         SaveUnitSkills();
         
         
@@ -170,7 +192,17 @@ public class SkillChangeInventoryCanvas : BaseCanvas
 
     private void CancelTargeting()
     {
+        AllSkillFrameWhite();
         isTargeting = false;
+    }
+
+    private void AllSkillFrameWhite()
+    {
+        foreach (var skillIcon in skillIcons)
+        {
+            skillIcon.SetFrameColor(Color.white,true);
+        }
+        changeIcon.SetFrameColor(Color.white,true);
     }
     
     public void Show()
