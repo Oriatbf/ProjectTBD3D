@@ -67,7 +67,7 @@ public class ActionStateContainer
         foreach (var id in toRemove)
         {
             actionStates[trigger].Remove(id);
-            ApplicationManager.Inst.GetModule<BuffStackController>().UnStackBuff(_unit.GetTile(),id);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().UnStackBuff(_unit.GetTile(),id);
         }
     }
 

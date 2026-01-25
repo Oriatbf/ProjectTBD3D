@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 4edf8074a3b598b41938bb30811f69b9
   m_SerializeEntries:
+  - m_GUID: 08d5b95e6cf119948b16267327c496e8
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Thunder.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 11f1f69c64a2a784cb0ea83e0eee4706
     m_Address: Assets/_Project/Art/Animator/Samurai.overrideController
     m_ReadOnly: 0
@@ -140,6 +145,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6085db89d5d6ae43b34503c15fe313b
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/DamageBuff.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: adbd713a1cc1ad14595a842328aca7b5
     m_Address: Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab
     m_ReadOnly: 0
@@ -152,11 +162,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2be9e2b679c5f34cb9dd32ae59b18de
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/DamageBuff.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b2d7b7ab7b42d344988ec46ad967ab9a
-    m_Address: Assets/_Project/Art/Animator/Cat.controller
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -197,6 +202,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: dd48b19d60b33fe448f31096f965d98f
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Poison.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: de488c870e1eadd4da6a566c63c88593
+    m_Address: Assets/_Project/Art/Animator/Cat.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -280,6 +280,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 6732975064628113548}
+  frame: {fileID: 0}
 --- !u!222 &7856794741646349118
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -648,6 +649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 1589150614689177156}
+  frame: {fileID: 0}
 --- !u!222 &2786684648999545365
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1407,6 +1409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 5289284817164035790}
+  frame: {fileID: 0}
 --- !u!222 &1186907940685462208
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1995,6 +1998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 2752551623750213453}
+  frame: {fileID: 0}
 --- !u!222 &7262133641434946663
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2284,7 +2288,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &4913693205286976394
 MonoBehaviour:
@@ -2351,6 +2355,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 5295521565023093255}
+  isShow: 0
   card: {fileID: 5295521565023093255}
   skillContent: {fileID: 3384439986629699256}
   nameTxt: {fileID: 2062622759051239228}

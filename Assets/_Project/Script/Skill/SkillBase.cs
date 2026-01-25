@@ -66,7 +66,7 @@ namespace SkillData
                         values.Add(int.Parse(v[i]));
                 }
                 
-                skillEffect.Init(this, values);
+                skillEffect.Init(values);
                 effects.Add(skillEffect);
             }
 

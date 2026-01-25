@@ -60,6 +60,8 @@ namespace UnitData
 		public System.String Name;
 		public System.String Infor;
 		public System.String AnimatorName;
+		public ManualType ManualType;
+		public Rarity Rarity;
 		public System.Single TurnGauge;
 		public System.Collections.Generic.List<Int32> BringSkill;
 		public System.Single Strength;

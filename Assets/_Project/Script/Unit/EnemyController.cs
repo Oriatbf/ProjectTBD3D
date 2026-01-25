@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : UnitController
 {
-    private float maxTurn = .5f;
+    private float maxTurn = 0;
     float curTurn = 0;
     
     /// <summary>
@@ -16,6 +16,7 @@ public class EnemyController : UnitController
     /// </summary>
     public async UniTask  RegisterSKill()
     {
+        maxTurn = _unit.GetStatContainer().turnGauge._maxValue;
         Debug.Log("RegisterSKill");
         var _skillStackInfoList = FindingSkill();
         foreach (var skillStackInfo in _skillStackInfoList)
@@ -67,13 +68,15 @@ public class EnemyController : UnitController
     /// </summary>
     private void FindingTargetTile(SkillData.SkillBase skill)
     {
+        //가장 많은 유닛이 존재하는 곳들을 모아서 저장
+        List<Vector2Int> targetTiles = new List<Vector2Int>();
+        
         var tileController = ApplicationManager.Inst.GetModule<TileController>();
         int rowCount = skill.GetData().RowCount;
         int columnCount = skill.GetData().ColumnCount;
         int mid = tileController.GetHalfCount();
         int row = tileController.GetRowCount();
-
-        Tile maxTile = null;
+        
         int maxCount = 0;
         for (int i = 0; i <= mid; i++)
         {
@@ -90,12 +93,19 @@ public class EnemyController : UnitController
 
                 if (playerCnt > maxCount)
                 {
+                    targetTiles = new List<Vector2Int>();
+                    targetTiles.Add(new Vector2Int(i, j));
                     maxCount = playerCnt;
-                    maxTile = curTile;
+                }
+                else if (playerCnt == maxCount)
+                {
+                    targetTiles.Add(new Vector2Int(i, j));
                 }
             }
         }
-        if(maxTile == null)Debug.LogError("maxTile이 없음");
-        skill.InitTarget(maxTile);
+        var random = Random.Range(0, targetTiles.Count);
+        var finalTile = tileController.GetTile(targetTiles[random]);
+        if(finalTile == null)Debug.LogError("maxTile이 없음");
+        skill.InitTarget(finalTile);
     }
 }

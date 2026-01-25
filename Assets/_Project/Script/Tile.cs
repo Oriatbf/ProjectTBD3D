@@ -17,6 +17,8 @@ public class Tile : MonoBehaviour
     public Unit GetUnit() => unit;
     public Vector3 GetPos() => transform.position;
     public Vector2 GetIndex()=> index;
+    
+    public void DestroyUnit()=> unit = null;
 
     public void Target()
     {

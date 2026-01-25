@@ -74,6 +74,23 @@ public class TileController : BaseController
     /// </summary>
     public Tile GetPlayerTile(Vector2 vec)=> Tiles[vec];
     public Tile GetEnemyTile(Vector2 vec) => Tiles[new Vector2(_halfCount+1,0) + vec];
+
+    public Tile GetRandomTile(Team team)
+    {
+        if (team == Team.PlayerTeam)
+        {
+            var x = Random.Range(0,_halfCount+1);
+            var y = Random.Range(0,_rowCount);
+            return Tiles[new Vector2(x,y)];
+        }
+        else
+        {
+            var x = Random.Range(_halfCount+1,_halfCount*2);
+            var y = Random.Range(0,_rowCount);
+            return Tiles[new Vector2(x,y)];
+        }
+        
+    }
     public Tile GetTile(Vector2 vec)
     {
         return Tiles[vec];

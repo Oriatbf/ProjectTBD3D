@@ -17,6 +17,17 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
         this.skillBase = skillBase;
         if (icon != null) SetSprite(skillBase.GetData().SpriteName);
     }
+
+    private bool Inside()
+    {
+        var rectTransform = transform as RectTransform;
+        bool inside = RectTransformUtility.RectangleContainsScreenPoint(
+            rectTransform,
+            Input.mousePosition,
+            null
+        );
+        return inside;
+    }
     
 
   
@@ -24,18 +35,20 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     
     public void OnPointerMove(PointerEventData eventData)
     {
-        //if(skill ==null) return;
+       // if(!Inside()) return;
         ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(skillBase,Input.mousePosition);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        //if(!Inside()) return;
         //if(skill ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Skill);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        //if(!Inside()) return;
         //if(skill ==null) return;
         Debug.Log("OnPointerEnter");
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);

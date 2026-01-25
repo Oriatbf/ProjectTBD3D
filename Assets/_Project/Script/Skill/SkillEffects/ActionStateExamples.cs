@@ -26,7 +26,7 @@ namespace SkillData.SkillEffects
             ActionState damageBuffState = new ActionState(damageBuffData);
             unit.GetActionStateContainer().AddActionState(
                 ActionTrigger.None, damageBuffState);
-            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,damageBuffState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.None,damageBuffState);
         }
         
             /// <summary>

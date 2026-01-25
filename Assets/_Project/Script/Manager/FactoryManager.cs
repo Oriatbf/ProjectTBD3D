@@ -54,7 +54,7 @@ public class FactoryManager : Singleton<FactoryManager>
           {
                ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(curEnemyArrange);
                ApplicationManager.Inst.GetModule<TurnController>().MapStage();
-               ApplicationManager.Inst.GetModule<BuffStackController>().ResetAllBuffs();
+               ApplicationManager.Inst.GetModule<ActionStateStackController>().ResetAllBuffs();
                ApplicationManager.Inst.GetModule<SkillStackController>().ResetAllSkillStacks();
                ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ResetAllSkillTurnCounter();
                foreach (var unit in playerUnits)
@@ -117,10 +117,27 @@ public class FactoryManager : Singleton<FactoryManager>
           }
      }
 
+     public void UnitSpawnRandom(int id, Team team)
+     {
+          var _unit = CreateUnit(id,team);
+          var randomTile = ApplicationManager.Inst.GetModule<TileController>().GetRandomTile(team);
+          while (randomTile.GetUnit())
+          {
+               randomTile = ApplicationManager.Inst.GetModule<TileController>().GetRandomTile(team);
+          }
+          _unit.SetTile(randomTile);
+          randomTile.SetUnit(_unit);
+          _unit.transform.position = randomTile.GetPos();
+          _unit.Initalize();
+          if(team == Team.PlayerTeam)playerUnits.Add(_unit);
+          else enemyUnits.Add(_unit);
+          InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+     }
+
      /// <summary>
      /// id에 기반해 유닛 생성
      /// </summary>
-     private Unit CreateUnit(int id,Team team)
+     public Unit CreateUnit(int id,Team team)
      {
           var unitData = SheetDataManager.Inst.GetUnitData(id);
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");

@@ -60,6 +60,8 @@ namespace RelicData
 		public System.String Name;
 		public System.String SpriteName;
 		public System.String Infor;
+		public ManualType ManualType;
+		public Rarity Rarity;
 		public System.Int32 RowCount;
 		public System.Int32 ColumnCount;
 		public System.String RelicEffectData;

@@ -19,7 +19,9 @@ public static class EffectTypeFactory
         SkillChange,
         DamageBuff,
         BloodBuff,
-        BloodHeal
+        BloodHeal,
+        Summon,
+        BarrierAttack
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -41,6 +43,8 @@ public static class EffectTypeFactory
             EffectType.DamageBuff => new DamageBuff(),
             EffectType.BloodBuff => new BloodBuff(),
             EffectType.BloodHeal => new BloodHeal(),
+            EffectType.Summon => new Summon(),
+            EffectType.BarrierAttack => new BarrierAttack(),
             
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };

@@ -9,7 +9,7 @@ public class Fire : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Buff;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
        skillContext.ForEachTarget(unit =>
         {
@@ -38,7 +38,7 @@ public class Fire : SkillEffect
 
             ActionState fireState = new ActionState(fireData);
             unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, fireState);
-            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnEnd,fireState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnTurnEnd,fireState);
         });
        
     }
@@ -53,7 +53,7 @@ public class Poison : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Buff;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
@@ -75,7 +75,7 @@ public class Poison : SkillEffect
 
             ActionState poisonState = new ActionState(poisonData);
             unit.GetActionStateContainer().AddActionState(ActionTrigger.OnTurnEnd, poisonState);
-            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnEnd,poisonState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnTurnEnd,poisonState);
             
         });
     }
@@ -90,7 +90,7 @@ public class Ice : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Buff;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
@@ -116,7 +116,7 @@ public class Ice : SkillEffect
             ActionState freezeState = new ActionState(iceData);
             unit.GetActionStateContainer().AddActionState(
                 ActionTrigger.OnTurnStart, freezeState);
-            ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnTurnStart,freezeState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnTurnStart,freezeState);
         });
     }
 
@@ -131,7 +131,7 @@ public class DamageBuff : SkillEffect
 {
     protected override SkillType SkillType=> SkillType.Buff;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         var unit = skillContext.SourceUnit;
         ActionStateExamples.DamageBuff(unit, values[0]);
@@ -147,7 +147,7 @@ public class BloodBuff : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Buff;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         var unit = skillContext.SourceUnit;
         ActionData bloodBuffData = new ActionData(
@@ -167,7 +167,7 @@ public class BloodBuff : SkillEffect
         ActionState bloodBuffState = new ActionState(bloodBuffData);
         unit.GetActionStateContainer().AddActionState(
             ActionTrigger.None, bloodBuffState);
-        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.None,bloodBuffState);
+        ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.None,bloodBuffState);
         
     }
     

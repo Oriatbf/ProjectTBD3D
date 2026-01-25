@@ -1085,10 +1085,12 @@ MonoBehaviour:
       mapDict: []
       isMapGenerated: 0
       curStageIndex: {x: 0, y: 0}
-    SoundData:
+    soundData:
       masterVolume: 0.5
       bgmVolume: 0.5
       sfxVolume: 0.5
+    relicSaveData:
+      relicIDList: 
     gold: 0
     constId: 0
     mainCharacterID: 0

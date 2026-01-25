@@ -6,7 +6,7 @@ namespace _Project.Script.Controller
 {
     public class GameFlowController : BaseController
     {
-        private RoomType _curRoomType = RoomType.Shop;
+        private RoomType _curRoomType = RoomType.Boss;
 
         public override void OnInitialize()
         {

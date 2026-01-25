@@ -18,7 +18,8 @@ namespace _Project.Script.Controller
         public override void OnInitialize()
         {
             base.OnInitialize();
-            //relics = SheetDataManager.Inst.GetRelicList.NonDupRandomT(1);
+            var relicIds = DataManager.Inst.GetRelicSaveData().relicIDList;
+            relics = SheetDataManager.Inst.GetRelicDataByIds(relicIds);
         }
 
         public void ExcuteAllRelic()

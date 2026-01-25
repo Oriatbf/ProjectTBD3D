@@ -21,7 +21,7 @@ public class StatContainer
         intelligence = Stat.Create(0);
         barrier = Stat.Create(0);
         
-        hp = Stat.Create(data.Hp);
+        hp = Stat.Create(data.Hp,data.Hp);
         turnGauge = Stat.Create(0,data.TurnGauge);
         avoidance = Stat.Create(data.Avoidance);
         charm = Stat.Create(data.Charm);

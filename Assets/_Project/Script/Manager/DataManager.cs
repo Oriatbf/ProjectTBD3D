@@ -5,6 +5,7 @@ using System.Linq;
 using Map;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class UnitSaveData
@@ -35,6 +36,17 @@ public class MapData
 }
 
 [Serializable]
+public class RelicSaveData
+{
+    public List<int> relicIDList = new List<int>();
+
+    public void AddRelic(int id)
+    {
+        relicIDList.Add(id);
+    }
+}
+
+[Serializable]
 public class SoundData
 {
     public float masterVolume,bgmVolume,sfxVolume;
@@ -52,7 +64,9 @@ public class GameData
 {
     public List<UnitSaveData> units = new List<UnitSaveData>();
     public MapData mapData = new MapData();
-    public SoundData SoundData = new SoundData();
+    public SoundData soundData = new SoundData();
+    public RelicSaveData relicSaveData = new RelicSaveData();
+    
     public int gold;
     public int constId = 0;
     public int mainCharacterID = 0;
@@ -235,22 +249,22 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     #region SoundDataAPI
 
-    public SoundData GetSoundData() => Data.SoundData;
+    public SoundData GetSoundData() => Data.soundData;
     public void SaveMasterVolume(float value)
     {
-        Data.SoundData.masterVolume = value;
+        Data.soundData.masterVolume = value;
 
     }
 
     public void SaveBGMVolume(float value)
     {
-        Data.SoundData.bgmVolume = value;
+        Data.soundData.bgmVolume = value;
    
     }
 
     public void SaveSFXVolume(float value)
     {
-        Data.SoundData.sfxVolume = value;
+        Data.soundData.sfxVolume = value;
     }
 
     #endregion
@@ -277,6 +291,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     }
 
     public int GetGold()=>Data.gold;
+    
+    public RelicSaveData GetRelicSaveData() => Data.relicSaveData;
+
+    public void SaveRelic(int id)
+    {
+        Data.relicSaveData.AddRelic(id);
+    }
 
     public RoomType GetCurRoomType()
     {

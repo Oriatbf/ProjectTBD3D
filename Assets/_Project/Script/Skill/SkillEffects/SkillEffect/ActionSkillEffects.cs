@@ -10,7 +10,7 @@ public class Damage : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Attack;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         int finalValue = (int)skillContext.SourceUnit.GetStatContainer().str.FinalValue() + values[0];
         skillContext.ForEachTarget(unit =>
@@ -39,7 +39,7 @@ public class BloodSuck : SkillEffect
 {
     protected override SkillType SkillType  => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         ActionStateExamples.BloodSuck(skillContext.SourceUnit);
     }
@@ -55,7 +55,7 @@ public class SelfPDamage : SkillEffect
 {
     protected override SkillType SkillType  => SkillType.Attack;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         float casterHp = skillContext.SourceUnit.GetStatContainer().hp._baseValue;
         float damage =(int)(casterHp *( (float)values[0]/100f));
@@ -72,7 +72,7 @@ public class HealToTarget : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
@@ -89,7 +89,7 @@ public class HealToSource : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
          skillContext.SourceUnit.GetDamage(-values[0],skillContext, SkillType);
     }
@@ -105,7 +105,7 @@ public class BarrierToTarget : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.ForEachTarget(unit =>
         {
@@ -123,7 +123,7 @@ public class BarrierToSource : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.SourceUnit.GetStatContainer().barrier.AddBaseValue(values[0]);
     }
@@ -138,7 +138,7 @@ public class InCreaseCharm : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         int finalValue = (int)skillContext.SourceUnit.GetStatContainer().charm.FinalValue() + values[0];
         skillContext.ForEachTarget(unit =>
@@ -157,7 +157,7 @@ public class BloodHeal : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         
         var bloodBuff = skillContext.SourceUnit.GetActionStateContainer().GetActionState(ActionTrigger.None,"BloodBuff");
@@ -165,6 +165,7 @@ public class BloodHeal : SkillEffect
         int value =  bloodBuff.GetData().stack;
         skillContext.SourceUnit.GetDamage(-value,skillContext, SkillType);
         bloodBuff.Finish();
+        ApplicationManager.Inst.GetModule<ActionStateStackController>().UnStackBuff(skillContext.SourceTile,bloodBuff.GetId());
         
     }
 
@@ -173,6 +174,42 @@ public class BloodHeal : SkillEffect
         return $"보유한 피 버프만큼 체력을 회복합니다. 이후 피 버프가 사라집니다.";
     }
 }
+
+public class BarrierAttack : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Attack;
+
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var value = (int)(skillContext.SourceUnit.GetStatContainer().barrier._baseValue*values[0]);
+        Damage d = new Damage();
+        d.Init(new List<int>(){value});
+        d.SkillAction(skillContext);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"자신이 보유한 보호막에 {GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>배 만큼의 데미지를 입힙니다";
+    }
+}
+
+public class Summon : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+
+    public override void SkillAction(SkillContext skillContext)
+    {
+        FactoryManager.Inst.UnitSpawnRandom(values[0],skillContext.SourceUnit.GetTeam());
+    }
+
+    public override string ReturnInformation()
+    {
+        var targetUnit = SheetDataManager.Inst.GetUnitData(values[0]);
+        return $"{targetUnit.Name}을 소환합니다";
+    }
+}
+
+
 
 
 

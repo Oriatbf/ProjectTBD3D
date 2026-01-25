@@ -5,7 +5,7 @@ public class Counter : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         var unit = skillContext.SourceUnit;
         ActionData counterData = new ActionData(
@@ -32,7 +32,7 @@ public class Counter : SkillEffect
 
         ActionState counterState = new ActionState(counterData);
         unit.GetActionStateContainer().AddActionState(ActionTrigger.OnHitted, counterState);
-        ApplicationManager.Inst.GetModule<BuffStackController>().StackAction(ActionTrigger.OnHitted,counterState);
+        ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnHitted,counterState);
    
     }
     
@@ -53,7 +53,7 @@ public class SkillChange : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.SourceUnit.SetBringSkills(values);
     }

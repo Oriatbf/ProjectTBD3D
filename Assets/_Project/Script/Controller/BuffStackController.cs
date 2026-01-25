@@ -6,7 +6,7 @@ using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class BuffStackController : BaseController
+public class ActionStateStackController : BaseController
 {
     private Dictionary<Tile ,List<BuffIcon>> stackData = new Dictionary<Tile, List<BuffIcon>>();
     private Camera _camera;

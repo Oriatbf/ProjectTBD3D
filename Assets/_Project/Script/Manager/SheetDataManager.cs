@@ -2,7 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Utility;
+using GoogleSheet.Core.Type;
 using SkillData;
+
+
+[UGS(typeof(Rarity))]
+public enum Rarity
+{
+    Common,Rare,Epic,Legendary
+}
+
+[UGS(typeof(ManualType))]
+public enum ManualType
+{
+    //Manual은 스크립트의 값 지정으로만 가져올 수 있음
+    None,Manual
+}
 
 public class SheetDataManager : Singleton<SheetDataManager>
 {
@@ -34,7 +49,23 @@ public class SheetDataManager : Singleton<SheetDataManager>
     public UnitData.Data GetUnitData(int id) => UnitData.Data.DataList.FirstOrDefault(d=>d.Id==id);
     
     //랜덤 유닛 엑셀데이터 가져오기
-    public List<UnitData.Data> GetRandomUnitData(int count) => UnitData.Data.DataList.NonDupRandomT(count);
+    public List<UnitData.Data> GetRandomUnitData(int count)
+    {
+        var list = UnitData.Data.DataList.Where(s=>s.ManualType == ManualType.None).ToList();
+        return list.NonDupRandomT(count);
+    }
+
+    public List<RelicBase> GetRelicDataByIds(List<int> ids)
+    {
+        var list =  relicList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
+        return list;
+    }
+    
+    public List<RelicBase> GetRandomRelicData(int count)
+    {
+        var list = relicList.Where(s=>s.GetData().ManualType == ManualType.None).ToList();
+        return list.NonDupRandomT(count);
+    }
 
     public List<RelicBase> GetRelicList => relicList;
     
@@ -48,8 +79,12 @@ public class SheetDataManager : Singleton<SheetDataManager>
         => skillList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
 
     //랜덤 스킬베이스 가져오기
-    public List<SkillBase> GetRandomSkillBaseList(int count) => skillList.NonDupRandomT(count);
-    
+    public List<SkillBase> GetRandomSkillBaseList(int count)
+    {
+        var list = skillList.Where(s=>s.GetData().ManualType == ManualType.None).Select(s=>s.Clone()).ToList();
+        return list.NonDupRandomT(count);
+    }
+
     //전체 스킬베이스 가져오기
     public List<SkillBase> GetAllSkills() => skillList;
 

@@ -80,8 +80,9 @@ namespace _Project.Script.Controller
         public override void OnUpdate()
         {
             base.OnUpdate();
+            if (characterSkillCanvas == null || !characterSkillCanvas.isShow) return;
 
-            if (!isTargeting &&characterSkillCanvas != null &&characterSkillCanvas.isShow)
+            if (!isTargeting)
             {
                 HandleSkillSelection();
             }
