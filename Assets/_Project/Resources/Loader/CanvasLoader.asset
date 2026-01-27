@@ -62,3 +62,7 @@ MonoBehaviour:
     Prefab: {fileID: 8459421187842030804, guid: 8d6701c365dbe6947a3b1dcaee0cbff3, type: 3}
     SceneName:
     - Title
+  - Key: RelicInfoCardCanvas
+    Prefab: {fileID: 6082594679596134325, guid: 519ef72c642233249bcd805f028a8ccd, type: 3}
+    SceneName:
+    - GamePlay

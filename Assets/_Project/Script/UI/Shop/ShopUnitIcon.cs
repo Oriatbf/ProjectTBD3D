@@ -3,8 +3,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopUnitIcon : UnitIcon
+public class ShopUnitIcon : UnitIcon,IBuyable
 {
+    public int value { get; set; }
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI priceTxt;
     
@@ -13,19 +14,17 @@ public class ShopUnitIcon : UnitIcon
     {
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(BtnAction);
-        priceTxt.text = "100" + "G";
+        
+        value = ShopHelper.ReturnValue(_unitSaveData.rarity);
+        priceTxt.text = $"{value}G";
     }
 
     private void BtnAction()
     {
-        var curGold = DataManager.Inst.GetGold();
-        if (curGold < 100)
-        {
-            Debug.Log("골드가 부족합니다");
-            return;
-        }
-        ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(-curGold);
+        if(!ShopHelper.Buy(value))return;
         DataManager.Inst.SaveUnit(_unitSaveData);
 
     }
+
+   
 }

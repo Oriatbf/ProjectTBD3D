@@ -6,39 +6,39 @@ namespace _Project.Script.Controller
 {
     public class GameFlowController : BaseController
     {
-        private RoomType _curRoomType = RoomType.Boss;
+        private NodeType curNodeType = NodeType.Shop;
 
         public override void OnInitialize()
         {
             base.OnInitialize();
-           // _curRoomType = DataManager.Inst.GetCurRoomType();
+            curNodeType = DataManager.Inst.GetMapData().curNodeType;
             SetFLow();
         }
 
         private void SetFLow()
         {
-            switch (_curRoomType)
+            switch (curNodeType)
             {
-                case RoomType.Village:
+                case NodeType.Village:
                     break;
-                case RoomType.Enemy:
+                case NodeType.Enemy:
                     SetEnemy(EnemyArrangeType.enemy);
                     break;
-                case RoomType.StrongEnemy:
+                case NodeType.StrongEnemy:
                     SetEnemy(EnemyArrangeType.strongEnemy);
                     break;
-                case RoomType.Boss:
+                case NodeType.Boss:
                     SetEnemy(EnemyArrangeType.Boss);
                     break;
-                case RoomType.Event:
+                case NodeType.Event:
                     SetEvent();
                     break;
-                case RoomType.Shop:
+                case NodeType.Shop:
                     SetShop();
                     break;
-                case RoomType.Rebellion:
+                case NodeType.Rebellion:
                     break;
-                case RoomType.None:
+                case NodeType.None:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

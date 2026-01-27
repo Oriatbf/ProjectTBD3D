@@ -11,5 +11,10 @@ namespace _Project.Script.Relic
         {
             values = _values;
         }
+        
+        /// <summary>
+        /// 각 스킬별 설명을 적어서 리턴하는 코드
+        /// </summary>
+        public abstract string ReturnInformation();
     }
 }

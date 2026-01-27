@@ -17,6 +17,7 @@ public class MapController : BaseController
         LateUpdateInterval = 0,
         FixedUpdateInterval = 0,
     };
+    /*
 
     public override void OnInitialize()
     {
@@ -64,31 +65,6 @@ public class MapController : BaseController
     {
         DataManager.Inst.SaveStageIndex(roomTile.GetRoom().GetIndex());
         FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
-        /*
-        switch (roomTile.GetRoom().GetRoomType())
-        {
-            case RoomType.Village:
-                break;
-            case RoomType.Enemy:
-                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
-                break;
-            case RoomType.StrongEnemy:
-                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
-                break;
-            case RoomType.Boss:
-                FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
-                break;
-            case RoomType.Event:
-                break;
-            case RoomType.Rebellion:
-                break;
-            case RoomType.Shop:
-                break;
-            case RoomType.None:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }*/
     }
 
     public void ResetAllRoomTileState()
@@ -142,5 +118,5 @@ public class MapController : BaseController
         }
         
     }
-    
+    */
 }

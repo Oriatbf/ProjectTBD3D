@@ -16,15 +16,15 @@ namespace Map
 
         [EndFoldout] 
         [Foldout("Debugging")] [SerializeField]
-        private RoomType curMapState;
+        private NodeType curMapState;
         private int _stageCount;
         private int _maxConsecutiveSameCount = 0;
 
         
-        [EndFoldout] [SerializeField] private List<RoomType> finalStageTypes;
+        [EndFoldout] [SerializeField] private List<NodeType> finalStageTypes;
         
         
-        public  List<RoomType> GetStageTypes(int stageCount)
+        public  List<NodeType> GetStageTypes(int stageCount)
         {
             var stageDataSO = Resources.Load<StageDataSO>("SO/Chapter1StageData");
             stageDatas = stageDataSO.stageDatas;
@@ -85,9 +85,9 @@ namespace Map
         [Button]
         private void SetStage()
         {
-            finalStageTypes = new List<RoomType>();
-            finalStageTypes.Add(RoomType.None);
-            finalStageTypes.Add(RoomType.Enemy);
+            finalStageTypes = new List<NodeType>();
+            finalStageTypes.Add(NodeType.None);
+            finalStageTypes.Add(NodeType.Enemy);
             for (int i = 1; i < _stageCount - 1; i++)
             {
                 var stage = GetStage(stageDatas);
@@ -99,7 +99,7 @@ namespace Map
                 if (stage != null) finalStageTypes.Add(stage.mapState);
             }
 
-            finalStageTypes.Add(RoomType.Boss);
+            finalStageTypes.Add(NodeType.Boss);
         }
 
         /// <summary>

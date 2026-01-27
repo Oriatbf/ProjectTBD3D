@@ -13,16 +13,16 @@ public class RelicIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoin
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Relic);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-       
+        ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Relic);
     }
 
     public void OnPointerMove(PointerEventData eventData)
     {
-        
+        ApplicationManager.Inst.GetModule<InformationController>().InitRelicData(_relicBase,Input.mousePosition);
     }
 }

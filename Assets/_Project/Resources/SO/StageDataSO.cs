@@ -16,7 +16,7 @@ public class StageDataSO : ScriptableObject
 [Serializable]
 public class StageData
 {
-    public RoomType mapState; // 스테이지 종류
+    public NodeType mapState; // 스테이지 종류
     public int percentage; //이 스테이지가 나올 퍼센트
     public int priority; //확률 재 분배 시 우선순위(내림차순 정렬)
     [Tooltip("디버깅용")]public int range; //랜덤 정수의 범위 설정

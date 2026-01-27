@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Project.Pooling;
 using _Project.Script.Controller;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
 using UnityEngine;
@@ -27,6 +28,9 @@ public class Unit : MonoBehaviour
     private ActionStateContainer _actionStateContainer;
     private UnitSaveData unitData;
     private UnitController unitController;
+    private SpriteRenderer spr;
+
+    private Material originalMat, whiteMat;
     
     private HealthContent healthContent;
     string animatorPath = "Assets/_Project/Art/Animator/";
@@ -38,6 +42,11 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        spr = GetComponent<SpriteRenderer>();
+        
+        originalMat = spr.material;
+        whiteMat = Resources.Load<Material>("Material/White");
+        
         _actionStateContainer = new ActionStateContainer(this);
         unitController = GetComponent<UnitController>();
     }
@@ -144,10 +153,20 @@ public class Unit : MonoBehaviour
         bringSkills = skills;
     }
 
-    public void AttackAnim()
+    public async UniTask AttackAnim()
     {
-        Debug.Log("스킬 애니메이션");
         animator.Play(Attack);
+
+        // 한 프레임 대기 (상태 전환용)
+        await UniTask.Yield();
+
+        AnimatorStateInfo state = animator.GetCurrentAnimatorStateInfo(0);
+
+        // 애니메이션 길이만큼 대기
+        await UniTask.Delay(TimeSpan.FromSeconds(state.length));
+        await UniTask.WaitForSeconds(0.15f);
+
+        Debug.Log("공격 애니메이션 끝");
     }
     
     public void GetDamage(float damage,SkillContext skillContext,SkillType skillType)
@@ -190,14 +209,22 @@ public class Unit : MonoBehaviour
         
         ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("Hit");
         
+        WhiteFlash().Forget();
+        
         var originPos = tile.GetPos();
         Sequence seq = DOTween.Sequence();
         var endValue = team == Team.PlayerTeam? originPos.x-1.5f : originPos.x+1.5f;
-        
         seq.Append(transform.DOMoveX(endValue, 0.25f).SetEase(Ease.OutCubic));
         seq.AppendInterval(0.25f);
         seq.Append(transform.DOMoveX(originPos.x,0.5f ).SetEase(Ease.OutSine));
         seq.Play();
+    }
+
+    private async UniTask WhiteFlash()
+    {
+        if(spr != null) spr.material = whiteMat;
+        await UniTask.WaitForSeconds(0.15f);
+        if(spr != null)spr.material = originalMat;
     }
     
     private void OnHpChange(float value)

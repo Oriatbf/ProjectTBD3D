@@ -12,6 +12,7 @@ public class Vehicle : MonoBehaviour
     bool isMoving = false;
     private bool isTargeting = false;
 
+    /*
     private void Awake()
     {
         foreach (Transform wheel in wheelParent)
@@ -81,4 +82,5 @@ public class Vehicle : MonoBehaviour
             wheel.Rotate(0, rotationSpeed * Time.deltaTime, 0f);
         }
     }
+    */
 }

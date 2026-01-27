@@ -133,11 +133,6 @@ MonoBehaviour:
       _originalValue: 0
       _maxValue: 0
       _isInfiniteValue: 0
-    curCharm:
-      _baseValue: 0
-      _originalValue: 0
-      _maxValue: 0
-      _isInfiniteValue: 0
     charm:
       _baseValue: 0
       _originalValue: 0
@@ -148,7 +143,7 @@ MonoBehaviour:
       _originalValue: 0
       _maxValue: 0
       _isInfiniteValue: 0
-  bringSkills: 
+  constID: 0
 --- !u!95 &5818559387003773048
 Animator:
   serializedVersion: 7

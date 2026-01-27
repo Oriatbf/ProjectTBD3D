@@ -6,7 +6,7 @@ using Map;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public enum RoomType
+public enum NodeType
 {
     Village,Enemy,StrongEnemy,Boss,Event,Shop,Rebellion,None
 }
@@ -73,7 +73,7 @@ public class MapGenerate
                continue;
            }
            curIndex = neighbor.Item2;
-            var createdRoom = CreateRoom(curIndex, RoomType.Enemy);
+            var createdRoom = CreateRoom(curIndex, NodeType.Enemy);
             mainPathRooms.Add(createdRoom);
             roomStack.Push(createdRoom);
             if (createdRoom.GetIndex() != lastIndex)
@@ -94,7 +94,7 @@ public class MapGenerate
             }
             lastIndex = createdRoom.GetIndex();
         }
-        mainPathRooms[^1].SetRoomType(RoomType.Boss);
+        mainPathRooms[^1].SetRoomType(NodeType.Boss);
         _endIndex = mainPathRooms[^1].GetIndex();
         Debug.Log($"메인 패스의 개수는 {mainPathRooms.Count}");
     }
@@ -129,7 +129,7 @@ public class MapGenerate
                     edgeRoomsData.Remove(curRoom);
                     continue;
                 }
-                var room = CreateRoom( neighbor.Item2, RoomType.Enemy);
+                var room = CreateRoom( neighbor.Item2, NodeType.Enemy);
                 edgeRoomsData.Add(room);
             }
           
@@ -263,9 +263,9 @@ public class MapGenerate
     /// <summary>
     /// 방 생성
     /// </summary>
-    private Room CreateRoom(Vector2Int roomIndex, RoomType roomType)
+    private Room CreateRoom(Vector2Int roomIndex, NodeType nodeType)
     {
-        var room = new Room(roomIndex,roomType);
+        var room = new Room(roomIndex,nodeType);
         mapDictionary.Add(roomIndex, room);
         curRoomCnt++;
         return room;
@@ -327,7 +327,7 @@ public class MapGenerate
     {
         Vector2Int startIndex = Vector2Int.zero;
         _startIndex = startIndex;
-        return CreateRoom(startIndex, RoomType.Village);
+        return CreateRoom(startIndex, NodeType.Village);
     }
 
     #region Utility

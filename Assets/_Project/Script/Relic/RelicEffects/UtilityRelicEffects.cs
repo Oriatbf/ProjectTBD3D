@@ -16,5 +16,11 @@ namespace _Project.Script.Relic
             
             Debug.Log("데미지 버프 유물");
         }
+
+        public override string ReturnInformation()
+        {
+            return $"시작 시 모든 아군유닛에게 데미지버프 " +
+                   $"{ColorText.GetTextColor(TxtColorType.Str)}{values[0]}</color>을 부여합니다";
+        }
     }
 }

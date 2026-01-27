@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using _Project.Script.Relic;
 using SkillData;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RelicBase : MonoBehaviour
 {
     private RelicData.Data _data; 
     private List<RelicEffect> effects = new List<RelicEffect>();
+    private string description;
     
   
     public RelicData.Data GetData()=>_data;
@@ -17,7 +19,7 @@ public class RelicBase : MonoBehaviour
         _data = data;
         effects = new List<RelicEffect>();
         FindRelicEffects(data.RelicEffectData);
-
+        SetDescription();
     }
 
     public RelicBase(RelicBase originalRelicBase)
@@ -26,6 +28,18 @@ public class RelicBase : MonoBehaviour
         effects =originalRelicBase.effects;
        
     }
+
+    private void SetDescription()
+    {
+        description = "";
+        foreach (var relicEffect in effects)
+        {
+            description += relicEffect.ReturnInformation() + " ";
+        }
+        
+    }
+
+    public string GetRelicDescription() => description;
     
    
     

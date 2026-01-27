@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Map;
 using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.Serialization;
 
+/// <summary>
+/// json에 저장하기 위한 unit 데이터
+/// </summary>
 [Serializable]
 public class UnitSaveData
 {
@@ -15,6 +16,7 @@ public class UnitSaveData
     public List<int> bringSkills = new List<int>();
     public StatContainer statContainer;
     public string iconKey;
+    public Rarity rarity;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
@@ -24,15 +26,18 @@ public class UnitSaveData
         id = unitData.Id;
         bringSkills = unitData.BringSkill;
         statContainer = new StatContainer(unitData);
+        rarity = unitData.Rarity;
     }
 }
 
 [Serializable]
 public class MapData
 {
-    public List<Room> mapDict =new List<Room>();
+    public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
-    public Vector2 curStageIndex=Vector2.zero;
+    public NodeType curNodeType = NodeType.Enemy; 
+    public int curFloor = 0;
+    public int curIndex = 0;
 }
 
 [Serializable]
@@ -84,11 +89,16 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     protected override void Awake()
     {
         base.Awake();
+
+    }
+
+    private void Start()
+    {
         path = Path.Combine(Application.persistentDataPath, fileName);
         JsonLoad();
-        saveAction = JsonSave;
+        saveAction = JsonSave;   
     }
-    
+
 
     private void Update()
     {
@@ -110,19 +120,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         if (!File.Exists(path))
         {
-            isNewData = false;
-            Data = new GameData();
-            for (int i = 0; i < 2; i++)
-            {
-                Data.units.Add(new UnitSaveData()
-                {
-                    iconKey = UnitData.Data.DataList[1].AnimatorName,
-                    constId = RandomID.GetConstID(),
-                    id = 1,
-                    bringSkills = UnitData.Data.DataList[1].BringSkill,
-                    statContainer = new StatContainer(UnitData.Data.DataList[1])
-                });
-            }
+            isNewData = false; 
+            SetMainCharcter(1);
         
             
             JsonSave();
@@ -131,15 +130,18 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         {
             isNewData = true;
             string loadJson = File.ReadAllText(path);
+            Data = JsonConvert.DeserializeObject<GameData>(loadJson);
+            /*
+            string loadJson = File.ReadAllText(path);
             Data = JsonUtility.FromJson<GameData>(loadJson);
-            //Data = JsonConvert.DeserializeObject<GameData>(loadJson);
+           */
         }
     }
 
     public void JsonSave()
     {
-        string json = JsonUtility.ToJson(Data, true);
-        //string json = JsonConvert.SerializeObject(Data, Formatting.Indented);
+       // string json = JsonUtility.ToJson(Data, true);
+        string json = JsonConvert.SerializeObject(Data, Formatting.Indented);
         File.WriteAllText(path, json);
     }
     
@@ -223,7 +225,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <summary>
     /// 맵 상태 저장
     /// </summary>
-    public void SaveMapData(List<Room> mapData)
+    public void SaveMapData(List<List<MapNode>> mapData)
     {
         Data.mapData.mapDict = mapData;
         Data.mapData.isMapGenerated = true;
@@ -240,9 +242,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         JsonSave();
     }
     
-    public void SaveStageIndex(Vector2Int index)
+
+    public void SaveCurNodeType(NodeCoord nodeCoord)
     {
-        Data.mapData.curStageIndex = index;
+        Data.mapData.curNodeType = nodeCoord.type;
+        Data.mapData.curFloor = nodeCoord.floor;
+        Data.mapData.curIndex = nodeCoord.index;
+        JsonSave();
     }
 
     public MapData GetMapData() => Data.mapData;
@@ -277,7 +283,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void SetMainCharcter(int id)
     {
         Reset();
-        JsonLoad();//Load안에 파일이 없으면 새로 생성하는 기능이 있음
         Data.units.Add(new UnitSaveData()
         {
             iconKey = UnitData.Data.DataList[id].AnimatorName,
@@ -298,24 +303,24 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         Data.relicSaveData.AddRelic(id);
     }
-
-    public RoomType GetCurRoomType()
+/*
+    public NodeType GetCurRoomType()
     {
         if (!Data.mapData.isMapGenerated)
         {
             Debug.LogError("현재 맵이 생성되어 있지 않음");
-            return RoomType.Enemy;
+            return NodeType.Enemy;
         }
         var curIndex = Data.mapData.curStageIndex;
         var targetRoom = Data.mapData.mapDict.Find(s => s._index == curIndex);
         if (targetRoom == null)
         {
             Debug.LogError("현재 룸 데이터가 없음");
-            return RoomType.Enemy;
+            return NodeType.Enemy;
         }
-        return targetRoom._roomType;
+        return targetRoom.nodeType;
     }
-    
+   */ 
     public void SetGold(int value)
     {
         Data.gold = value;

@@ -70,7 +70,9 @@ public class SkillTurnCounterController : BaseController
           
             
             await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
-            sourceUnit.AttackAnim();
+            await sourceUnit.AttackAnim();
+            //스킬 실행
+            skill.SkillAction();
             if(skill.GetSkillContext().TargetUnit!=null)
                 await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().TargetUnit);
             // 스킬 실행 후 UI 애니메이션 시작
@@ -85,8 +87,6 @@ public class SkillTurnCounterController : BaseController
                 await seq.Play().AsyncWaitForCompletion();
 
             }
-            //스킬 실행
-            skill.SkillAction();
 
             
             //몬스터 위에 스킬 스택되어있던거 삭제

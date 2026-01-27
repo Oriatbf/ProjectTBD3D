@@ -19,19 +19,19 @@ public class Room
 {
     public int _order = 0;
     public Vector2Int _index;
-    public RoomType _roomType;
+    [FormerlySerializedAs("_roomType")] public NodeType nodeType;
     public List<RoomLinkData> _linkedRooms = new List<RoomLinkData> ();
 
-    public Room(Vector2Int index, RoomType roomType)
+    public Room(Vector2Int index, NodeType nodeType)
     {
         _index = index;
-        _roomType = roomType;
+        this.nodeType = nodeType;
     }
     
-    public void SetRoomType(RoomType roomType) => _roomType = roomType;
+    public void SetRoomType(NodeType nodeType) => this.nodeType = nodeType;
     public void SetOrder(int order) => _order = order;
     
     public Vector2Int GetIndex() => _index; 
-    public RoomType GetRoomType() => _roomType;
+    public NodeType GetRoomType() => nodeType;
     public List<RoomLinkData>  GetLinkedDict() => _linkedRooms;
 }

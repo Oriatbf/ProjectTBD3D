@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Core.Utility
@@ -47,15 +48,16 @@ namespace Core.Utility
         /// </summary>
         public static List<T> NonDupRandomT<T>(this List<T> list, int count)
         {
-            var randomHashSet = new HashSet<T>();
-        
-            while (randomHashSet.Count < count)
-            {
-                var random = Random.Range(0, list.Count);
-                randomHashSet.Add(list[random]);
-            }
+            if (list == null)
+                throw new ArgumentNullException(nameof(list));
 
-            return randomHashSet.ToList();
+            if (list.Count < count)
+                throw new ArgumentException("list가 count보다 작음");
+
+            var shuffledList = new List<T>(list);
+            shuffledList.Shuffle();
+
+            return shuffledList.Take(count).ToList();
         }
     
         /// <summary>
