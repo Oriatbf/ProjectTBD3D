@@ -35,9 +35,8 @@ public class MapData
 {
     public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
-    public NodeType curNodeType = NodeType.Enemy; 
+    public NodeCoord prevNodeCoord = new NodeCoord();
     public int curFloor = 0;
-    public int curIndex = 0;
 }
 
 [Serializable]
@@ -89,7 +88,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     protected override void Awake()
     {
         base.Awake();
-
     }
 
     private void Start()
@@ -243,11 +241,10 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     }
     
 
-    public void SaveCurNodeType(NodeCoord nodeCoord)
+    public void SaveCurNodeType(NodeCoord prevNodeCoord,int curFloor)
     {
-        Data.mapData.curNodeType = nodeCoord.type;
-        Data.mapData.curFloor = nodeCoord.floor;
-        Data.mapData.curIndex = nodeCoord.index;
+        Data.mapData.prevNodeCoord = prevNodeCoord;
+        Data.mapData.curFloor = curFloor;
         JsonSave();
     }
 

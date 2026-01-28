@@ -5,7 +5,7 @@ using SkillData;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class RelicBase : MonoBehaviour
+public class RelicBase 
 {
     private RelicData.Data _data; 
     private List<RelicEffect> effects = new List<RelicEffect>();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
@@ -7,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-public class SkillTurnCounterController : BaseController
+public class SkillTurnCounter 
 {
     private string canvasPath = "Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab";
     private string playerTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab";
@@ -21,25 +22,7 @@ public class SkillTurnCounterController : BaseController
     private float imageMoveDistance = 200;
     private float imageInterval = 60;
     
-    public override void OnInitialize()
-    {
-        SetCanvas();
-    }
-
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            TBDLogger.CommandLog(KeyCode.F6,this);
-            var list = turnImageQueue.ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                Debug.Log($"{list[i]}");
-            }
-        }
-    }
+    
 
     /// <summary>
     /// 등록된 모든 스킬 사행
@@ -84,13 +67,15 @@ public class SkillTurnCounterController : BaseController
                 //UI이미지 이동 + 투명화
                 seq.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion * imageMoveDistance, 0), 0.2f));
                 seq.JoinCallback(() => image.ArrowAlpha());
+                //몬스터 위에 스킬 스택되어있던거 삭제
+                seq.JoinCallback(() =>
+                    ApplicationManager.Inst.GetModule<SkillProgressController>().GetSkillStack().UnstackSkill(skillStackInfo.sourceTile));
                 await seq.Play().AsyncWaitForCompletion();
 
             }
 
             
-            //몬스터 위에 스킬 스택되어있던거 삭제
-            ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
+            
         }
         //한 턴에 해당하는 UI gameObject 삭제
         foreach (var obj in destroyObj) GameObject.Destroy(obj);
@@ -100,7 +85,7 @@ public class SkillTurnCounterController : BaseController
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }
 
-    private async void SetCanvas()
+    public async UniTask SetCanvas()
     {
         canvas= await Addressables.LoadAssetAsync<GameObject>(canvasPath).Task;
         playerTurnImage = await Addressables.LoadAssetAsync<GameObject>(playerTurnImagePath).Task;
@@ -159,7 +144,7 @@ public class SkillTurnCounterController : BaseController
         var list = turnImageQueue.ToList();
         for (int i = 0; i < list.Count; i++)
         {
-            list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-imageInterval*i), 0.2f);
+            list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-130-imageInterval*i), 0.2f);
         }
     }
 
@@ -176,20 +161,41 @@ public class SkillTurnCounterController : BaseController
 
     public void DequeueByTile(Tile sourceTile)
     {
-        var list = turnQueue.ToList();
-        var imageList = turnImageQueue.ToList();
-        for (int i = 0; i < list.Count; i++)
+        var skillStackInfos = turnQueue.ToList();
+        var turnImages = turnImageQueue.ToList();
+        for (int i = 0; i < skillStackInfos.Count; i++)
         {
-            if (list[i].sourceTile == sourceTile)
+            if (skillStackInfos[i].sourceTile == sourceTile)
             {
-                list.RemoveAt(i);
-                GameObject.Destroy(imageList[i].gameObject);
-                imageList.RemoveAt(i);
+                skillStackInfos.RemoveAt(i);
+                Object.Destroy(turnImages[i].gameObject);
+                turnImages.RemoveAt(i);
             }
         }
-        turnQueue = new Queue<SkillStackInfo>(list);
-        turnImageQueue = new Queue<TurnImage>(imageList);
+        turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
+        turnImageQueue = new Queue<TurnImage>(turnImages);
         RefreshUI();
         
+    }
+
+    public void DequeueByTurn(float curStackTurn,float deleteStackTurn)
+    {
+        var skillStackInfos = turnQueue.ToList();
+        var turnImages = turnImageQueue.ToList();
+
+        for (int i = 0; i < skillStackInfos.Count; i++)
+        {
+            var curSkillStackTurn = skillStackInfos[i].stackTurn;
+            if (curSkillStackTurn >= curStackTurn && curSkillStackTurn <= deleteStackTurn)
+            {
+                skillStackInfos.RemoveAt(i);
+                Object.Destroy(turnImages[i].gameObject);
+                turnImages.RemoveAt(i);
+            }
+        }
+        
+        turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
+        turnImageQueue = new Queue<TurnImage>(turnImages);
+        RefreshUI();
     }
 }

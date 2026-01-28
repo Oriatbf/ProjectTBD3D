@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -33,7 +34,7 @@ public class TurnController : BaseController
         if (AttackTurn == Team.EnemyTeam) return;
         ApplicationManager.Inst.GetModule<CharacterSkillController>().CancelTargeting();
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
-        await ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ActionSkill();
+        await ApplicationManager.Inst.GetModule<SkillProgressController>().ActionSkill();
         foreach (var unit in allUnits)
         {
             unit.OnTurnEnd();
@@ -60,6 +61,7 @@ public class TurnController : BaseController
     public void Reset()
     {
         Debug.Log("UnitResets");
+        InGameUnitInfo.ResetCurTurn();
         foreach (var unit in allUnits)
         {
             unit.Reset();
@@ -126,10 +128,10 @@ public class TurnController : BaseController
             stateControl.ChangeState(state);
         }
 
-        if (team == Team.EnemyTeam && state == State.Attack) EnemyRegisterSkill();
+        if (team == Team.EnemyTeam && state == State.Attack) EnemyRegisterSkill().Forget();
     }
 
-    private async void EnemyRegisterSkill()
+    private async UniTask EnemyRegisterSkill()
     {
         await ApplicationManager.Inst.GetModule<EnemyRegisterController>().Register();
         ChangeStates(State.Idle, Team.EnemyTeam);

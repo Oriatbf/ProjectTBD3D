@@ -70,12 +70,11 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(TileController), new TileController());
         _modulesByType.Add(typeof(RelicController), new RelicController());
         _modulesByType.Add(typeof(TitleFlowController), new TitleFlowController());
-        _modulesByType.Add(typeof(SkillTurnCounterController), new SkillTurnCounterController());
         _modulesByType.Add(typeof(TurnController), new TurnController());
         _modulesByType.Add(typeof(EnemyRegisterController),new EnemyRegisterController());
         _modulesByType.Add(typeof(CharacterSkillController), new CharacterSkillController());
         _modulesByType.Add(typeof(PopUpUIController), new PopUpUIController());
-        _modulesByType.Add(typeof(SkillStackController),new SkillStackController());
+        _modulesByType.Add(typeof(SkillProgressController),new SkillProgressController());
         _modulesByType.Add(typeof(PlayerSpawnController),new PlayerSpawnController());
         _modulesByType.Add(typeof(LootController), new LootController());
         _modulesByType.Add(typeof(InformationController), new InformationController());

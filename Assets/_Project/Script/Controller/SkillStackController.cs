@@ -19,8 +19,18 @@ public class SkillStackInfo
     {
         stackTurn = skillStackInfo.stackTurn;
         skill = skillStackInfo.skill.Clone();
+        skill.InitStackTurn(stackTurn);
         sourceTile = skillStackInfo.sourceTile;
         team = skillStackInfo.team;
+    }
+
+    public SkillStackInfo(SkillBase skill, Tile curTile, float stackTurn, Team team)
+    {
+        this.stackTurn = stackTurn;
+        this.skill = skill.Clone();
+        this.skill.InitStackTurn(stackTurn);
+        sourceTile = curTile;
+        sourceTile = curTile;
     }
 
     public SkillStackInfo(SkillBase skillBase)
@@ -28,10 +38,11 @@ public class SkillStackInfo
         skill = skillBase.Clone();
         stackTurn = skill.GetData().RequireTurn;
         sourceTile = skill.GetSkillContext().SourceTile;
+        skill.InitStackTurn(stackTurn);
         team = Team.PlayerTeam;
     }
 }
-public class SkillStackController : BaseController
+public class SkillStack 
 {
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab";
     private readonly string SkillStackCanvasPath = "Assets/_Project/Prefab/UI/SkillStackCanvas.prefab";
@@ -39,18 +50,15 @@ public class SkillStackController : BaseController
     private Icon iconPrefab;
     private Camera _camera;
     private Dictionary<Tile ,Queue<Icon>> stackData = new Dictionary<Tile ,Queue<Icon>>();
+    private Dictionary<Icon, Tile> iconToTile = new();
+    private List<(float,Icon)> stackIcons = new List<(float,Icon)>();
     private float skillIconInterval = 100;
     bool isRefreshing = false;
 
-    public override void OnInitialize()
-    {
-        base.OnInitialize();
-        _camera = Camera.main;
-        SetPrefab();
-    }
 
-    private async void SetPrefab()
+    public async UniTask SetPrefab()
     {
+        _camera = Camera.main;
         var _canvas = await Addressables.LoadAssetAsync<GameObject>(SkillStackCanvasPath).ToUniTask();
         var obj = GameObject.Instantiate(_canvas);
         this.content = obj.transform.GetChild(0).transform;
@@ -63,11 +71,14 @@ public class SkillStackController : BaseController
     {
         var tile = skillStackInfo.sourceTile;
         if(tile==null) Debug.LogError("Tile is null");
-        var obj = GameObject.Instantiate(iconPrefab,content);
+        var obj = Object.Instantiate(iconPrefab,content);
         obj.Init(skillStackInfo.skill);
         
+        if(obj == null)Debug.LogError("iconPrefab" + " is null");
         if (stackData.ContainsKey(tile)) stackData[tile].Enqueue(obj);
         else stackData.Add(tile,new Queue<Icon>(new []{obj}));
+        stackIcons.Add((skillStackInfo.stackTurn,obj));
+        iconToTile.Add(obj,tile);
         RefreshUI(tile,stackData[tile]);
         
     }
@@ -79,6 +90,20 @@ public class SkillStackController : BaseController
         var skillIcon = stackData[tile].Dequeue();
         GameObject.Destroy(skillIcon.gameObject);
         RefreshUI(tile,stackData[tile]);
+    }
+
+    public void UnstackSkillByTurn(float curStackTurn, float deleteStackTurn)
+    {
+        for (int i = 0; i < stackIcons.Count; i++)
+        {
+            var iconTurnStack = stackIcons[i].Item1;
+            if (iconTurnStack >= curStackTurn && iconTurnStack <= deleteStackTurn)
+            {
+                var targetIcon = stackIcons[i].Item2;
+                var targetTile = iconToTile[targetIcon];
+                UnstackSkill(targetTile);
+            }
+        }
     }
 
     public void UnstackAllUnitSkills(Tile tile)

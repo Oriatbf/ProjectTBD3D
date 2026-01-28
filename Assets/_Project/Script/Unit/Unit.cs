@@ -119,7 +119,7 @@ public class Unit : MonoBehaviour
         if(healthContent != null)
              healthContent.SetPos(tile.GetPos());
         if(tile == null) Debug.LogError("Unit tile is null");
-        ApplicationManager.Inst.GetModule<SkillStackController>().PositionedOnCamera(tile);
+        ApplicationManager.Inst.GetModule<SkillProgressController>().GetSkillStack().PositionedOnCamera(tile);
         ApplicationManager.Inst.GetModule<ActionStateStackController>().PositionedOnCamera(tile);
     }
 
@@ -256,8 +256,7 @@ public class Unit : MonoBehaviour
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
         ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
-        ApplicationManager.Inst.GetModule<SkillStackController>().UnstackAllUnitSkills(tile);
-        ApplicationManager.Inst.GetModule<SkillTurnCounterController>().DequeueByTile(tile);
+        ApplicationManager.Inst.GetModule<SkillProgressController>().UnStack(tile);
         ApplicationManager.Inst.GetModule<ActionStateStackController>().UnstackAllUnitBuffs(tile);
         tile.DestroyUnit();
         DataManager.Inst.DeleteUnit(unitData.constId);

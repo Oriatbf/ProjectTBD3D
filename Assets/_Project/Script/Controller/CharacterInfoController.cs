@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Project.Pooling;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -64,9 +65,8 @@ namespace _Project.Script.Controller
             Show();
             curConstId = unit.GetUnitData().constId;
             if(curTile == null)Debug.LogError("CurTile is null");
-            this.turnGauage = unit.GetStatContainer().turnGauge;
-            maxTurnStack = turnGauage._maxValue;
-            curTurnStack = turnGauage._baseValue;
+            maxTurnStack = InGameUnitInfo.PlayerMaxTurn;
+            curTurnStack = InGameUnitInfo.PlayerCurTurn;
         
             var skills = SheetDataManager.Inst.GetSkillBaseList(bringSkills);
         
@@ -188,7 +188,7 @@ namespace _Project.Script.Controller
 
             curTurnStack += reqTurn;
             skillStackInfo.stackTurn = curTurnStack;
-            turnGauage.SetBaseValue(curTurnStack);
+            InGameUnitInfo.PlayerCurTurn = curTurnStack;
 
             var skill = skillStackInfo.skill;
             if(skill.GetSkillContext().SourceTile== null)Debug.LogError("skillStackInfo.sourceTile is null");
@@ -196,7 +196,7 @@ namespace _Project.Script.Controller
             //skill.InitSource(skillStackInfo.sourceTile);
             if(targetTile!=null) skill.InitTarget(targetTile);
 
-            ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+            ApplicationManager.Inst.GetModule<SkillProgressController>().Stack(skillStackInfo);
         
             return true;
         }

@@ -22,7 +22,8 @@ public class MapRenderer : MonoBehaviour
     private List<List<MapNode>> map;
     private Dictionary<NodeCoord, MapNodeUI> nodeUIs = new();
     private MapNode currentNode;
-    private int _curFloor = 0,_curIndex = 0;
+    private int _curFloor = 0;
+    private NodeCoord _prevNodeCoord;
     
     private Sprite enemySpr,shopSpr,eventSpr,bossSpr,strongEnemySpr;
 
@@ -54,7 +55,7 @@ public class MapRenderer : MonoBehaviour
         {
             map = DataManager.Inst.GetMapData().mapDict;
             _curFloor = DataManager.Inst.GetMapData().curFloor;
-            _curIndex = DataManager.Inst.GetMapData().curIndex;
+            _prevNodeCoord = DataManager.Inst.GetMapData().prevNodeCoord;
         }
         Debug.Log(map.Count);
 
@@ -87,19 +88,8 @@ public class MapRenderer : MonoBehaviour
             }
         }
 
-        if (_curFloor < 0 || _curFloor >= map.Count)
-        {
-            Debug.LogWarning("curFloor invalid, reset to 0");
-            _curFloor = 0;
-        }
-
-        if (_curIndex < 0 || _curIndex >= map[_curFloor].Count)
-        {
-            Debug.LogWarning("curIndex invalid, reset to 0");
-            _curIndex = 0;
-        }
         // 시작 노드 설정
-        currentNode = map[_curFloor][_curIndex];
+        currentNode = map[_prevNodeCoord.floor][_prevNodeCoord.index];
         UpdateInteractable();
     }
 
@@ -188,7 +178,7 @@ public class MapRenderer : MonoBehaviour
 
     private void SetMapState(MapNode node)
     {
-        DataManager.Inst.SaveCurNodeType(node.nodeCoord);
+        DataManager.Inst.SaveCurNodeType(node.nodeCoord,_curFloor);
     }
 
     void UpdateInteractable()

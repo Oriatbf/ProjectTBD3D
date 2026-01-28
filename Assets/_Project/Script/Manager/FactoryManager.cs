@@ -3,6 +3,7 @@ using System.Linq;
 using _Project.Script.Controller;
 using Core.Utility;
 using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VInspector;
@@ -55,8 +56,7 @@ public class FactoryManager : Singleton<FactoryManager>
                ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(curEnemyArrange);
                ApplicationManager.Inst.GetModule<TurnController>().MapStage();
                ApplicationManager.Inst.GetModule<ActionStateStackController>().ResetAllBuffs();
-               ApplicationManager.Inst.GetModule<SkillStackController>().ResetAllSkillStacks();
-               ApplicationManager.Inst.GetModule<SkillTurnCounterController>().ResetAllSkillTurnCounter();
+               ApplicationManager.Inst.GetModule<SkillProgressController>().Reset();
                foreach (var unit in playerUnits)
                {
                     DataManager.Inst.SaveUnit(unit);
@@ -70,6 +70,8 @@ public class FactoryManager : Singleton<FactoryManager>
      public void GameStart()
      {
           InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+          TurnInit();
+          
           ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
           ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
@@ -82,6 +84,26 @@ public class FactoryManager : Singleton<FactoryManager>
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
      }
+
+     public void TurnInit()
+     {
+          float playerMaxTurn = 0,enemyMaxTurn = 0;
+          foreach (var unit in playerUnits)
+          {
+               playerMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
+          }
+
+          foreach (var unit in enemyUnits)
+          {
+               enemyMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
+          }
+          
+          InGameUnitInfo.PlayerMaxTurn = playerMaxTurn;
+          InGameUnitInfo.EenemyMaxTurn = enemyMaxTurn;
+          InGameUnitInfo.ResetCurTurn();
+     }
+     
+     
      
      /// <summary>
      /// id에 기반해 아군 유닛 소환

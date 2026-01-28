@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnitData;
 using UnityEngine;
@@ -24,8 +26,7 @@ public class EnemyController : UnitController
             var skill = skillStackInfo.skill;
             skill.InitSource(curTile);
             FindingTargetTile(skillStackInfo.skill);
-            ApplicationManager.Inst.GetModule<SkillStackController>().StackSkill(skillStackInfo);
-            ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+            ApplicationManager.Inst.GetModule<SkillProgressController>().Stack(skillStackInfo);
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
         }
         
@@ -49,12 +50,15 @@ public class EnemyController : UnitController
             var targetSkill = skillList[rand];
             if (targetSkill.GetData().RequireTurn <= maxTurn - curTurn)
             {
-                curTurn += targetSkill.GetData().RequireTurn;  
+               //curTrun은 해당 적이 maxTurn까지만 턴을 사용하게 하기 위한 요소
+                curTurn += targetSkill.GetData().RequireTurn; 
+                var realTurn =   InGameUnitInfo.EnemyCurTurn += targetSkill.GetData().RequireTurn;
+               
                 SkillStackInfo _skillStackInfo = new SkillStackInfo()
                 {
                     skill = targetSkill.Clone(),
                     sourceTile = curTile,
-                    stackTurn = curTurn,
+                    stackTurn = realTurn,
                     team = Team.EnemyTeam
                 };
                 resultSkillStackInfo.Add(_skillStackInfo);

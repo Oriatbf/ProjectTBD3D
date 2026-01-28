@@ -13,7 +13,7 @@ public class PlayerController : UnitController
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
             (_unit,_unit.GetSkillList(),curTile);
          
-
+        
 
     }
 }

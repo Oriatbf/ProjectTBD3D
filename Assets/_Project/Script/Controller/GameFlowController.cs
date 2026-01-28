@@ -11,7 +11,7 @@ namespace _Project.Script.Controller
         public override void OnInitialize()
         {
             base.OnInitialize();
-            curNodeType = DataManager.Inst.GetMapData().curNodeType;
+            curNodeType = DataManager.Inst.GetMapData().prevNodeCoord.type;
             SetFLow();
         }
 

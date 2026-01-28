@@ -1,3 +1,4 @@
+using _Project.Script.Controller;
 using SkillData;
 using UnityEngine;
 
@@ -61,5 +62,19 @@ public class SkillChange : SkillEffect
     public override string ReturnInformation()
     {
         return $"체인소모드로 변경합니다.";
+    }
+}
+
+public class TurnDelete : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    { 
+        ApplicationManager.Inst.GetModule<SkillProgressController>().DeleteStack(skillContext.stackTurn,values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{ColorText.GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>만큼 앞의 턴을 삭제합니다.";
     }
 }
