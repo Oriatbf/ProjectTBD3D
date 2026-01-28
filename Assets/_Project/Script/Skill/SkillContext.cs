@@ -12,6 +12,8 @@ namespace SkillData
         public Unit TargetUnit { get; set; }
         
         public int rowCount=0,columnCount=0;
+
+        public float stackTurn = 0;
         public TargetType targetType { get; set; }
 
         public void Init(TargetType targetType,int rowCount, int columnCount)
@@ -40,6 +42,11 @@ namespace SkillData
             if(sourceTile.GetUnit() == null)Debug.LogError("sourceUnit is null");
             SourceUnit = sourceTile.GetUnit();
             
+        }
+
+        public void InitStackTurn(float stackTurn)
+        {
+            this.stackTurn = stackTurn;
         }
 
         public void InitTargetTile(Tile targetTile)

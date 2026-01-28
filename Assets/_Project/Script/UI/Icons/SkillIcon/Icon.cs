@@ -50,7 +50,6 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     {
         //if(!Inside()) return;
         //if(skill ==null) return;
-        Debug.Log("OnPointerEnter");
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
     }
 

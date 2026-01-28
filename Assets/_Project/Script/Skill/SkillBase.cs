@@ -23,6 +23,7 @@ namespace SkillData
             
         public void InitTarget(Tile target)=>skillContext.InitTargetTile(target);
         public void InitSource(Tile owner) => skillContext.InitSourceTile(owner);
+        public void InitStackTurn(float stackTurn) => skillContext.InitStackTurn(stackTurn);
         public SkillContext GetSkillContext() => skillContext;
         public Data GetData()=>_data;
 

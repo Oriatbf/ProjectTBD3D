@@ -17,6 +17,7 @@ public class TurnImage : MonoBehaviour
     private SkillData.SkillBase skill;
     private Team team;
     private CanvasGroup canvasGroup;
+    private SkillStackInfo skillStackInfo;
 
     private void Start()
     {
@@ -29,6 +30,7 @@ public class TurnImage : MonoBehaviour
 
     public void SetInfo(SkillStackInfo skillStackInfo)
     {
+        this.skillStackInfo = skillStackInfo;
         turnGauge = skillStackInfo.stackTurn;
         this.team = skillStackInfo.team;
         this.skill = skillStackInfo.skill;
@@ -40,6 +42,7 @@ public class TurnImage : MonoBehaviour
         canvasGroup.DOFade(0, 0.2f);
     }
 
+    public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
     private void ClickAction()
     {
         var skillContext = skill.GetSkillContext();

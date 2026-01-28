@@ -48,6 +48,7 @@ public class SettingCanvas : BaseCanvas
     }
     void Update()
     {
+        if (!isShow) return;
         var es = EventSystem.current;
         if (es == null) return;
 
@@ -64,12 +65,14 @@ public class SettingCanvas : BaseCanvas
     
     private void BackToGameHandle()
     {
+        if (!isShow) return;
         Debug.Log("BackToGameHandle");
         ChangeState(false, true);
     }
 
     private void SettingHandle()
     {
+        if (!isShow) return;
         Debug.Log("SettingHandle");
         menuContent.gameObject.SetActive(false);
         settingContent.gameObject.SetActive(true);
@@ -80,6 +83,7 @@ public class SettingCanvas : BaseCanvas
 
     private void SetSlider()
     {
+        if (!isShow) return;
         var soundData = DataManager.Inst.GetSoundData();
         masterScrollbar.value = soundData.masterVolume;
         bgmScrollbar.value = soundData.bgmVolume;

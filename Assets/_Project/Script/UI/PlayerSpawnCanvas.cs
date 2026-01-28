@@ -26,6 +26,7 @@ public class PlayerSpawnCanvas : BaseCanvas
 
     public void SetSpawnEndAction(Action action)
     {
+        Debug.Log("SpawnEnd");
         spawnEndBtn.onClick.AddListener(()=>action?.Invoke());
     }
 
