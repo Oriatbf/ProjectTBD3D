@@ -49,6 +49,43 @@ namespace _Project.Script.Controller
                 characterSkillCanvas = characterInfoCanvas;
                 characterInfoCanvas.SetPos(InitializePos);
             }
+            SetTutorial();
+            SetTutorial2();
+        }
+        
+        private void SetTutorial()
+        {
+         Debug.Log(characterSkillCanvas.GetInventoryIcons()[0].transform.GetComponent<RectTransform>().position);   
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 4,
+                informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+                highLightRect = characterSkillCanvas.GetInventoryIcons()[0].transform.GetComponent<RectTransform>(),
+                offset = new Vector2(0,400),
+                transformType = TransformType.Rect,
+                highLightSize = new Vector2(100,100),
+                btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial2()
+        {
+            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(2, 1));
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 5,
+                informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+                transform = tile.transform,
+                transformType = TransformType.Transform,
+                highLightSize = new Vector2(100,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetInventoryIcons()[0];
+                    ExcuteSkill(tile);
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
         }
 
         /// <summary>
@@ -64,7 +101,9 @@ namespace _Project.Script.Controller
             }
             Show();
             curConstId = unit.GetUnitData().constId;
+            if(unit == null)Debug.LogError("Unit is Null");
             if(curTile == null)Debug.LogError("CurTile is null");
+            if(bringSkills == null || bringSkills.Count == 0)Debug.LogError("bringSkills is null");
             maxTurnStack = InGameUnitInfo.PlayerMaxTurn;
             curTurnStack = InGameUnitInfo.PlayerCurTurn;
         
@@ -102,18 +141,25 @@ namespace _Project.Script.Controller
             _pointerEventData.position = Input.mousePosition;
             _raycastResults.Clear();
             EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
+            if (_raycastResults.Count == 0)
+                return;
 
-            foreach (var result in _raycastResults)
+            var top = _raycastResults[0].gameObject;
+            
+            if (!top.TryGetComponent(out InventoryIcon  _skillIcon)) return;
+            if (top.TryGetComponent(out InventoryIcon skillIcon))
             {
-                if (result.gameObject.TryGetComponent(out InventoryIcon skillIcon))
-                {
-                    curIcon = skillIcon;
-                    curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
-                    curIcon.SetFrameColor(Color.green,true);
-                    isTargeting = true;
-                    return;
-                }
+                SelectSkill(skillIcon);
+                return;
             }
+        }
+
+        private void SelectSkill(InventoryIcon skillIcon)
+        {
+            curIcon = skillIcon;
+            curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
+            curIcon.SetFrameColor(Color.green,true);
+            isTargeting = true;
         }
     
         /// <summary>
@@ -121,6 +167,7 @@ namespace _Project.Script.Controller
         /// </summary>
         private void HandleSkillTargeting()
         {
+          
             //우클릭으로 타켓팅 취소
             if (Input.GetMouseButtonDown(1))
             {
@@ -142,10 +189,9 @@ namespace _Project.Script.Controller
             // 타일 선택 확정
             if (Input.GetMouseButtonDown(0))
             {
-                if (TryExecuteSkill(_tile))
-                {
-                    CancelTargeting();
-                }
+                if (EventSystem.current.IsPointerOverGameObject())
+                    return; 
+               ExcuteSkill(_tile);
                 return;
             }
 
@@ -155,6 +201,15 @@ namespace _Project.Script.Controller
                 UpdateTargetHighlight(_tile);
             }
         }
+
+        private void ExcuteSkill(Tile tile)
+        {
+            if (TryExecuteSkill(tile))
+            {
+                CancelTargeting();
+            }
+        }
+        
         private void UpdateTargetHighlight(Tile tile)
         {
             lastTile = tile;

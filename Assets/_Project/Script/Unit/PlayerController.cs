@@ -1,6 +1,7 @@
 using System;
 using _Project.Script.Controller;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : UnitController
 {
@@ -8,7 +9,8 @@ public class PlayerController : UnitController
     
     private void OnMouseDown()
     {
-    
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
         //ApplicationManager.Inst.GetModule<CharacterSkillController>().Show();
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
             (_unit,_unit.GetSkillList(),curTile);

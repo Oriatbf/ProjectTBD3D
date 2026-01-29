@@ -8,36 +8,28 @@ using VInspector;
 public class CharacterSkillCanvas : BaseCanvas
 {
     [Foldout("Serialize")]
-    [SerializeField] private Transform skillContent;
+    [SerializeField]private List<InventoryIcon> inventoryIcons = new List<InventoryIcon>();
     [EndFoldout]
-    private Icon iconPrefab;
-    private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/InventorySkillIcon Variant.prefab";
+   
+   
 
-
-    protected async override void Awake()
+    protected  override void Awake()
     {
         base.Awake();
-        var obj = await Addressables.LoadAssetAsync<GameObject>(skillIconPath).Task;
-        iconPrefab = obj.GetComponent<Icon>();
     }
     
+    public List<InventoryIcon> GetInventoryIcons()=> inventoryIcons;
     
     
 
     public void Init(List<SkillBase> skillBases)
     {
         if(skillBases.Count<=0)Debug.LogError("skillbases is null");
-        if (skillContent.childCount > 0)
+        foreach (var icons in inventoryIcons)icons.gameObject.SetActive(false);
+        for (int i = 0; i < skillBases.Count; i++)
         {
-            foreach (Transform child in skillContent)
-            {
-                Destroy(child.gameObject);
-            }
-        }
-        foreach (var skill in skillBases)
-        {
-            var _skillIcon = Instantiate(iconPrefab, skillContent);
-            _skillIcon.Init(skill);
+            inventoryIcons[i].gameObject.SetActive(true);
+            inventoryIcons[i].Init(skillBases[i]);
         }
     }
    

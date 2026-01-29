@@ -88,14 +88,15 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     protected override void Awake()
     {
         base.Awake();
-    }
-
-    private void Start()
-    {
+        SkillData.Data.Load();
+        UnitData.Data.Load();
+        RelicData.Data.Load();
         path = Path.Combine(Application.persistentDataPath, fileName);
         JsonLoad();
         saveAction = JsonSave;   
     }
+
+    
 
 
     private void Update()
@@ -289,7 +290,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             statContainer = new StatContainer(UnitData.Data.DataList[id])
         });
         JsonSave();
-        
+        Debug.Log("MainChaarcter");
     }
 
     public int GetGold()=>Data.gold;

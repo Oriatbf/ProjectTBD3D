@@ -94,6 +94,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
          {
              if (result.gameObject.TryGetComponent(out UnitIcon unitIcon))
              {
+                 if(unitIcon.GetUnitData() == null)return;
                  foreach (var u in unitIcons)
                  {
                      u.SetFrameColor(Color.white,true);
@@ -120,6 +121,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         {
             if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
             {
+                if(skillIcon.GetSkillBase() == null)return;
                 curIcon = skillIcon;
                 curIcon.SetFrameColor(Color.green,true);
                 isTargeting = true;
@@ -149,6 +151,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             {
                 if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
                 {
+                    if(skillIcon.GetSkillBase() == null)return;
                     targetIcon = skillIcon;
                     ChangeSkill();
                     isTargeting = false;
@@ -185,7 +188,8 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         List<int> ids = new List<int>();
         foreach (var skillIcon in skillIcons)
         {
-            ids.Add(skillIcon.GetSkillBase().GetData().ID);
+            if(skillIcon.GetSkillBase() != null)
+                ids.Add(skillIcon.GetSkillBase().GetData().ID);
         }
         DataManager.Inst.SaveUnitSkills(constId,ids);
     }

@@ -66,3 +66,7 @@ MonoBehaviour:
     Prefab: {fileID: 6082594679596134325, guid: 519ef72c642233249bcd805f028a8ccd, type: 3}
     SceneName:
     - GamePlay
+  - Key: TutorialCanvas
+    Prefab: {fileID: 8919878554540582406, guid: 77fe3a1ec9cce3c488b04f006526310a, type: 3}
+    SceneName:
+    - GamePlay

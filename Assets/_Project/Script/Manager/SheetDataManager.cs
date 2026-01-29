@@ -29,7 +29,6 @@ public class SheetDataManager : Singleton<SheetDataManager>
         SkillData.Data.Load();
         UnitData.Data.Load();
         RelicData.Data.Load();
-        
         //엑셀의 데이터를 리스트에 저장
         foreach (var data in SkillData.Data.DataList)
         {
@@ -43,8 +42,9 @@ public class SheetDataManager : Singleton<SheetDataManager>
             relicList.Add(newRelic);
         }
         
+
     }
-    
+        
     //특정 ID의 유닛 엑셀데이터 가져오기
     public UnitData.Data GetUnitData(int id) => UnitData.Data.DataList.FirstOrDefault(d=>d.Id==id);
     

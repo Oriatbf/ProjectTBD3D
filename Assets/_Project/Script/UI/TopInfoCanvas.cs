@@ -11,6 +11,7 @@ public class TopInfoCanvas : MonoBehaviour
 
     private void Start()
     {
+        
         curGold = DataManager.Inst.GetGold();
         goldTxt.text=DataManager.Inst.Data.gold+"G";
     }

@@ -87,6 +87,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         _modulesByType.Add(typeof(DebugController), new DebugController());
         _modulesByType.Add(typeof(CameraController), new CameraController());
         _modulesByType.Add(typeof(MapCameraMoveController), new MapCameraMoveController());
+        _modulesByType.Add(typeof(TutorialController), new TutorialController());
        // _modulesByType.Add(typeof(MapController), new MapController());
         _modulesByType.Add(typeof(GameFlowController), new GameFlowController());
     }

@@ -1,4 +1,5 @@
 using System;
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,7 +17,23 @@ public class TurnEndCanvas : BaseCanvas
         turnEndBtn.gameObject.SetActive(true);
         SetNextStageAction();
         SetTurnEndAction();
+        SetTutorial();
     }
+    private void SetTutorial()
+    {
+            
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 6,
+            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            highLightRect = turnEndBtn.GetComponent<RectTransform>(),
+            transformType = TransformType.Rect,
+            highLightSize = new Vector2(100,100),
+            btnAction = ()=>turnEndBtn.onClick.Invoke()
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
 
     public void SetTurnEndAction()
     {

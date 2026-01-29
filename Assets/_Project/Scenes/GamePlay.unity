@@ -1082,9 +1082,12 @@ MonoBehaviour:
   Data:
     units: []
     mapData:
-      mapDict: []
       isMapGenerated: 0
-      curStageIndex: {x: 0, y: 0}
+      prevNodeCoord:
+        floor: 0
+        index: 0
+        type: 0
+      curFloor: 0
     soundData:
       masterVolume: 0.5
       bgmVolume: 0.5

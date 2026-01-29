@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -26,6 +28,7 @@ public class PlayerSpawnController : BaseController
     {
         base.OnInitialize();
         _allSavedUnits = DataManager.Inst.GetAllSavedUnits();
+        Debug.Log("저장된 유닛 개수는 "+_allSavedUnits.Count);
         foreach (var data in _allSavedUnits)
             unitSaveDatas.Add(data.constId,data);
         _pointerEventData = new PointerEventData(EventSystem.current);
@@ -43,7 +46,9 @@ public class PlayerSpawnController : BaseController
         _playerSpawnCanvas.Init(datas);
         _playerSpawnCanvas.SetPos(Vector2.zero,true);
         _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
-        
+        SetTutorial();
+        SetTutorial2();
+        SetTutorial3();
     }
 
     private void SpawnEndAction()
@@ -53,6 +58,57 @@ public class PlayerSpawnController : BaseController
         _playerSpawnCanvas.ChangeState(false,true);
          FactoryManager.Inst.GameStart();
     }
+
+    private void SetTutorial()
+    {
+        var unitIcon = _playerSpawnCanvas.GetUnitIcons[0];
+        if(unitIcon == null)Debug.LogError("UnitIcon is Null");
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 0,
+            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            transformType = TransformType.Rect,
+            highLightRect = unitIcon.GetComponent<RectTransform>(),
+            highLightSize = new Vector2(100,100),
+            btnAction = ()=>UnitSelected(unitIcon)
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+
+    private void SetTutorial2()
+    {
+        var tile = ApplicationManager.Inst.GetModule<TileController>().GetTile(new Vector2(0, 0));
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 1,
+            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            transform = tile.transform,
+            transformType = TransformType.Transform,
+            highLightSize = new Vector2(100,100),
+            btnAction = ()=>Spawn(_playerSpawnCanvas.GetUnitIcons[0],tile)
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial3()
+    {
+        var tile = ApplicationManager.Inst.GetModule<TileController>().GetTile(new Vector2(0, 0));
+        var characterSkillController = ApplicationManager.Inst.GetModule<CharacterSkillController>();
+        if (characterSkillController == null) Debug.LogError("CharacterSkillController is Null");
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 3,
+            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            transform = tile.transform,
+            transformType = TransformType.Transform,
+            highLightSize = new Vector2(100,100),
+            btnAction = ()=>ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
+                (InGameUnitInfo.PlayerUnits[0],InGameUnitInfo.PlayerUnits[0].GetSkillList(),tile)
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+
+   
 
     public override void OnUpdate()
     {
@@ -67,13 +123,12 @@ public class PlayerSpawnController : BaseController
         {
             HandleUnitSelection();
         }
-        
-
     }
 
     private void HandleUnitSelection()
     {
         if (!Input.GetMouseButtonDown(0)) return;
+       
         _pointerEventData.position = Input.mousePosition;
         _raycastResults.Clear();
         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
@@ -83,13 +138,18 @@ public class PlayerSpawnController : BaseController
             if (result.gameObject.transform.parent.TryGetComponent(out UnitIcon unitIcon))
             {
                 if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
-                Debug.Log(unitIcon.name);
-                _curUnitIcon = unitIcon;
-                _curUnitIcon.SetFrameColor(Color.green,true);
-                isTargeting = true;
+                UnitSelected(unitIcon);
                 return;
             }
         }
+    }
+
+    private void UnitSelected(UnitIcon unitIcon)
+    {
+        Debug.Log(unitIcon.name + " is Selected");
+        _curUnitIcon = unitIcon;
+        _curUnitIcon.SetFrameColor(Color.green,true);
+        isTargeting = true;
     }
 
     private void HandleSpawnTargeting()
@@ -105,12 +165,11 @@ public class PlayerSpawnController : BaseController
         {
             if (hit.transform.TryGetComponent(out Tile tile))
             {
+               
                 if(Input.GetMouseButtonDown(0))
                 {
-                    FactoryManager.Inst.PlayerSpawn(_curUnitIcon.GetUnitData(),tile);
-                    RegisterUnit(_curUnitIcon.GetUnitData().constId);
-                    CancelTargeting(Color.red);
-                    
+                    if (EventSystem.current.IsPointerOverGameObject()) return;
+                    Spawn(tile);
                 }
                 else
                 {
@@ -123,6 +182,20 @@ public class PlayerSpawnController : BaseController
                
             }
         }
+    }
+
+    private void Spawn(Tile tile)
+    {
+        FactoryManager.Inst.PlayerSpawn(_curUnitIcon.GetUnitData(),tile);
+        RegisterUnit(_curUnitIcon.GetUnitData().constId);
+        CancelTargeting(Color.red);
+    }
+    
+    private void Spawn(UnitIcon unitIcon,Tile tile)
+    {
+        FactoryManager.Inst.PlayerSpawn(unitIcon.GetUnitData(),tile);
+        RegisterUnit(unitIcon.GetUnitData().constId);
+        CancelTargeting(Color.red);
     }
 
     private void RegisterUnit(int constId)
