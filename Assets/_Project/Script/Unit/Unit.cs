@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour
     [Foldout("Debug")]
     [SerializeField]private StatContainer _statContainer = new StatContainer();
     [SerializeField] private int constID;
+    [SerializeField] private Material baseMaterial;
     [EndFoldout]
     
     private List<int> originalBringSkills = new List<int>();
@@ -44,11 +45,13 @@ public class Unit : MonoBehaviour
         animator = GetComponent<Animator>();
         spr = GetComponent<SpriteRenderer>();
         
-        originalMat = spr.material;
+        originalMat = new Material(baseMaterial);
+        spr.material = originalMat;
         whiteMat = Resources.Load<Material>("Material/White");
         
         _actionStateContainer = new ActionStateContainer(this);
         unitController = GetComponent<UnitController>();
+        HideOutLine();
     }
     private void Start()
     {
@@ -261,5 +264,16 @@ public class Unit : MonoBehaviour
         tile.DestroyUnit();
         DataManager.Inst.DeleteUnit(unitData.constId);
         Destroy(gameObject);
+    }
+
+    public void ShowOutLine(Color color)
+    {
+        originalMat.SetFloat("_OutlineSize", 0.5f);
+        originalMat.SetColor("_OutlineColor", color);
+    }
+
+    public void HideOutLine()
+    {
+        originalMat.SetFloat("_OutlineSize", 0f);
     }
 }

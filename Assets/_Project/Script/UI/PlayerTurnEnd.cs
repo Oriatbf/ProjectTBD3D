@@ -25,10 +25,11 @@ public class TurnEndCanvas : BaseCanvas
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
             order = 6,
-            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            informationTxt = "턴이 종료되면 스킬이 시전됩니다",
             highLightRect = turnEndBtn.GetComponent<RectTransform>(),
             transformType = TransformType.Rect,
-            highLightSize = new Vector2(100,100),
+            highLightSize =turnEndBtn.GetComponent<RectTransform>().sizeDelta,
+            textOffset = new Vector2(-100,100),
             btnAction = ()=>turnEndBtn.onClick.Invoke()
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);

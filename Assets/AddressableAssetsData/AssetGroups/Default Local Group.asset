@@ -120,11 +120,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 80902250a613d194eaef69caea2daf10
-    m_Address: Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 89bd655f6c0acf74dab4b1116172c967
     m_Address: Assets/_Project/Prefab/UI/Skill/ActiveSkillIcon Variant.prefab
     m_ReadOnly: 0
@@ -190,11 +185,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d8fa101f330c4d8458c79465fb66d704
-    m_Address: Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d9327b4d288252e4c8baa7592b16370a
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/Ice.png
     m_ReadOnly: 0
@@ -212,11 +202,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: eb9ee628091661043afd18ed5278ebe5
-    m_Address: Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

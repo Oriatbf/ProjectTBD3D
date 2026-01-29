@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
@@ -10,14 +11,11 @@ using UnityEngine.UI;
 
 public class SkillTurnCounter 
 {
-    private string canvasPath = "Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab";
-    private string playerTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab";
-    private string enemyTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab";
-    private GameObject playerTurnImage,enemyTurnImage;
+    private GameObject playerTurnImage,enemyTurnImage,expectationTurnImage;
     
     private Queue<SkillStackInfo> turnQueue = new Queue<SkillStackInfo>();
     private Queue<TurnImage> turnImageQueue = new Queue<TurnImage>();
-    private GameObject canvas;
+    private GameObject turnCounterCanvas;
     private Transform parent;
     private float imageMoveDistance = 200;
     private float imageInterval = 60;
@@ -85,13 +83,13 @@ public class SkillTurnCounter
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }
 
-    public async UniTask SetCanvas()
+    public void SetCanvas()
     {
-        canvas= await Addressables.LoadAssetAsync<GameObject>(canvasPath).Task;
-        playerTurnImage = await Addressables.LoadAssetAsync<GameObject>(playerTurnImagePath).Task;
-        enemyTurnImage = await Addressables.LoadAssetAsync<GameObject>(enemyTurnImagePath).Task;
-        var obj = GameObject.Instantiate(canvas);
-        parent = obj.transform.GetChild(0);
+        turnCounterCanvas= ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas("TurnCounterCanvas");
+        playerTurnImage = Resources.Load<GameObject>("UI/TurnCounter/PlayerTurnCounter");
+        enemyTurnImage = Resources.Load<GameObject>("UI/TurnCounter/EnemyTurnCounter");
+        expectationTurnImage = Resources.Load<GameObject>("UI/TurnCounter/ExpectationTurnCounter");
+        parent = turnCounterCanvas.transform.GetChild(0);
     }
 
     /// <summary>
@@ -121,6 +119,7 @@ public class SkillTurnCounter
         for (int i = 0; i < skillList.Count; i++)
         {
             var skillReq = skillList[i].stackTurn;
+            //턴 순서 정리
             if (curSkillReq < skillReq)
             {
                 skillList.Insert(i,skillStackInfo);
@@ -142,6 +141,7 @@ public class SkillTurnCounter
     private void RefreshUI()
     {
         var list = turnImageQueue.ToList();
+        Debug.Log("턴 이미지의 개수는 "+list.Count);
         for (int i = 0; i < list.Count; i++)
         {
             list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-130-imageInterval*i), 0.2f);
@@ -156,6 +156,54 @@ public class SkillTurnCounter
         }
         turnImageQueue.Clear();
         turnQueue.Clear();
+    }
+
+    public TurnImage EnqueueExpectSkill(SkillBase skillBase)
+    {
+        var skillContext = skillBase.GetSkillContext();
+        var skillData = skillBase.GetData();
+        var stackTurn = InGameUnitInfo.PlayerCurTurn + skillData.RequireTurn;
+        var skillStackInfo = new SkillStackInfo
+            (skillBase,skillContext.SourceTile,stackTurn,Team.PlayerTeam);
+        var obj = Object.Instantiate(expectationTurnImage, parent);
+        if (obj.TryGetComponent(out TurnImage turnImage))
+        {
+            turnImage.SetInfo(skillStackInfo);
+        };
+        
+        var skillList = turnQueue.ToList();
+        var turnImageList = turnImageQueue.ToList();
+        for (int i = 0; i < skillList.Count; i++)
+        {
+            var skillReq = skillList[i].stackTurn;
+            //턴 순서 정리
+            if (stackTurn < skillReq)
+            {
+                turnImageList.Insert(i,turnImage);
+                turnImageQueue = new Queue<TurnImage>(turnImageList);
+                RefreshUI();
+                return turnImage;
+            }
+        }
+        turnImageList.Add(turnImage);
+        turnImageQueue = new Queue<TurnImage>(turnImageList);
+        RefreshUI();
+        return turnImage;
+    }
+
+    public void DequeueExpectSkill(TurnImage turnImage)
+    {
+        var list = turnImageQueue.ToList();
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == turnImage)
+            {
+                list.RemoveAt(i);
+            }
+        }
+        turnImageQueue = new Queue<TurnImage>(list);
+        Object.Destroy(turnImage.gameObject);
+        RefreshUI();
     }
     
 

@@ -36,7 +36,7 @@ public class HealthContent : MonoBehaviour,IPoolable
 
     private void SetCharmBar(float value)
     {
-        Debug.Log($"매혹도 : {value} {_statContainer.charmResist._originalValue} {_statContainer.charmResist._baseValue} {_statContainer.charmResist._maxValue}");
+        //Debug.Log($"매혹도 : {value} {_statContainer.charmResist._originalValue} {_statContainer.charmResist._baseValue} {_statContainer.charmResist._maxValue}");
         charmBar_value.fillAmount = value/_statContainer.charmResist._maxValue;
     }
 

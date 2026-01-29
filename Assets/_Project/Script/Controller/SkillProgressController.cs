@@ -20,7 +20,7 @@ namespace _Project.Script.Controller
         {
             base.OnInitialize();
             _skillStack.SetPrefab().Forget();
-            _skillTurnCounter.SetCanvas().Forget();
+            _skillTurnCounter.SetCanvas();
         }
 
         public void Reset()

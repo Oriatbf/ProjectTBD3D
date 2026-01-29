@@ -67,7 +67,7 @@ namespace SkillData
             }
         }
 
-        private List<Tile> GetTargetTiles()
+        public List<Tile> GetTargetTiles()
         {
             List<Tile> _tiles = new List<Tile>();
             var tileController = ApplicationManager.Inst.GetModule<TileController>();

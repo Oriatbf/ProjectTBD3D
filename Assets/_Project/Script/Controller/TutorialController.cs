@@ -15,9 +15,10 @@ namespace _Project.Script.Controller
         public string informationTxt;
         public TransformType transformType;
         public RectTransform highLightRect;
-        public Transform transform;
-        public Vector2 offset = Vector2.zero;
-        public Vector2 highLightSize;
+        public Transform highlightTrans;
+        public Vector2 highlightOffset = Vector2.zero;
+        public Vector2 textOffset = Vector2.zero;
+        public Vector2 highLightSize = new Vector2(100,100);
         public Action btnAction;
         
     }
@@ -65,10 +66,8 @@ namespace _Project.Script.Controller
             Debug.Log("튜토리얼 시작");
             _tutorialCanvas.ChangeState(true, true,true);
             var curTutorial = _tutorialInfos[curIndex++];
-            if(curTutorial.transformType == TransformType.Rect)
-                _tutorialCanvas.MoveHighlight(curTutorial.highLightRect,curTutorial.offset);
-            else
-                _tutorialCanvas.MoveHighlight(curTutorial.transform,curTutorial.offset);
+            _tutorialCanvas.MoveHighlight(curTutorial);
+            _tutorialCanvas.SetHighlightSize(curTutorial.highLightSize);
             _tutorialCanvas.SetHighlightAction(curTutorial.btnAction);
             _tutorialCanvas.SetText(curTutorial.informationTxt);
             

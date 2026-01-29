@@ -1,4 +1,5 @@
 using System;
+using _Project.Script.Controller;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -32,42 +33,49 @@ public class TutorialCanvas : BaseCanvas
     {
         ChangeHighlightSize();
     }
-
-    public void MoveHighlight(RectTransform target,Vector2 offset)
+    
+    public void MoveHighlight(TutorialInfo tutorialInfo)
     {
+        var targetTrans = tutorialInfo.highlightTrans;
+        var targetRect = tutorialInfo.highLightRect;
+        var highlightOffset = tutorialInfo.highlightOffset;
+        var textOffset = tutorialInfo.textOffset;
+        Vector2 screenPos = Vector2.zero;
+        Vector2 localPos = Vector2.zero;
+        if (tutorialInfo.transformType == TransformType.Rect)
+        {
+            // 타겟의 월드 위치를 스크린 포인트로 변환
+            screenPos = RectTransformUtility.WorldToScreenPoint(null, targetRect.position);
+            
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                highlightRect.parent as RectTransform, 
+                screenPos, 
+                null, 
+                out localPos
+            );
+        }
+        else
+        { 
+            screenPos = Camera.main.WorldToScreenPoint(targetTrans.position);
+            // 스크린 포인트를 하이라이트 부모 rect의 로컬 위치로 변환
         
-        // 타겟의 월드 위치를 스크린 포인트로 변환
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, target.position);
-
-        // 스크린 포인트를 하이라이트 부모 rect의 로컬 위치로 변환
-        Vector2 localPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            highlightRect.parent as RectTransform, 
-            screenPos, 
-            null, 
-            out localPos
-        );
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                highlightRect.parent as RectTransform, 
+                screenPos, 
+                null, 
+                out localPos
+            );     
+        }
+       
 
         // 앵커드 포지션 설정 (UI 요소는 anchoredPosition 사용)
-        highlightRect.anchoredPosition = localPos + offset;
-        infoText.rectTransform.anchoredPosition = localPos + new Vector2(100, 100);
+        highlightRect.anchoredPosition = localPos+highlightOffset;
+        infoText.rectTransform.anchoredPosition = localPos + textOffset;
     }
 
-    public void MoveHighlight(Transform target,Vector2 offset)
+    public void SetHighlightSize(Vector2 size)
     {
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(target.position);
-        // 스크린 포인트를 하이라이트 부모 rect의 로컬 위치로 변환
-        Vector2 localPos;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            highlightRect.parent as RectTransform, 
-            screenPos, 
-            null, 
-            out localPos
-        );
-
-        // 앵커드 포지션 설정 (UI 요소는 anchoredPosition 사용)
-        highlightRect.anchoredPosition = localPos+offset;
-        infoText.rectTransform.anchoredPosition = localPos + new Vector2(100, 100);
+        highlightRect.sizeDelta = size;
     }
 
     public void SetHighlightAction(Action action)

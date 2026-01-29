@@ -69,7 +69,8 @@ public class PlayerSpawnController : BaseController
             informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
             transformType = TransformType.Rect,
             highLightRect = unitIcon.GetComponent<RectTransform>(),
-            highLightSize = new Vector2(100,100),
+            highLightSize = unitIcon.GetComponent<RectTransform>().sizeDelta,
+            textOffset = new Vector2(250,100),
             btnAction = ()=>UnitSelected(unitIcon)
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
@@ -81,10 +82,11 @@ public class PlayerSpawnController : BaseController
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
             order = 1,
-            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
-            transform = tile.transform,
+            informationTxt = "타일을 클릭하여 유닛을 배치하세요",
+            highlightTrans = tile.transform,
             transformType = TransformType.Transform,
-            highLightSize = new Vector2(100,100),
+            highLightSize = new Vector2(120,100),
+            textOffset = new Vector2(250,100),
             btnAction = ()=>Spawn(_playerSpawnCanvas.GetUnitIcons[0],tile)
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
@@ -98,10 +100,12 @@ public class PlayerSpawnController : BaseController
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
             order = 3,
-            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
-            transform = tile.transform,
+            informationTxt = "유닛을 누르면 스킬을 선택할 수 있습니다",
+            highlightTrans = tile.transform,
             transformType = TransformType.Transform,
-            highLightSize = new Vector2(100,100),
+            highLightSize = new Vector2(130,300),
+            highlightOffset = new Vector2(0,100),
+            textOffset =new Vector2(350,120),
             btnAction = ()=>ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
                 (InGameUnitInfo.PlayerUnits[0],InGameUnitInfo.PlayerUnits[0].GetSkillList(),tile)
         };

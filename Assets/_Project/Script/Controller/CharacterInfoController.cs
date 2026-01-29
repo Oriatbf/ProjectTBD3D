@@ -15,6 +15,7 @@ namespace _Project.Script.Controller
     
         private CharacterSkillCanvas characterSkillCanvas;
         private Icon curIcon;
+        private TurnImage expectTurnImage;
         private TargetType curTargetType;
 
         private Stat turnGauage;
@@ -55,15 +56,16 @@ namespace _Project.Script.Controller
         
         private void SetTutorial()
         {
-         Debug.Log(characterSkillCanvas.GetInventoryIcons()[0].transform.GetComponent<RectTransform>().position);   
+            var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
             TutorialInfo tutorialInfo = new TutorialInfo()
             {
                 order = 4,
-                informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
-                highLightRect = characterSkillCanvas.GetInventoryIcons()[0].transform.GetComponent<RectTransform>(),
-                offset = new Vector2(0,400),
+                informationTxt = "스킬을 클릭하여 선택하세요",
+                highLightRect = targetRect,
+                highlightOffset = new Vector2(0,400),
                 transformType = TransformType.Rect,
-                highLightSize = new Vector2(100,100),
+                highLightSize = new Vector2(400,100),
+                textOffset = new Vector2(0,600),
                 btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
             };
             ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
@@ -75,10 +77,12 @@ namespace _Project.Script.Controller
             TutorialInfo tutorialInfo = new TutorialInfo()
             {
                 order = 5,
-                informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
-                transform = tile.transform,
+                informationTxt = "타일을 선택하여 스킬을 등록하세요",
+                highlightTrans = tile.transform,
                 transformType = TransformType.Transform,
-                highLightSize = new Vector2(100,100),
+                highLightSize = new Vector2(140,50),
+                highlightOffset = new Vector2(0,10),
+                textOffset = new Vector2(0,100),
                 btnAction = ()=>
                 {
                     curIcon = characterSkillCanvas.GetInventoryIcons()[0];
@@ -156,6 +160,8 @@ namespace _Project.Script.Controller
 
         private void SelectSkill(InventoryIcon skillIcon)
         {
+            expectTurnImage= ApplicationManager.Inst.GetModule<SkillProgressController>()
+                .GetSkillTurnCounter().EnqueueExpectSkill(skillIcon.GetSkillBase());
             curIcon = skillIcon;
             curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
             curIcon.SetFrameColor(Color.green,true);
@@ -262,6 +268,11 @@ namespace _Project.Script.Controller
         }
         public void CancelTargeting()
         {
+            if (expectTurnImage != null)
+            {
+               ApplicationManager.Inst.GetModule<SkillProgressController>().GetSkillTurnCounter()
+                   .DequeueExpectSkill(expectTurnImage);
+            }
             ClearTargetTiles();
             if(curIcon != null)
                 curIcon.SetFrameColor(Color.white,true);

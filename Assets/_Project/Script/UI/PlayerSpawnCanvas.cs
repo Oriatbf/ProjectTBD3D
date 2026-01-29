@@ -36,10 +36,11 @@ public class PlayerSpawnCanvas : BaseCanvas
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
             order = 2,
-            informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
+            informationTxt = "소환 종료를 누르세요",
             highLightRect = spawnEndBtn.GetComponent<RectTransform>(),
             transformType = TransformType.Rect,
-            highLightSize = new Vector2(100,100),
+            highLightSize = spawnEndBtn.GetComponent<RectTransform>().sizeDelta,
+            textOffset = new Vector2(-150,100),
             btnAction = ()=>spawnEndBtn.onClick.Invoke()
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);

@@ -151,7 +151,6 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             {
                 if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
                 {
-                    if(skillIcon.GetSkillBase() == null)return;
                     targetIcon = skillIcon;
                     ChangeSkill();
                     isTargeting = false;
