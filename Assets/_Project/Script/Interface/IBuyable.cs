@@ -40,6 +40,8 @@ public static class ShopHelper
 
 public interface IBuyable
 {
+    //구매했는가
+    public bool isBuyed { get; set; }
     public int value { get; set; }
     
 }

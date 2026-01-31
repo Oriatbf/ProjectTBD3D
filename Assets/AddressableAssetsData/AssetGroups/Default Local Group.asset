@@ -165,11 +165,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b3f30010fd7932f42b5666256cf6536b
-    m_Address: Assets/_Project/Prefab/UI/TopInfoCanvas.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c5baa87c1b0bb3a4a8890abedb849bee
     m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterInfoCanvas.prefab
     m_ReadOnly: 0

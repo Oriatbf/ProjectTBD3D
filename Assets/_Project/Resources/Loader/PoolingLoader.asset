@@ -33,3 +33,7 @@ MonoBehaviour:
     Prefab: {fileID: 7017776862379325499, guid: 49ad7e550963d7f43bcb29a74b5e7a83, type: 3}
     poolType: 0
     canvasOrder: 9
+  - Key: RelicIcon
+    Prefab: {fileID: 3332520036445807150, guid: ad95f09489a06144c8216e9069223953, type: 3}
+    poolType: 0
+    canvasOrder: 0

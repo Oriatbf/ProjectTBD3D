@@ -20,6 +20,7 @@ public class IconBase : MonoBehaviour
 
     protected void AlphaIcon(float alpha,bool isDotween = false,float duration = 0.25f)
     {
+        icon.DOKill();
         if (isDotween) icon.DOFade(alpha, duration);
         else icon.DOFade(alpha, 0);
     }

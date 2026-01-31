@@ -681,8 +681,8 @@ MonoBehaviour:
   spamGroup: Bleed
   enableCombination: 1
   combinationSettings:
-    method: 0
-    maxDistance: 0.25
+    method: 1
+    maxDistance: 0.14
     spawnDelay: 0.1
     absorbDuration: 0.8
     scaleCurve:

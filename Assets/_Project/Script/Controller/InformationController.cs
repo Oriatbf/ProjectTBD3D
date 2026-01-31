@@ -42,10 +42,16 @@ public class InformationController : BaseController
         _skillInfoCardCanvas.InitData(skillBase, targetPos);
     }
 
-    public void InitUnitData(UnitSaveData unitSaveData, Vector3 targetPos)
+    public void InitUnitData(UnitSaveData unitSaveData)
     {
         var unitData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
-        _unitInfoCardCanvas.InitData(unitData,unitSaveData, targetPos);
+        _unitInfoCardCanvas.InitData(unitData,unitSaveData);
+       
+    }
+
+    public void InitUnitPos( Vector3 targetPos)
+    { 
+        _unitInfoCardCanvas.InitPos(targetPos);
     }
 
     public void InitRelicData(RelicBase relicBase, Vector3 targetPos)

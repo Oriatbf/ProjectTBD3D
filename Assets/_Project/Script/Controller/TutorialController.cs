@@ -48,11 +48,6 @@ namespace _Project.Script.Controller
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                TBDLogger.CommandLog(KeyCode.L,this);
-                StartTutorial();
-            }
         }
 
         public void StartTutorial()
@@ -61,6 +56,7 @@ namespace _Project.Script.Controller
             if (curIndex >= _tutorialInfos.Count)
             {
                 _tutorialCanvas.ChangeState(false,true);
+                TutorialEnd();
                 return;
             }
             Debug.Log("튜토리얼 시작");
@@ -81,6 +77,11 @@ namespace _Project.Script.Controller
             SortTutorial();
         }
 
+        private void TutorialEnd()
+        {
+            var mainCharacterId = DataManager.Inst.Data.mainCharacterID;
+            DataManager.Inst.SetMainCharcter(mainCharacterId);
+        }
         public void HideTutorial()
         {
             _tutorialCanvas.ChangeState(false, true);

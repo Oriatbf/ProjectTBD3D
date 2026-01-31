@@ -28,7 +28,7 @@ namespace _Project.Script.UI.Canvas
             seq.AppendCallback(()=>_titleAnimating = false);
             seq.Play();
             
-            clickTxt.DOFade(0.5f, 0.8f)
+            clickTxt.DOFade(0.3f, 0.8f)
                 .SetLoops(-1, LoopType.Yoyo)
                 .SetUpdate(true);
         }
@@ -37,7 +37,7 @@ namespace _Project.Script.UI.Canvas
         {
             if (Input.GetMouseButtonDown(0) && isShow)
             {
-                if (!_titleAnimating)
+                if (_titleAnimating)
                 {
                     titleText.DOComplete();
                     _titleAnimating = true;

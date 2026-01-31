@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Utility
 {
@@ -9,12 +10,46 @@ namespace Core.Utility
         public static List<Unit> AllUnits = new List<Unit>();
         
         public static float PlayerCurTurn = 0,PlayerMaxTurn = 0;
-        public static float EnemyCurTurn = 0,EenemyMaxTurn = 0;
+        public static float EnemyCurTurn = 0,EnemyMaxTurn = 0;
+        
+        public static Action playerTurnValueHandle;
+
+        public static void ResetData()
+        {
+            PlayerCurTurn = 0;
+            PlayerMaxTurn = 0;
+            EnemyCurTurn = 0;
+            EnemyMaxTurn = 0;
+            
+            PlayerUnits.Clear();
+            AllUnits.Clear();
+            EnemyUnits.Clear();
+            
+            playerTurnValueHandle = null;
+        }
 
         public static void ResetCurTurn()
         {
             PlayerCurTurn = 0;
             EnemyCurTurn = 0;
+            PlayerTurnValueHandle();
+        }
+
+        
+        public static void SetPlayerMaxTurn(float playerMaxTurn)
+        {
+            PlayerMaxTurn = playerMaxTurn;
+            PlayerTurnValueHandle();
+        }
+        public static void SetPlayerCurTurn(float playerCurTurn)
+        {
+            PlayerCurTurn = playerCurTurn;
+            PlayerTurnValueHandle();
+        }
+
+        private static void PlayerTurnValueHandle()
+        {
+            playerTurnValueHandle?.Invoke();
         }
 
         public static void StoreUnits(List<Unit> playerUnits, List<Unit> enemyUnits)

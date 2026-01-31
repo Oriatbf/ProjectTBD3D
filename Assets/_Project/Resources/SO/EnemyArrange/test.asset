@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: test
   m_EditorClassIdentifier: 
   appearAct: 0
-  enemyArrangeType: 1
+  enemyArrangeType: 0
   lootDatas:
   - lootType: 0
     value: 2

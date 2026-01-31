@@ -74,3 +74,11 @@ MonoBehaviour:
     Prefab: {fileID: 3223632354152057054, guid: eb9ee628091661043afd18ed5278ebe5, type: 3}
     SceneName:
     - GamePlay
+  - Key: LoseCanvas
+    Prefab: {fileID: 2311560917153567004, guid: 90d65fedd14fba646bc9c0a08b077713, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: TopInfoCanvas
+    Prefab: {fileID: 1765680143217015501, guid: e7f0a0c52cbaf17439124f80e9a3c6b5, type: 3}
+    SceneName:
+    - GamePlay

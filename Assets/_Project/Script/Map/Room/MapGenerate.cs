@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public enum NodeType
 {
-    Village,Enemy,StrongEnemy,Boss,Event,Shop,Rebellion,None
+    Village,Enemy,StrongEnemy,Boss,Event,Shop,Rebellion,None,Tutorial
 }
 
 public class MapGenerate

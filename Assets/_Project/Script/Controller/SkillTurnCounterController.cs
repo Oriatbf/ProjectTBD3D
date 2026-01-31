@@ -66,7 +66,7 @@ public class SkillTurnCounter
                 seq.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion * imageMoveDistance, 0), 0.2f));
                 seq.JoinCallback(() => image.ArrowAlpha());
                 //몬스터 위에 스킬 스택되어있던거 삭제
-                seq.JoinCallback(() =>
+                seq.AppendCallback(() =>
                     ApplicationManager.Inst.GetModule<SkillProgressController>().GetSkillStack().UnstackSkill(skillStackInfo.sourceTile));
                 await seq.Play().AsyncWaitForCompletion();
 

@@ -23,7 +23,8 @@ public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoint
     public void OnPointerMove(PointerEventData eventData)
     {
         if(_unitSaveData ==null) return;
-        ApplicationManager.Inst.GetModule<InformationController>().InitUnitData(_unitSaveData,Input.mousePosition);
+       
+        ApplicationManager.Inst.GetModule<InformationController>().InitUnitPos(Input.mousePosition);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -36,6 +37,7 @@ public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoint
     {
         if(_unitSaveData ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Unit);
+        ApplicationManager.Inst.GetModule<InformationController>().InitUnitData(_unitSaveData);
     }
 
 }

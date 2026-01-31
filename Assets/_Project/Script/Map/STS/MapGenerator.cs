@@ -67,8 +67,8 @@ public class MapGenerator
         foreach (var node in map[^2])
         {
             var targetNodeCoord = new NodeCoord(node);
-            if(!node.next.Contains(targetNodeCoord)) 
-                node.next.Add(targetNodeCoord);
+            if(!node.next.Contains(bossNode.nodeCoord)) 
+                node.next.Add(bossNode.nodeCoord);
         }
 
         return map;

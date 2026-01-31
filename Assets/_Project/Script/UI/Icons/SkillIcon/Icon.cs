@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using SkillData;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,11 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     public virtual void Init(SkillBase skillBase)
     {
         this.skillBase = skillBase;
-        if (icon != null) SetSprite(skillBase.GetData().SpriteName);
+        if (icon != null)
+        {
+            if(skillBase == null) AlphaIcon(0);
+            else SetSprite(skillBase.GetData().SpriteName).Forget();
+        }
     }
 
     private bool Inside()

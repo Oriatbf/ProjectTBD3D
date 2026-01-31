@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Project.Script.Controller;
@@ -7,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using VInspector;
+using Random = UnityEngine.Random;
 
 public class FactoryManager : Singleton<FactoryManager>
 {
@@ -18,10 +20,14 @@ public class FactoryManager : Singleton<FactoryManager>
      private List<EnemyArrangeSO> enemyArrangeSOs = new List<EnemyArrangeSO>();
      [EndFoldout] 
      private EnemyArrangeSO curEnemyArrange;
+     private LoseCanvas _loseCanvas;
      
      private readonly string SOLabel = "EnemySO";
-     
-     
+
+     private void Awake()
+     {
+          InGameUnitInfo.ResetData();
+     }
 
      public void RegisterDeadUnit(Unit _unit)
      {
@@ -51,12 +57,21 @@ public class FactoryManager : Singleton<FactoryManager>
                ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
           }
 
+          if (playerUnits.Count <= 0)
+          {
+               _loseCanvas.ChangeState(true,true,true);
+               return;
+          }
+
           if (enemyUnits.Count == 0)
           {
                ApplicationManager.Inst.GetModule<LootController>().InitEnemyArrange(curEnemyArrange);
                ApplicationManager.Inst.GetModule<TurnController>().MapStage();
                ApplicationManager.Inst.GetModule<ActionStateStackController>().ResetAllBuffs();
                ApplicationManager.Inst.GetModule<SkillProgressController>().Reset();
+
+               if (DataManager.Inst.GetMapData().prevNodeCoord.type == NodeType.Tutorial) return;
+               //전투가 끝나고 남은 유닛들 세이브
                foreach (var unit in playerUnits)
                {
                     DataManager.Inst.SaveUnit(unit);
@@ -77,12 +92,13 @@ public class FactoryManager : Singleton<FactoryManager>
           ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
           ApplicationManager.Inst.GetModule<RelicController>().ExcuteAllRelic();
           
-          
           ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
           
           
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
+
+          _loseCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<LoseCanvas>("LoseCanvas");
      }
 
      public void TurnInit()
@@ -98,8 +114,8 @@ public class FactoryManager : Singleton<FactoryManager>
                enemyMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
           }
           
-          InGameUnitInfo.PlayerMaxTurn = playerMaxTurn;
-          InGameUnitInfo.EenemyMaxTurn = enemyMaxTurn;
+          InGameUnitInfo.SetPlayerMaxTurn(playerMaxTurn); 
+          InGameUnitInfo.EnemyMaxTurn = enemyMaxTurn;
           InGameUnitInfo.ResetCurTurn();
      }
      

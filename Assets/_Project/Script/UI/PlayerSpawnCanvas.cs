@@ -9,25 +9,24 @@ using UnityEngine.UI;
 
 public class PlayerSpawnCanvas : BaseCanvas
 {
-    [SerializeField ]private Transform instanceParent;
     [SerializeField] private RectTransform backGround;
+    [SerializeField] private Transform content;
     [SerializeField] private Button spawnEndBtn;
-    [SerializeField] private UnitIcon unitIconPrefab;
-    private List<UnitIcon> _unitIcons = new List<UnitIcon>();
+    [SerializeField] private List<UnitIcon> _unitIcons = new List<UnitIcon>();
 
+    
 
     private void Start()
     {
+        
         SetTutorial();
     }
 
     public void  Init(List<UnitSaveData> unitSaveData)
     {
-        foreach (var unitData in unitSaveData)
+        for (int i = 0; i < unitSaveData.Count; i++)
         {
-            var instance = Instantiate(unitIconPrefab,instanceParent);
-            instance.Init(unitData);
-            _unitIcons.Add(instance);
+            _unitIcons[i].Init(unitSaveData[i]);
         }
     }
     

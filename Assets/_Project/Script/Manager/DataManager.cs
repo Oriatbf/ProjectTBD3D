@@ -74,6 +74,7 @@ public class GameData
     public int gold;
     public int constId = 0;
     public int mainCharacterID = 0;
+    public bool isFirstGame = true;
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -82,7 +83,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public GameData Data;
     private Action saveAction;
     private string fileName = "GameData.json";
-    private bool isNewData = false;
+    
+    //새로운 데이터
+    [SerializeField]private bool isNewData = false;
 
 
     protected override void Awake()
@@ -104,7 +107,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         if (Input.GetKeyDown(KeyCode.F5))
         {
             TBDLogger.CommandLog(KeyCode.F5,this);
-            Reset();
+            FileReset();
         }
         
         if (Input.GetKeyDown(KeyCode.F7))
@@ -119,15 +122,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         if (!File.Exists(path))
         {
-            isNewData = false; 
-            SetMainCharcter(1);
-        
-            
+            Data.isFirstGame = true;
+            isNewData = true; 
             JsonSave();
         }
         else
         {
-            isNewData = true;
+            isNewData = false;
+            Data.isFirstGame = false;
             string loadJson = File.ReadAllText(path);
             Data = JsonConvert.DeserializeObject<GameData>(loadJson);
             /*
@@ -144,15 +146,21 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         File.WriteAllText(path, json);
     }
     
-    public void Reset()
+    public void  FileReset()
     {
         if (File.Exists(path))
         {
             File.Delete(path); // 파일 삭제
         }
+        
+    }
 
-        // 새 데이터로 초기화
+    public void DataReset()
+    {
+        var nodeCoord = Data.mapData.prevNodeCoord;
         Data = new GameData();
+        Data.isFirstGame = false;
+        Data.mapData.prevNodeCoord = nodeCoord;
     }
     #endregion
     public List<UnitSaveData> GetAllSavedUnits() => Data.units;
@@ -218,7 +226,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         var unit = Data.units.FirstOrDefault(u => u.constId == constID);
         if (unit != null)
         {
-           // Data.units.Remove(unit);
+            Data.units.Remove(unit);
         }
     }
     /// <summary>
@@ -274,13 +282,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     #endregion
 
     public bool IsNewData() => isNewData;
+    public bool IsFirstGame() => Data.isFirstGame;
     
     public int GetConstId() => Data.constId;
     public void SetConstID(int id) => Data.constId = id;
 
     public void SetMainCharcter(int id)
     {
-        Reset();
+        DataReset();
         Data.units.Add(new UnitSaveData()
         {
             iconKey = UnitData.Data.DataList[id].AnimatorName,
@@ -289,6 +298,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             bringSkills = UnitData.Data.DataList[id].BringSkill,
             statContainer = new StatContainer(UnitData.Data.DataList[id])
         });
+        Data.mainCharacterID = id;
         JsonSave();
         Debug.Log("MainChaarcter");
     }
@@ -301,24 +311,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         Data.relicSaveData.AddRelic(id);
     }
-/*
-    public NodeType GetCurRoomType()
-    {
-        if (!Data.mapData.isMapGenerated)
-        {
-            Debug.LogError("현재 맵이 생성되어 있지 않음");
-            return NodeType.Enemy;
-        }
-        var curIndex = Data.mapData.curStageIndex;
-        var targetRoom = Data.mapData.mapDict.Find(s => s._index == curIndex);
-        if (targetRoom == null)
-        {
-            Debug.LogError("현재 룸 데이터가 없음");
-            return NodeType.Enemy;
-        }
-        return targetRoom.nodeType;
-    }
-   */ 
+
     public void SetGold(int value)
     {
         Data.gold = value;

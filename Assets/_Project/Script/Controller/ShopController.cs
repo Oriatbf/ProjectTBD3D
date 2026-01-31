@@ -1,9 +1,12 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ShopController : BaseController
 {
     private bool isFirstOpen = false;
+    private bool buyAble = false;
     ShopCanvas shopCanvas;
 
     public override ControllerInfo ControllerInfo { get; } = new()
@@ -27,15 +30,19 @@ public class ShopController : BaseController
         }
     }
 
-    public void Show()
+    public async UniTask Show()
     {
+        await UniTask.WaitForEndOfFrame();
         shopCanvas.ChangeState(true,true,true);
+        DOVirtual.DelayedCall(2f,()=>buyAble = true);
         if (!isFirstOpen)
         {
             isFirstOpen = true;
             RerollAll();
         }
     }
+
+    public bool GetBuyAble() => buyAble;
     
     private void RerollAll()
     {

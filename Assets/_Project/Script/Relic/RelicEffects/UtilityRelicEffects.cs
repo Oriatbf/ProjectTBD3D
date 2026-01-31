@@ -9,6 +9,7 @@ namespace _Project.Script.Relic
         public override void Excute()
         {
             var players = InGameUnitInfo.PlayerUnits;
+            Debug.Log($"데미지 버프를 받는 인원 {players.Count}");
             foreach (var player in players)
             {
                 ActionStateExamples.DamageBuff(player, values[0]);

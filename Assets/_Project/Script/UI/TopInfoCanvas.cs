@@ -1,19 +1,32 @@
 using System;
+using System.Collections.Generic;
+using _Project.Pooling;
+using Core.Utility;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-public class TopInfoCanvas : MonoBehaviour
+public class TopInfoCanvas : BaseCanvas
 {
-    [SerializeField] private TextMeshProUGUI goldTxt;
+    [SerializeField] private TextMeshProUGUI goldTxt,remainTurnTxt;
+    [SerializeField] private Transform relicContetnt;
     private float textAnimDur = 0.4f;
     private int curGold = 0;
+    [SerializeField]private List<RelicIcon> relicIcons = new List<RelicIcon>();
 
     private void Start()
     {
-        
+        ChangeState(true,true,true);
+        RefreshRelic();
+        InGameUnitInfo.playerTurnValueHandle += () => UpdateTurnTxt();
         curGold = DataManager.Inst.GetGold();
-        goldTxt.text=DataManager.Inst.Data.gold+"G";
+        goldTxt.text=curGold+"G";
+    }
+
+    private void UpdateTurnTxt()
+    {
+        var curTurn = InGameUnitInfo.PlayerMaxTurn - InGameUnitInfo.PlayerCurTurn;
+        remainTurnTxt.text = $"남은 턴 : {curTurn}";
     }
 
     public void AddGold(int value)
@@ -21,6 +34,20 @@ public class TopInfoCanvas : MonoBehaviour
         GoldTextAnim(curGold, curGold+value);
         curGold += value;
         DataManager.Inst.SetGold(curGold);
+    }
+
+    public void RefreshRelic()
+    {
+        var relics = DataManager.Inst.GetRelicSaveData().relicIDList;
+        var relicDatas = SheetDataManager.Inst.GetRelicDataByIds(relics);   
+        Debug.Log(relicDatas.Count);
+        for (int i = 0; i < relicDatas.Count; i++)
+        {
+            var relicIcon = ApplicationManager.Inst.GetModule<PoolController>().Spawn<RelicIcon>("RelicIcon");
+            relicIcon.transform.SetParent(relicContetnt);
+            relicIcon.Init(relicDatas[i]);
+            relicIcons.Add(relicIcon);
+        }
     }
     
     private void GoldTextAnim(int originValue,int targetValue)

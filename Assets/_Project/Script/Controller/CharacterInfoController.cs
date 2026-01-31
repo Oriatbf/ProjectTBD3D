@@ -53,6 +53,8 @@ namespace _Project.Script.Controller
             SetTutorial();
             SetTutorial2();
         }
+
+        #region Tutorial
         
         private void SetTutorial()
         {
@@ -65,7 +67,7 @@ namespace _Project.Script.Controller
                 highlightOffset = new Vector2(0,400),
                 transformType = TransformType.Rect,
                 highLightSize = new Vector2(400,100),
-                textOffset = new Vector2(0,600),
+                textOffset = new Vector2(0,500),
                 btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
             };
             ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
@@ -91,12 +93,14 @@ namespace _Project.Script.Controller
             };
             ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
         }
+        #endregion
 
         /// <summary>
         /// 클릭한 캐릭터의 데이터와 타일정보를 받음
         /// </summary>
         public void Init(Unit unit,List<int> bringSkills,Tile curTile)
         {
+            if (isTargeting) return;
             if (unit.GetUnitData().constId == curConstId)
             {
                 Hide();
@@ -249,7 +253,7 @@ namespace _Project.Script.Controller
 
             curTurnStack += reqTurn;
             skillStackInfo.stackTurn = curTurnStack;
-            InGameUnitInfo.PlayerCurTurn = curTurnStack;
+            InGameUnitInfo.SetPlayerCurTurn(curTurnStack);
 
             var skill = skillStackInfo.skill;
             if(skill.GetSkillContext().SourceTile== null)Debug.LogError("skillStackInfo.sourceTile is null");

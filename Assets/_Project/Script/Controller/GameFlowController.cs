@@ -1,4 +1,5 @@
 ﻿using System;
+using DG.Tweening;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -6,12 +7,12 @@ namespace _Project.Script.Controller
 {
     public class GameFlowController : BaseController
     {
-        private NodeType curNodeType = NodeType.Enemy;
+        private NodeType curNodeType = NodeType.Shop;
 
         public override void OnInitialize()
         {
             base.OnInitialize();
-            //curNodeType = DataManager.Inst.GetMapData().prevNodeCoord.type;
+            curNodeType = DataManager.Inst.GetMapData().prevNodeCoord.type;
             SetFLow();
         }
 
@@ -39,6 +40,10 @@ namespace _Project.Script.Controller
                 case NodeType.Rebellion:
                     break;
                 case NodeType.None:
+                    break;
+                case NodeType.Tutorial:
+                    SetEnemy(EnemyArrangeType.Tutorial); 
+                    ApplicationManager.Inst.GetModule<TutorialController>().StartTutorial();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -754,16 +754,23 @@ MonoBehaviour:
   Data:
     units: []
     mapData:
-      mapDict: []
       isMapGenerated: 0
-      curStageIndex: {x: 0, y: 0}
-    SoundData:
+      prevNodeCoord:
+        floor: 0
+        index: 0
+        type: 0
+      curFloor: 0
+    soundData:
       masterVolume: 0.5
       bgmVolume: 0.5
       sfxVolume: 0.5
+    relicSaveData:
+      relicIDList: 
     gold: 0
     constId: 0
     mainCharacterID: 0
+    isFirstGame: 1
+  isNewData: 0
 --- !u!4 &1878071355
 Transform:
   m_ObjectHideFlags: 0

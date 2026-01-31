@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine.EventSystems;
 
 namespace _Project.Script.FieldObject
@@ -12,7 +13,7 @@ namespace _Project.Script.FieldObject
 
             ApplicationManager.Inst
                 .GetModule<ShopController>()
-                .Show();
+                .Show().Forget();
         }
     }
 }

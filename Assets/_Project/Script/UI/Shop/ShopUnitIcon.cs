@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ShopUnitIcon : UnitIcon,IBuyable
 {
+    public bool isBuyed { get; set; }
     public int value { get; set; }
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI priceTxt;
@@ -12,6 +13,7 @@ public class ShopUnitIcon : UnitIcon,IBuyable
 
     public void SetBtn()
     {
+        isBuyed = false;
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(BtnAction);
         
@@ -21,7 +23,9 @@ public class ShopUnitIcon : UnitIcon,IBuyable
 
     private void BtnAction()
     {
-        if(!ShopHelper.Buy(value))return;
+        if(!ShopHelper.Buy(value) || !isBuyed)return;
+        isBuyed = true;
+        SetFrameColor(Color.red,true);
         DataManager.Inst.SaveUnit(_unitSaveData);
 
     }

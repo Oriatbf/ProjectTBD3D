@@ -7,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class PlayerSpawnController : BaseController
 {
@@ -27,7 +28,13 @@ public class PlayerSpawnController : BaseController
     public override void OnInitialize()
     {
         base.OnInitialize();
+        _playerSpawnCanvas = ApplicationManager.Inst
+            .GetModule<CanvasController>().GetCanvas<PlayerSpawnCanvas>("PlayerSpawnCanvas");
         _allSavedUnits = DataManager.Inst.GetAllSavedUnits();
+        var datas = _allSavedUnits;
+        
+        _playerSpawnCanvas.Init(datas);
+        _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
         Debug.Log("저장된 유닛 개수는 "+_allSavedUnits.Count);
         foreach (var data in _allSavedUnits)
             unitSaveDatas.Add(data.constId,data);
@@ -39,13 +46,7 @@ public class PlayerSpawnController : BaseController
     /// </summary>
     public  void SetCanvas()
     {
-        var datas = _allSavedUnits;
-        _playerSpawnCanvas = ApplicationManager.Inst
-            .GetModule<CanvasController>().GetCanvas<PlayerSpawnCanvas>("PlayerSpawnCanvas");
         _playerSpawnCanvas.ChangeState(true,true,true);
-        _playerSpawnCanvas.Init(datas);
-        _playerSpawnCanvas.SetPos(Vector2.zero,true);
-        _playerSpawnCanvas.SetSpawnEndAction(SpawnEndAction);
         SetTutorial();
         SetTutorial2();
         SetTutorial3();
@@ -62,14 +63,17 @@ public class PlayerSpawnController : BaseController
     private void SetTutorial()
     {
         var unitIcon = _playerSpawnCanvas.GetUnitIcons[0];
+        RectTransform rt = unitIcon.GetComponent<RectTransform>();
+        RectTransform parentRT = unitIcon.transform.parent as RectTransform;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parentRT);
         if(unitIcon == null)Debug.LogError("UnitIcon is Null");
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
             order = 0,
             informationTxt = "유닛 아이콘을 누르면 유닛이 선택됩니다.",
             transformType = TransformType.Rect,
-            highLightRect = unitIcon.GetComponent<RectTransform>(),
-            highLightSize = unitIcon.GetComponent<RectTransform>().sizeDelta,
+            highLightRect = rt,
+            highLightSize = rt.rect.size,
             textOffset = new Vector2(250,100),
             btnAction = ()=>UnitSelected(unitIcon)
         };
@@ -135,17 +139,22 @@ public class PlayerSpawnController : BaseController
        
         _pointerEventData.position = Input.mousePosition;
         _raycastResults.Clear();
+        
         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
-        foreach (var result in _raycastResults)
+        if (_raycastResults.Count == 0)
+            return;
+
+        var top = _raycastResults[0].gameObject;
+            
+        if (!top.TryGetComponent(out UnitIcon  _unitIcon)) return;
+
+        //부모에 스크립트 존재
+        if (top.TryGetComponent(out UnitIcon unitIcon))
         {
-            //부모에 스크립트 존재
-            if (result.gameObject.transform.parent.TryGetComponent(out UnitIcon unitIcon))
-            {
-                if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
-                UnitSelected(unitIcon);
-                return;
-            }
+            if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
+            UnitSelected(unitIcon);
         }
+        
     }
 
     private void UnitSelected(UnitIcon unitIcon)

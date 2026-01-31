@@ -26,15 +26,17 @@ public class UnitInfoCardCanvas : BaseCanvas
     }
 
 
-    public void InitData(UnitData.Data unitData,UnitSaveData unitSaveData,Vector3 targetPos)
+    public void InitData(UnitData.Data unitData,UnitSaveData unitSaveData)
     {
         var _unitData = unitData;
         nameTxt.text = _unitData.Name;
-        // string attribute = skillBase._data.SkillType == SkillType.Physical 
-        // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
-        //  arrtibuteTxt.text = attribute;
         descriptionTxt.text = _unitData.Infor;
         SetIcon(unitSaveData.bringSkills);
+    
+    }
+
+    public void InitPos(Vector3 targetPos)
+    {
         SetPos(targetPos);
     }
 
@@ -48,6 +50,7 @@ public class UnitInfoCardCanvas : BaseCanvas
     private void SetIcon(List<int> skillIds)
     {
         var skillBaseList = SheetDataManager.Inst.GetSkillBaseList(skillIds);
+        foreach (var skill in skills)skill.Init(null);
         for(int i = 0; i < skillBaseList.Count; i++)
             skills[i].Init(skillBaseList[i]);
     }
