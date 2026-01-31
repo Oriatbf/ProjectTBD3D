@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 using VInspector;
 
 public class CharacterSkillCanvas : BaseCanvas
 {
     [Foldout("Serialize")]
     [SerializeField]private List<InventoryIcon> inventoryIcons = new List<InventoryIcon>();
+
+    [FormerlySerializedAs("uniqueSill")] [SerializeField] private InventoryIcon uniqueSkill;
     [EndFoldout]
    
    
@@ -19,8 +22,12 @@ public class CharacterSkillCanvas : BaseCanvas
     }
     
     public List<InventoryIcon> GetInventoryIcons()=> inventoryIcons;
-    
-    
+
+    private void Start()
+    {
+        InitUniqueSkill();
+    }
+
 
     public void Init(List<SkillBase> skillBases)
     {
@@ -31,6 +38,17 @@ public class CharacterSkillCanvas : BaseCanvas
             inventoryIcons[i].gameObject.SetActive(true);
             inventoryIcons[i].Init(skillBases[i]);
         }
+    }
+
+    public void SetUniqueSkillSource(Tile sourceTile)
+    {
+        uniqueSkill.GetSkillBase().InitSource(sourceTile);
+    }
+
+    private void InitUniqueSkill()
+    {
+        var tamingSkill = SheetDataManager.Inst.GetSkillBase(34);
+        uniqueSkill.Init(tamingSkill);
     }
    
 }

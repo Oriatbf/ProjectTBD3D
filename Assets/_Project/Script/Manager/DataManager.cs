@@ -17,6 +17,7 @@ public class UnitSaveData
     public StatContainer statContainer;
     public string iconKey;
     public Rarity rarity;
+    public float charm;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
@@ -27,6 +28,7 @@ public class UnitSaveData
         bringSkills = unitData.BringSkill;
         statContainer = new StatContainer(unitData);
         rarity = unitData.Rarity;
+        charm = unitData.Charm;
     }
 }
 
@@ -35,6 +37,7 @@ public class MapData
 {
     public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
+    public NodeCoord curNodeCoord = new NodeCoord();
     public NodeCoord prevNodeCoord = new NodeCoord();
     public int curFloor = 0;
 }
@@ -110,6 +113,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             FileReset();
         }
         
+        if (Input.GetKeyDown(KeyCode.F8))
+        {
+            TBDLogger.CommandLog(KeyCode.F8,this);
+            SaveUnit(new UnitSaveData(SheetDataManager.Inst.GetUnitData(1)));
+        }
+
+        
         if (Input.GetKeyDown(KeyCode.F7))
         {
             TBDLogger.CommandLog(KeyCode.F7,this);
@@ -122,6 +132,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         if (!File.Exists(path))
         {
+            Data = new GameData();
             Data.isFirstGame = true;
             isNewData = true; 
             JsonSave();
@@ -163,6 +174,29 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data.mapData.prevNodeCoord = nodeCoord;
     }
     #endregion
+    
+    
+    #region 캐릭터저장관련
+
+    /// <summary>
+    /// 유닛 스킬 덮어쓰기
+    /// </summary>
+    public void SaveUnitSkills(int constID,List<int> skillList)
+    {
+        if (Data.mapData.prevNodeCoord.type == NodeType.Tutorial) return;
+        var unit = Data.units.FirstOrDefault(u=>u.constId==constID);
+        unit.bringSkills = skillList;
+        JsonSave();
+    }
+    public void SetMainCharcter(int id)
+    {
+        DataReset();
+        Data.units.Add(new UnitSaveData(UnitData.Data.DataList[id]));
+        Data.mainCharacterID = id;
+        JsonSave();
+        Debug.Log("MainChaarcter");
+    }
+    
     public List<UnitSaveData> GetAllSavedUnits() => Data.units;
     public UnitSaveData GetSavedUnit(int constID)=>Data.units.FirstOrDefault(u => u.constId == constID);
 
@@ -229,6 +263,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             Data.units.Remove(unit);
         }
     }
+
+
+    #endregion
+    
+
+
+    #region MapAPI
+    
     /// <summary>
     /// 맵 상태 저장
     /// </summary>
@@ -239,25 +281,23 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         saveAction?.Invoke();
     }
 
-    /// <summary>
-    /// 유닛 스킬 덮어쓰기
-    /// </summary>
-    public void SaveUnitSkills(int constID,List<int> skillList)
-    {
-        var unit = Data.units.FirstOrDefault(u=>u.constId==constID);
-        unit.bringSkills = skillList;
-        JsonSave();
-    }
-    
 
-    public void SaveCurNodeType(NodeCoord prevNodeCoord,int curFloor)
+    public void SaveCurNodeType(NodeCoord prevNodeCoord)
     {
         Data.mapData.prevNodeCoord = prevNodeCoord;
-        Data.mapData.curFloor = curFloor;
-        JsonSave();
+        saveAction?.Invoke();
+    }
+
+    public void ClearMap()
+    { 
+        Data.mapData.curNodeCoord = Data.mapData.prevNodeCoord;
+        Data.mapData.prevNodeCoord = new NodeCoord();
+        saveAction?.Invoke();
     }
 
     public MapData GetMapData() => Data.mapData;
+
+    #endregion
 
     #region SoundDataAPI
 
@@ -287,22 +327,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public int GetConstId() => Data.constId;
     public void SetConstID(int id) => Data.constId = id;
 
-    public void SetMainCharcter(int id)
-    {
-        DataReset();
-        Data.units.Add(new UnitSaveData()
-        {
-            iconKey = UnitData.Data.DataList[id].AnimatorName,
-            constId = RandomID.GetConstID(),
-            id = id,
-            bringSkills = UnitData.Data.DataList[id].BringSkill,
-            statContainer = new StatContainer(UnitData.Data.DataList[id])
-        });
-        Data.mainCharacterID = id;
-        JsonSave();
-        Debug.Log("MainChaarcter");
-    }
-
     public int GetGold()=>Data.gold;
     
     public RelicSaveData GetRelicSaveData() => Data.relicSaveData;
@@ -314,6 +338,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void SetGold(int value)
     {
+        if (Data.mapData.prevNodeCoord.type == NodeType.Tutorial) return;
         Data.gold = value;
         JsonSave();
     }

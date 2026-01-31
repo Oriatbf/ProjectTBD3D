@@ -61,7 +61,7 @@ public class TurnController : BaseController
     public void Reset()
     {
         Debug.Log("UnitResets");
-        InGameUnitInfo.ResetCurTurn();
+        FactoryManager.Inst.TurnInit();
         foreach (var unit in allUnits)
         {
             unit.Reset();

@@ -44,7 +44,13 @@ namespace _Project.Script.Controller
         public void UnStack(Tile tile)
         {
             _skillStack.UnstackSkill(tile);
-            _skillTurnCounter.DequeueByTile(tile);
+            _skillTurnCounter.DequeueAllByTile(tile);
+        }
+
+        public void UnStackAll(Tile tile)
+        {
+            _skillStack.UnstackAllUnitSkills(tile);
+            _skillTurnCounter.DequeueAllByTile(tile);
         }
 
         public async UniTask ActionSkill()

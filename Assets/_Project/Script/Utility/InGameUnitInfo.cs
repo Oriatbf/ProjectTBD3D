@@ -11,6 +11,7 @@ namespace Core.Utility
         
         public static float PlayerCurTurn = 0,PlayerMaxTurn = 0;
         public static float EnemyCurTurn = 0,EnemyMaxTurn = 0;
+        public static int PlayersCharms = 0;
         
         public static Action playerTurnValueHandle;
 
@@ -51,6 +52,8 @@ namespace Core.Utility
         {
             playerTurnValueHandle?.Invoke();
         }
+        
+        public static int GetPlayersCharms()=> PlayersCharms;
 
         public static void StoreUnits(List<Unit> playerUnits, List<Unit> enemyUnits)
         {
@@ -63,6 +66,16 @@ namespace Core.Utility
             
             AllUnits.AddRange(playerUnits);
             AllUnits.AddRange(enemyUnits);
+
+            PlayersCharms = 0;
+            int playerCharmValue = 0;
+            foreach (var unit in playerUnits)
+            {
+                playerCharmValue+=(int)unit.GetUnitData().charm;
+            }
+              
+            
+            PlayersCharms = playerCharmValue;
         }
         
         

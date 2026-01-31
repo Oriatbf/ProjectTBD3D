@@ -8,10 +8,10 @@ using UnityEngine.AddressableAssets;
 
 public class ActionStateStackController : BaseController
 {
-    private Dictionary<Tile ,List<BuffIcon>> stackData = new Dictionary<Tile, List<BuffIcon>>();
+    private Dictionary<Tile ,List<ActionStateIcon>> stackData = new Dictionary<Tile, List<ActionStateIcon>>();
     private Camera _camera;
     private Transform content;
-    private BuffIcon buffIconPrefab;
+    private ActionStateIcon actionStateIconPrefab;
     private float skillIconInterval = 75;
     private bool isRefreshing = false;
     
@@ -35,7 +35,7 @@ public class ActionStateStackController : BaseController
         content= obj.transform.GetChild(0).transform;
         
         var _buffIcon = await Addressables.LoadAssetAsync<GameObject>(buffIconPath).ToUniTask();
-        if(_buffIcon.TryGetComponent(out BuffIcon skillIcon))buffIconPrefab = skillIcon;
+        if(_buffIcon.TryGetComponent(out ActionStateIcon skillIcon))actionStateIconPrefab = skillIcon;
     }
 
     
@@ -45,6 +45,7 @@ public class ActionStateStackController : BaseController
         var unit = actionState.GetData().ownerUnit;
         if(tile==null) Debug.LogError("SourceTile is null");
         var targetActionState = unit.GetActionStateContainer().GetActionState(actionTrigger, actionState.GetId());
+        if (targetActionState == null) return;
         if (targetActionState.IsVisualized())
         {
             Debug.Log($"Same ActionState : {actionState.GetId()}");
@@ -53,11 +54,11 @@ public class ActionStateStackController : BaseController
         
         targetActionState.GetData().isVisualized = true;
         
-        var _ActionIcon = GameObject.Instantiate(buffIconPrefab,content);
+        var _ActionIcon = GameObject.Instantiate(actionStateIconPrefab,content);
         _ActionIcon.Init(actionState);
         
         if (stackData.ContainsKey(tile)) stackData[tile].Add(_ActionIcon);
-        else stackData.Add(tile,new List<BuffIcon>(new []{_ActionIcon}));
+        else stackData.Add(tile,new List<ActionStateIcon>(new []{_ActionIcon}));
         RefreshUI(tile,stackData[tile]);
         
     }
@@ -103,7 +104,7 @@ public class ActionStateStackController : BaseController
         stackData.Clear();
     }
 
-    private void RefreshUI(Tile tile,List<BuffIcon> list)
+    private void RefreshUI(Tile tile,List<ActionStateIcon> list)
     {
         isRefreshing = true;
         Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());

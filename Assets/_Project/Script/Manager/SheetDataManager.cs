@@ -19,6 +19,14 @@ public enum ManualType
     None,Manual
 }
 
+
+[UGS(typeof(SkillType))]
+public enum SkillType
+{
+    Attack,Utility,Buff,Debuff
+}
+
+
 public class SheetDataManager : Singleton<SheetDataManager>
 {
     //전체 SkillBase 저장

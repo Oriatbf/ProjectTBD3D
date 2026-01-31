@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
 using SkillData;
 using SkillData.SkillEffects;
 using UnityEngine;
@@ -107,16 +108,18 @@ public class Ice : SkillEffect
             {
                 if (data.stack >= 3)
                 {
-                    Debug.Log($"{data.ownerUnit.name}이(가) 빙결되었습니다!");
-                    // TODO: 행동 불가 처리
-                    //data.Finish();
+                    data.ownerUnit.GetActionStateContainer().RemoveActionState(ActionTrigger.None, iceData.id);
+                    ApplicationManager.Inst.GetModule<ActionStateStackController>().UnStackBuff(data.ownerTile,data.id);
+                    ApplicationManager.Inst.GetModule<SkillProgressController>().UnStackAll(context.TargetTile);
+                    var target = context.TargetUnit;
+                    ActionStateExamples.FaintingBuff(target, 2);
                 }
             };
 
             ActionState freezeState = new ActionState(iceData);
             unit.GetActionStateContainer().AddActionState(
-                ActionTrigger.OnTurnStart, freezeState);
-            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnTurnStart,freezeState);
+                ActionTrigger.None, freezeState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.None,freezeState);
         });
     }
 
@@ -127,6 +130,21 @@ public class Ice : SkillEffect
     }
 }
 
+
+public class Fainting : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Buff;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var unit = skillContext.TargetUnit;
+        ActionStateExamples.FaintingBuff(unit, values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        throw new NotImplementedException();
+    }
+}
 public class DamageBuff : SkillEffect
 {
     protected override SkillType SkillType=> SkillType.Buff;

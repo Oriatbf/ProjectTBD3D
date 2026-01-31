@@ -23,7 +23,7 @@ public class MapRenderer : MonoBehaviour
     private Dictionary<NodeCoord, MapNodeUI> nodeUIs = new();
     private MapNode currentNode;
     private int _curFloor = 0;
-    private NodeCoord _prevNodeCoord;
+    private NodeCoord _curNodeCoord;
     
     private Sprite enemySpr,shopSpr,eventSpr,bossSpr,strongEnemySpr;
 
@@ -55,7 +55,7 @@ public class MapRenderer : MonoBehaviour
         {
             map = DataManager.Inst.GetMapData().mapDict;
             _curFloor = DataManager.Inst.GetMapData().curFloor;
-            _prevNodeCoord = DataManager.Inst.GetMapData().prevNodeCoord;
+            _curNodeCoord = DataManager.Inst.GetMapData().curNodeCoord;
         }
         Debug.Log(map.Count);
 
@@ -89,7 +89,7 @@ public class MapRenderer : MonoBehaviour
         }
 
         // 시작 노드 설정
-        currentNode = map[_prevNodeCoord.floor][_prevNodeCoord.index];
+        currentNode = map[_curNodeCoord.floor][_curNodeCoord.index];
         UpdateInteractable();
     }
 
@@ -168,7 +168,6 @@ public class MapRenderer : MonoBehaviour
     void OnNodeClicked(MapNode node)
     {
         currentNode = node;
-        _curFloor+=1;
         UpdateInteractable();
         SetMapState(node);
         FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
@@ -178,7 +177,7 @@ public class MapRenderer : MonoBehaviour
 
     private void SetMapState(MapNode node)
     {
-        DataManager.Inst.SaveCurNodeType(node.nodeCoord,_curFloor);
+        DataManager.Inst.SaveCurNodeType(node.nodeCoord);
     }
 
     void UpdateInteractable()

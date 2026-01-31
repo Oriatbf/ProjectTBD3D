@@ -28,6 +28,34 @@ namespace SkillData.SkillEffects
                 ActionTrigger.None, damageBuffState);
             ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.None,damageBuffState);
         }
+
+        public static void FaintingBuff(Unit targetUnit,int turn)
+        {
+            var unit = targetUnit;
+            ActionData faintingBuff = new ActionData(
+                id: "FaintingBuff",
+                owner: unit,
+                stack: 0,
+                turn: turn,
+                decreaseType: DecreaseType.OnlyTurn,
+                targetType: ActionTargetType.Self
+            );
+
+            faintingBuff.action = (data, context) =>
+            {
+                unit.GetStatContainer().isStun = true;
+            };
+
+            faintingBuff.finishAction = (data) =>
+            {
+                unit.GetStatContainer().isStun = false;
+            };
+
+            ActionState faintingBuffState = new ActionState(faintingBuff);
+            unit.GetActionStateContainer().AddActionState(
+                ActionTrigger.OnTurnEnd, faintingBuffState);
+            ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnTurnEnd,faintingBuffState);
+        }
         
             /// <summary>
         /// 예시 1: 3턴 동안 턴 종료 시 적 전체에게 1의 데미지

@@ -207,11 +207,11 @@ public class SkillTurnCounter
     }
     
 
-    public void DequeueByTile(Tile sourceTile)
+    public void DequeueAllByTile(Tile sourceTile)
     {
         var skillStackInfos = turnQueue.ToList();
         var turnImages = turnImageQueue.ToList();
-        for (int i = 0; i < skillStackInfos.Count; i++)
+        for (int i = skillStackInfos.Count - 1; i >= 0; i--)
         {
             if (skillStackInfos[i].sourceTile == sourceTile)
             {
@@ -220,6 +220,7 @@ public class SkillTurnCounter
                 turnImages.RemoveAt(i);
             }
         }
+
         turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
         turnImageQueue = new Queue<TurnImage>(turnImages);
         RefreshUI();

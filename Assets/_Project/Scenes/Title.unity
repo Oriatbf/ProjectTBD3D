@@ -755,6 +755,10 @@ MonoBehaviour:
     units: []
     mapData:
       isMapGenerated: 0
+      curNodeCoord:
+        floor: 0
+        index: 0
+        type: 0
       prevNodeCoord:
         floor: 0
         index: 0

@@ -79,6 +79,7 @@ namespace _Project.Script.Controller
 
         private void TutorialEnd()
         {
+            Debug.Log("튜토리얼 끝");
             var mainCharacterId = DataManager.Inst.Data.mainCharacterID;
             DataManager.Inst.SetMainCharcter(mainCharacterId);
         }

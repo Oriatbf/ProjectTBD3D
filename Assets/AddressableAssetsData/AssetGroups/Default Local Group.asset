@@ -135,6 +135,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9cac916381ca45c479892472de799724
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/FaintingBuff.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a5f43e0144e8dea408a9c95c97818f7d
     m_Address: Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterHead.prefab
     m_ReadOnly: 0

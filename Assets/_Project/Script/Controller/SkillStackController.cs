@@ -110,13 +110,15 @@ public class SkillStack
     {
         if (!stackData.ContainsKey(tile)) return;
         if(stackData[tile].Count ==0)return;
-        for (int i = 0; i < stackData[tile].Count; i++)
+        if (!stackData.TryGetValue(tile, out var queue)) return;
+
+        while (queue.Count > 0)
         {
-            var skillIcon = stackData[tile].Dequeue();
-            GameObject.Destroy(skillIcon.gameObject);
-            
+            var skillIcon = queue.Dequeue();
+            Object.Destroy(skillIcon.gameObject);
         }
-        RefreshUI(tile,stackData[tile]);   
+
+        RefreshUI(tile, queue);
     }
 
     public void ResetAllSkillStacks()

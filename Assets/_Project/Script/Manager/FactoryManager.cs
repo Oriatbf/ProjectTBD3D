@@ -77,6 +77,8 @@ public class FactoryManager : Singleton<FactoryManager>
                     DataManager.Inst.SaveUnit(unit);
                }
           }
+
+          UnitAddtionHandle();
      }
 
      /// <summary>
@@ -84,7 +86,7 @@ public class FactoryManager : Singleton<FactoryManager>
      /// </summary>
      public void GameStart()
      {
-          InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+          UnitAddtionHandle();
           TurnInit();
           
           ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
@@ -106,12 +108,14 @@ public class FactoryManager : Singleton<FactoryManager>
           float playerMaxTurn = 0,enemyMaxTurn = 0;
           foreach (var unit in playerUnits)
           {
-               playerMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
+               if(!unit.GetStatContainer().isStun)
+                    playerMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
           }
 
           foreach (var unit in enemyUnits)
           {
-               enemyMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
+               if(!unit.GetStatContainer().isStun)
+                    enemyMaxTurn += unit.GetStatContainer().turnGauge._maxValue;
           }
           
           InGameUnitInfo.SetPlayerMaxTurn(playerMaxTurn); 
@@ -169,13 +173,13 @@ public class FactoryManager : Singleton<FactoryManager>
           _unit.Initalize();
           if(team == Team.PlayerTeam)playerUnits.Add(_unit);
           else enemyUnits.Add(_unit);
-          InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+          UnitAddtionHandle();
      }
 
      /// <summary>
      /// id에 기반해 유닛 생성
      /// </summary>
-     public Unit CreateUnit(int id,Team team)
+     private Unit CreateUnit(int id,Team team)
      {
           var unitData = SheetDataManager.Inst.GetUnitData(id);
           if(unitData == null)Debug.LogError("ID에 해당하는 유닛이 없음");
@@ -199,5 +203,10 @@ public class FactoryManager : Singleton<FactoryManager>
      }
      
      public List<Unit> GetPlayerUnits()=>playerUnits;
+
+     private void UnitAddtionHandle()
+     {
+          InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+     }
 }
 

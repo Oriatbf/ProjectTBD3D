@@ -4,10 +4,6 @@ using SkillData;
 using UnityEngine;
 
 
-public enum SkillType
-{
-    Attack,Utility,Buff
-}
 
 /// <summary>
 /// SkillEffect는 부모인 SkillBase에서 하나의 스킬을 담당하는 요소

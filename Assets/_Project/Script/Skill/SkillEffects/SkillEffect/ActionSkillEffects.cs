@@ -41,7 +41,9 @@ public class BloodSuck : SkillEffect
 
     public override void SkillAction(SkillContext skillContext)
     {
-        ActionStateExamples.BloodSuck(skillContext.SourceUnit);
+        if(skillContext.TargetUnit ==null)return;
+        skillContext.SourceUnit.GetDamage(-1,skillContext,SkillType);
+        //ActionStateExamples.BloodSuck(skillContext.SourceUnit);
     }
     
 

@@ -1,4 +1,5 @@
 using _Project.Script.Controller;
+using Core.Utility;
 using SkillData;
 using UnityEngine;
 
@@ -76,5 +77,24 @@ public class TurnDelete : SkillEffect
     public override string ReturnInformation()
     {
         return $"{ColorText.GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>만큼 앞의 턴을 삭제합니다.";
+    }
+}
+
+public class Taming : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var rate = TamingHelper.TaimgCalculator(skillContext.TargetUnit);
+        Debug.Log($"테이밍 확률은 {rate}");
+        if (Random.value < rate)
+        {
+            skillContext.TargetUnit.GetStatContainer().charmResist.AddBaseValue(999);
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"일정 확률로 적을 매혹시킵니다";
     }
 }

@@ -45,6 +45,8 @@ public class TurnEndCanvas : BaseCanvas
     public void SetNextStageAction()
     {
         nextStageBtn.onClick.AddListener(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
+        nextStageBtn.onClick.AddListener(() =>
+            DataManager.Inst.ClearMap());
         nextStageBtn.onClick.AddListener(()=>DataManager.Inst.JsonSave());
     }
 

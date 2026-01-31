@@ -22,7 +22,8 @@ namespace _Project.Script.Controller
         private Tile lastTile;
         //범위 공격일 경우
         private List<Tile> lastTiles = new List<Tile>();
-        
+
+        private bool isUniqueSkill = false;
         private bool isTargeting = false;
         private float maxTurnStack = 0;
         private float curTurnStack = 0;
@@ -56,6 +57,9 @@ namespace _Project.Script.Controller
 
         #region Tutorial
         
+        /// <summary>
+        /// 튜토리얼 등록
+        /// </summary>
         private void SetTutorial()
         {
             var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
@@ -122,6 +126,7 @@ namespace _Project.Script.Controller
                 skill.InitSource(curTile);
             }
             characterSkillCanvas.Init(skills);
+            characterSkillCanvas.SetUniqueSkillSource(curTile);
         }
 
         public override void OnUpdate()
@@ -162,10 +167,15 @@ namespace _Project.Script.Controller
             }
         }
 
+        /// <summary>
+        /// 스킬 선택
+        /// </summary>
         private void SelectSkill(InventoryIcon skillIcon)
         {
             expectTurnImage= ApplicationManager.Inst.GetModule<SkillProgressController>()
                 .GetSkillTurnCounter().EnqueueExpectSkill(skillIcon.GetSkillBase());
+            //TODO 테이밍 스킬 판단
+            isUniqueSkill = skillIcon.GetSkillBase().GetData().ID == 34;
             curIcon = skillIcon;
             curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
             curIcon.SetFrameColor(Color.green,true);
@@ -192,9 +202,15 @@ namespace _Project.Script.Controller
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if (!hit.transform.TryGetComponent(out Tile tile)) return;
-                else _tile = tile;
+                _tile = tile;
+                if (_tile.GetUnit()?.GetTeam() == Team.EnemyTeam && isUniqueSkill)
+                {
+                    var rate = TamingHelper.TaimgCalculator(_tile.GetUnit());
+                    Debug.Log($"적의 테이밍 확률은 {rate}");
+                }
+                
             }
-      
+            
 
             // 타일 선택 확정
             if (Input.GetMouseButtonDown(0))
@@ -234,6 +250,9 @@ namespace _Project.Script.Controller
                 targetTile.Target();
             }
         }
+        /// <summary>
+        /// 시전 가능한 턴게이지를 확인하고 스킬을 등록
+        /// </summary>
         private bool TryExecuteSkill(Tile targetTile)
         {
             var originalSkillBase = curIcon?.GetSkillBase();
@@ -265,11 +284,18 @@ namespace _Project.Script.Controller
         
             return true;
         }
+        
+        /// <summary>
+        /// 스킬 범위 표시 없애기
+        /// </summary>
         private void ClearTargetTiles()
         {
             foreach(var tile in lastTiles)tile.UnTarget();
             lastTiles.Clear();
         }
+        /// <summary>
+        /// 타겟팅 취소
+        /// </summary>
         public void CancelTargeting()
         {
             if (expectTurnImage != null)
@@ -283,6 +309,7 @@ namespace _Project.Script.Controller
             curIcon = null;
             isTargeting = false;
             lastTile = null;
+            isUniqueSkill = false;
             lastTiles.Clear();
         }
 

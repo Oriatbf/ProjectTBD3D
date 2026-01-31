@@ -98,7 +98,6 @@ public class Unit : MonoBehaviour
     {
         _statContainer.turnGauge.SetBaseValue(0);
         _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnStart);
-        List<string> removeList = new List<string>();
 
     }
     
@@ -246,7 +245,7 @@ public class Unit : MonoBehaviour
             ApplicationManager.Inst.GetModule<PoolController>()
                 .Spawn<CharmEffect>("CharmEffect",transform.position + new Vector3(0,0.3f));
             DataManager.Inst.SaveUnit(unitData);
-            OnDispos();
+            OnDispos(true);
         }
     }
 
@@ -255,14 +254,15 @@ public class Unit : MonoBehaviour
         if(value<=0)Debug.Log("cost가 0임");
     }
 
-    private void OnDispos()
+    private void OnDispos(bool isCharm = false)
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
         ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
-        ApplicationManager.Inst.GetModule<SkillProgressController>().UnStack(tile);
+        ApplicationManager.Inst.GetModule<SkillProgressController>().UnStackAll(tile);
         ApplicationManager.Inst.GetModule<ActionStateStackController>().UnstackAllUnitBuffs(tile);
         tile.DestroyUnit();
-        DataManager.Inst.DeleteUnit(unitData.constId);
+        if(!isCharm)
+            DataManager.Inst.DeleteUnit(unitData.constId);
         Destroy(gameObject);
     }
 

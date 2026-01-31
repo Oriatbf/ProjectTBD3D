@@ -28,6 +28,7 @@ public struct NodeCoord : IEquatable<NodeCoord>
         index = mapNode.nodeCoord.index;
         type = mapNode.nodeCoord.type;
     }
+    
 
     public bool Equals(NodeCoord other)
     {

@@ -36,7 +36,7 @@ public class BuffInfoController : BaseController
 
     public void InitData(ActionState actionState,Vector3 targetPos)
     {
-        string info = $"이름은 : {actionState.GetData().id} 턴은 : {actionState.GetData().turn} 스택은 :{actionState.GetData().stack}";
+        string info = $"{actionState.GetData().id} {actionState.GetData().turn}턴 {actionState.GetData().stack}스택";
         buffInfo.InitData(info, targetPos);
         Show();
     }

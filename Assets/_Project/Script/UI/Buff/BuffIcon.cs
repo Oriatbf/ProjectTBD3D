@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BuffIcon : MonoBehaviour,IPointerMoveHandler,IPointerEnterHandler,IPointerExitHandler
+public class ActionStateIcon : MonoBehaviour,IPointerMoveHandler,IPointerEnterHandler,IPointerExitHandler
 {
     [SerializeField] private Image icon;
     private ActionState _actionState;

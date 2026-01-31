@@ -12,14 +12,22 @@ public class EnemyController : UnitController
 {
     private float maxTurn = 0;
     float curTurn = 0;
-    
+    TileController _tileController;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _tileController = ApplicationManager.Inst.GetModule<TileController>();
+        
+    }
+
     /// <summary>
     /// 스킬 등록
     /// </summary>
     public async UniTask  RegisterSKill()
     {
+        if (_unit.GetStatContainer().isStun) return;
         maxTurn = _unit.GetStatContainer().turnGauge._maxValue;
-        Debug.Log("RegisterSKill");
         var _skillStackInfoList = FindingSkill();
         foreach (var skillStackInfo in _skillStackInfoList)
         {
@@ -72,44 +80,108 @@ public class EnemyController : UnitController
     /// </summary>
     private void FindingTargetTile(SkillData.SkillBase skill)
     {
-        //가장 많은 유닛이 존재하는 곳들을 모아서 저장
-        List<Vector2Int> targetTiles = new List<Vector2Int>();
-        
-        var tileController = ApplicationManager.Inst.GetModule<TileController>();
         int rowCount = skill.GetData().RowCount;
         int columnCount = skill.GetData().ColumnCount;
-        int mid = tileController.GetHalfCount();
-        int row = tileController.GetRowCount();
-        
-        int maxCount = 0;
-        for (int i = 0; i <= mid; i++)
-        {
-            for (int j = 0; j <row; j++)
-            {
-                Tile curTile = tileController.GetTile(new Vector2(i, j));
-                var list = tileController.GetTiles(curTile,rowCount, columnCount);
-                int playerCnt = 0;
-                if (list.Count > 0)
-                {
-                    foreach (var tile in list)
-                        if(tile.GetUnit()?.GetTeam() == Team.PlayerTeam)playerCnt+=1;
-                }
+        Tile resultTile = curTile;
 
-                if (playerCnt > maxCount)
-                {
-                    targetTiles = new List<Vector2Int>();
-                    targetTiles.Add(new Vector2Int(i, j));
-                    maxCount = playerCnt;
-                }
-                else if (playerCnt == maxCount)
-                {
-                    targetTiles.Add(new Vector2Int(i, j));
-                }
+        if (skill.GetData().TargetType == TargetType.Area)
+        {
+            switch (skill.GetData().SkillType)
+            {
+                case SkillType.Attack:
+                    resultTile=TargetEnemyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Utility:
+                    resultTile=TargetFriendlyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Buff:
+                    resultTile=TargetFriendlyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Debuff:
+                    resultTile=TargetEnemyUnit(rowCount, columnCount);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }      
+        }
+      
+        skill.InitTarget(resultTile);
+    }
+
+    private Tile TargetEnemyUnit(int row, int column)
+    {
+        //가장 많은 적 유닛이 존재하는 곳들을 모아서 저장
+        List<Tile> targetTiles = new List<Tile>();
+        int maxCount = 0;
+        var playerTiles = _tileController.GetAllTeamTiles(Team.PlayerTeam);
+        for (int i = 0; i < playerTiles.Count; i++)
+        {
+            var list = _tileController.GetTiles(playerTiles[i],row, column);
+            int unitCnt = 0;
+            if (list.Count > 0)
+            {
+                foreach (var tile in list)
+                    if(tile.GetUnit()?.GetTeam() == Team.PlayerTeam)unitCnt+=1;
+            }
+
+            if (unitCnt > maxCount)
+            {
+                targetTiles = new List<Tile>();
+                targetTiles.Add(playerTiles[i]);
+                maxCount = unitCnt;
+            }
+            else if (unitCnt == maxCount)
+            {
+                targetTiles.Add(playerTiles[i]);
             }
         }
+        
         var random = Random.Range(0, targetTiles.Count);
-        var finalTile = tileController.GetTile(targetTiles[random]);
-        if(finalTile == null)Debug.LogError("maxTile이 없음");
-        skill.InitTarget(finalTile);
+        var finalTile = targetTiles[random];
+        return finalTile;
+    }
+
+    private Tile TargetFriendlyUnit(int row, int column)
+    {
+        //가장 많은 적 유닛과 손실된 피를 저장
+        List<(Tile,int)> targetTiles = new  List<(Tile,int)>() ;
+        int maxScore = 0;
+        var enemyTiles = _tileController.GetAllTeamTiles(Team.EnemyTeam);
+        for (int i = 0; i < enemyTiles.Count; i++)
+        {
+            var list = _tileController.GetTiles(enemyTiles[i],row, column);
+            int unitCnt = 0;
+            int lostHp = 0;
+            if (list.Count > 0)
+            {
+                foreach (var tile in list)
+                {
+                    if (tile.GetUnit()?.GetTeam() == Team.EnemyTeam)
+                    {
+                        unitCnt+=1;
+                        var hpStat = tile.GetUnit().GetStatContainer().hp;
+                        var lost = hpStat._maxValue - hpStat._baseValue;
+                        lostHp += (int)lost;
+                    }
+                }
+            }
+
+            var score = lostHp + (unitCnt*3);
+
+            if (score > maxScore)
+            {
+                targetTiles = new  List<(Tile,int)>() ;
+               
+                maxScore = score;
+            }
+            else if (score == maxScore)
+            {
+                targetTiles.Add((enemyTiles[i],score));
+            }
+        }
+        
+        var random = Random.Range(0, targetTiles.Count);
+        var finalTile = targetTiles[random].Item1;
+        return finalTile;
     }
 }

@@ -131,6 +131,29 @@ public class TileController : BaseController
         return _tiles.ToList();
     }
 
+    public List<Tile> GetAllTeamTiles(Team team)
+    {
+        List<Tile> _tiles = new List<Tile>();
+        if (team == Team.PlayerTeam)
+        {
+            foreach (var tile in Tiles.Values)
+            {
+                if(tile.GetIndex().x <= _halfCount)
+                    _tiles.Add(tile);
+            }
+        }
+        else if (team == Team.EnemyTeam)
+        {
+            foreach (var tile in Tiles.Values)
+            {
+                if(tile.GetIndex().x > _halfCount)
+                    _tiles.Add(tile);
+            }
+        }
+       
+        return _tiles;
+    }
+
     public List<Tile> GetAllTiles()
     {
         List<Tile> _tiles = new List<Tile>();

@@ -64,10 +64,7 @@ namespace UnitData
 		public Rarity Rarity;
 		public System.Single TurnGauge;
 		public System.Collections.Generic.List<Int32> BringSkill;
-		public System.Single Strength;
 		public System.Single Hp;
-		public System.Single Intelligence;
-		public System.Single Avoidance;
 		public System.Single Charm;
 		public System.Single CharmResist;
   

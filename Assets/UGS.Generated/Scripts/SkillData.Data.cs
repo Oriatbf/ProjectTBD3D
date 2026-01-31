@@ -64,6 +64,7 @@ namespace SkillData
 		public Rarity Rarity;
 		public System.Single RequireTurn;
 		public TargetType TargetType;
+		public SkillType SkillType;
 		public System.Int32 RowCount;
 		public System.Int32 ColumnCount;
 		public System.String EffectData;
