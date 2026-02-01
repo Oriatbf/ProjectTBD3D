@@ -34,6 +34,7 @@ public class Unit : MonoBehaviour
     private Material originalMat, whiteMat;
     
     private HealthContent healthContent;
+    private PopUpTxt ratePopUpTxt;
     string animatorPath = "Assets/_Project/Art/Animator/";
     
     private bool isDead = false;
@@ -51,6 +52,7 @@ public class Unit : MonoBehaviour
         
         _actionStateContainer = new ActionStateContainer(this);
         unitController = GetComponent<UnitController>();
+        ratePopUpTxt = ApplicationManager.Inst.GetModule<PoolController>().Spawn<PopUpTxt>("PopUpTxt");
         HideOutLine();
     }
     private void Start()
@@ -275,5 +277,18 @@ public class Unit : MonoBehaviour
     public void HideOutLine()
     {
         originalMat.SetFloat("_OutlineSize", 0f);
+    }
+
+    public void ShowRate()
+    {
+        var rate = TamingHelper.TaimgCalculator(this);
+        ratePopUpTxt.SetTxt($"약 {Mathf.Floor((rate*100))}%",Color.red,true).Forget();
+        var pos = Camera.main.WorldToScreenPoint(tile.GetPos()) + new Vector3(150, 150);
+        ratePopUpTxt.transform.position = pos;
+    }
+    
+    public void HideRate()
+    {
+        ratePopUpTxt.Hide();
     }
 }

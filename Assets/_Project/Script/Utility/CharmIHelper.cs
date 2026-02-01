@@ -6,7 +6,6 @@ public static class TamingHelper
     public static float TaimgCalculator(Unit targetUnit)
     {
         float charms = InGameUnitInfo.GetPlayersCharms();
-        Debug.Log($"전체 매혹도는 {charms}");
         var targetCharmResist = targetUnit.GetStatContainer().charmResist;
         float resist = targetCharmResist._maxValue - targetCharmResist._baseValue;
         var rate = 1 / (1 + Mathf.Exp((-(charms*2.5f -resist)/20)));

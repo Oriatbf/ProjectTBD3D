@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Core.Utility;
 using DG.Tweening;
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VInspector;
 
@@ -53,11 +54,24 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         ResetVisualize();
         
         var skillContext = skill.GetSkillContext();
-        skillContext.SourceUnit.ShowOutLine(Color.green);
-        skillContext.TargetUnit.ShowOutLine(Color.red);
-   
-        var targetTiles =tileController.GetTiles
-                (skillContext.TargetTile,skillContext.rowCount,skillContext.columnCount);
+        if (skill.GetData().TargetType == TargetType.Source)
+        {
+            if(skillContext.SourceUnit!=null)
+                skillContext.SourceUnit.ShowOutLine(Color.green);
+        }
+        else
+        {
+            if(skillContext.SourceUnit!=null)
+                skillContext.SourceUnit.ShowOutLine(Color.green);
+            if(skillContext.TargetUnit!=null)
+                skillContext.TargetUnit.ShowOutLine(Color.red);
+        }
+       
+        List<Tile> targetTiles = new List<Tile>();
+        var standardTile = skill.GetData().TargetType 
+                           == TargetType.Source?skillContext.SourceTile:skillContext.TargetTile;
+        targetTiles  =tileController.GetTiles
+                (standardTile,skillContext.rowCount,skillContext.columnCount);
         foreach (var targetTile in targetTiles)
         {
             targetTile.Target();

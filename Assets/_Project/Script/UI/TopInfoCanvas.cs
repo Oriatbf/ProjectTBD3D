@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class TopInfoCanvas : BaseCanvas
 {
-    [SerializeField] private TextMeshProUGUI goldTxt,remainTurnTxt;
+    [SerializeField] private TextMeshProUGUI goldTxt,remainTurnTxt,teamCharmTxt;
     [SerializeField] private Transform relicContetnt;
     private float textAnimDur = 0.4f;
     private int curGold = 0;
@@ -19,6 +19,7 @@ public class TopInfoCanvas : BaseCanvas
         ChangeState(true,true,true);
         RefreshRelic();
         InGameUnitInfo.playerTurnValueHandle += () => UpdateTurnTxt();
+        InGameUnitInfo.playerCharmsValueHandle += () => UpdateCharmsTxt();
         curGold = DataManager.Inst.GetGold();
         goldTxt.text=curGold+"G";
     }
@@ -27,6 +28,12 @@ public class TopInfoCanvas : BaseCanvas
     {
         var curTurn = InGameUnitInfo.PlayerMaxTurn - InGameUnitInfo.PlayerCurTurn;
         remainTurnTxt.text = $"남은 턴 : {curTurn}";
+    }
+    
+    private void UpdateCharmsTxt()
+    {
+        var value = InGameUnitInfo.PlayersCharms;
+        teamCharmTxt.text = $"팀 매혹도 : {value}";
     }
 
     public void AddGold(int value)

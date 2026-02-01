@@ -176,6 +176,8 @@ namespace _Project.Script.Controller
                 .GetSkillTurnCounter().EnqueueExpectSkill(skillIcon.GetSkillBase());
             //TODO 테이밍 스킬 판단
             isUniqueSkill = skillIcon.GetSkillBase().GetData().ID == 34;
+            if (isUniqueSkill) SetEnemyRate(true);
+            
             curIcon = skillIcon;
             curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
             curIcon.SetFrameColor(Color.green,true);
@@ -202,12 +204,8 @@ namespace _Project.Script.Controller
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
                 if (!Physics.Raycast(ray, out RaycastHit hit)) return;
                 if (!hit.transform.TryGetComponent(out Tile tile)) return;
+                
                 _tile = tile;
-                if (_tile.GetUnit()?.GetTeam() == Team.EnemyTeam && isUniqueSkill)
-                {
-                    var rate = TamingHelper.TaimgCalculator(_tile.GetUnit());
-                    Debug.Log($"적의 테이밍 확률은 {rate}");
-                }
                 
             }
             
@@ -293,6 +291,17 @@ namespace _Project.Script.Controller
             foreach(var tile in lastTiles)tile.UnTarget();
             lastTiles.Clear();
         }
+
+        private void SetEnemyRate(bool isShow)
+        {
+            var enemies = InGameUnitInfo.EnemyUnits;
+            foreach (var unit in enemies)
+            {
+                if(isShow) unit.ShowRate();
+                else unit.HideRate();
+            }
+        }
+        
         /// <summary>
         /// 타겟팅 취소
         /// </summary>
@@ -310,6 +319,7 @@ namespace _Project.Script.Controller
             isTargeting = false;
             lastTile = null;
             isUniqueSkill = false;
+            SetEnemyRate(false);
             lastTiles.Clear();
         }
 

@@ -10,7 +10,7 @@ public class PopUpTxt : PoolBase
     [SerializeField] private TextMeshProUGUI popUpText;
     
 
-    public async UniTask SetTxt(string txt,Color color ,bool isDotween = false ,float returnTime = 0.5f)
+    public async UniTask SetTxt(string txt,Color color ,bool isDotween = false,bool autoHide = false ,float returnTime = 0.5f)
     {
         transform.DOKill();
         popUpText.color = color;
@@ -22,9 +22,28 @@ public class PopUpTxt : PoolBase
             await popUpText.DOFade(1, 0.25f).AsyncWaitForCompletion();
         }
         else popUpText.alpha = 1;
-        
+
+        if (!autoHide) return;
         await UniTask.WaitForSeconds(returnTime);
         await popUpText.DOFade(0, 0.25f).AsyncWaitForCompletion();
         ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("PopUpTxt",transform);
     }
+
+    public void ReturnPool()
+    {
+        ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("PopUpTxt",transform);
+    }
+
+
+    public override void OnSpawnFromPool()
+    {
+        base.OnSpawnFromPool();
+        Hide();
+    }
+
+    public void Hide()
+    {
+        popUpText.alpha = 0;
+    }
+    
 }

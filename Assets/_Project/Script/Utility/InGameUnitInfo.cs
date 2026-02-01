@@ -13,7 +13,7 @@ namespace Core.Utility
         public static float EnemyCurTurn = 0,EnemyMaxTurn = 0;
         public static int PlayersCharms = 0;
         
-        public static Action playerTurnValueHandle;
+        public static Action playerTurnValueHandle,playerCharmsValueHandle;
 
         public static void ResetData()
         {
@@ -27,6 +27,7 @@ namespace Core.Utility
             EnemyUnits.Clear();
             
             playerTurnValueHandle = null;
+            playerCharmsValueHandle = null;
         }
 
         public static void ResetCurTurn()
@@ -76,6 +77,7 @@ namespace Core.Utility
               
             
             PlayersCharms = playerCharmValue;
+            playerCharmsValueHandle?.Invoke();
         }
         
         
