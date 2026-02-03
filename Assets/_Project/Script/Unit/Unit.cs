@@ -68,7 +68,7 @@ public class Unit : MonoBehaviour
         var animator = await Addressables.LoadAssetAsync<AnimatorOverrideController>
             (animatorPath+animatorName+".overrideController").Task;
         this.animator.runtimeAnimatorController = animator;
-        _statContainer = unitData.statContainer;
+        _statContainer =  unitData.statContainer;
         originalBringSkills = unitData.bringSkills;
         bringSkills = unitData.bringSkills;
         this.unitData = unitData;
@@ -246,7 +246,7 @@ public class Unit : MonoBehaviour
         {
             ApplicationManager.Inst.GetModule<PoolController>()
                 .Spawn<CharmEffect>("CharmEffect",transform.position + new Vector3(0,0.3f));
-            DataManager.Inst.SaveUnit(unitData);
+            DataManager.Inst.SaveUnit(this);
             OnDispos(true);
         }
     }
@@ -259,7 +259,8 @@ public class Unit : MonoBehaviour
     private void OnDispos(bool isCharm = false)
     {
         FactoryManager.Inst.RegisterDeadUnit(this);
-        ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
+        if(healthContent != null)
+            ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
         ApplicationManager.Inst.GetModule<SkillProgressController>().UnStackAll(tile);
         ApplicationManager.Inst.GetModule<ActionStateStackController>().UnstackAllUnitBuffs(tile);
         tile.DestroyUnit();

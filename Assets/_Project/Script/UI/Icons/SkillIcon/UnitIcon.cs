@@ -9,8 +9,8 @@ public class UnitIcon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPoint
     public void Init(UnitSaveData unitSaveData)
     {
         _unitSaveData = unitSaveData;
-        Debug.Log(_unitSaveData.iconKey);
-        SetSprite(_unitSaveData.iconKey).Forget();
+        Debug.Log(_unitSaveData.animatorName);
+        SetSprite(_unitSaveData.animatorName).Forget();
     }
 
     private void Start()

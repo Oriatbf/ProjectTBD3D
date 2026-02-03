@@ -45,8 +45,8 @@ public class ApplicationManager : Singleton<ApplicationManager>
     }
 
     private async UniTask CreateController()
-    {
-        await InitializeModules();
+    { 
+        InitializeModules();
         var sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         var moduleList = _modulesByType.ToList();
         for(int i = 0;i<moduleList.Count;i++)
@@ -60,7 +60,7 @@ public class ApplicationManager : Singleton<ApplicationManager>
         Debug.Log($"Create Controller {_modulesByType.Count}");
     }
 
-    private async UniTask InitializeModules()
+    private  void InitializeModules()
     {
         _modulesByType.Clear();
         _modulesByType.Add(typeof(AudioController), new AudioController());

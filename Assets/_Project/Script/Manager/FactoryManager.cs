@@ -21,12 +21,17 @@ public class FactoryManager : Singleton<FactoryManager>
      [EndFoldout] 
      private EnemyArrangeSO curEnemyArrange;
      private LoseCanvas _loseCanvas;
-     
-     private readonly string SOLabel = "EnemySO";
+     private VictoryCanvas _victoryCanvas;
 
      private void Awake()
      {
           InGameUnitInfo.ResetData();
+     }
+
+     private void Start()
+     {
+          _loseCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<LoseCanvas>("LoseCanvas");
+          _victoryCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<VictoryCanvas>("VictoryCanvas");
      }
 
      public void RegisterDeadUnit(Unit _unit)
@@ -59,7 +64,7 @@ public class FactoryManager : Singleton<FactoryManager>
 
           if (playerUnits.Count <= 0)
           {
-               _loseCanvas.ChangeState(true,true,true);
+               Lose();
                return;
           }
 
@@ -70,15 +75,25 @@ public class FactoryManager : Singleton<FactoryManager>
                ApplicationManager.Inst.GetModule<ActionStateStackController>().ResetAllBuffs();
                ApplicationManager.Inst.GetModule<SkillProgressController>().Reset();
 
-               if (DataManager.Inst.GetMapData().prevNodeCoord.type == NodeType.Tutorial) return;
+               if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
                //전투가 끝나고 남은 유닛들 세이브
                foreach (var unit in playerUnits)
                {
                     DataManager.Inst.SaveUnit(unit);
                }
+
+               if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Boss)
+               {
+                    _victoryCanvas.ChangeState(true,true,true);
+               }
           }
 
           UnitAddtionHandle();
+     }
+
+     public void Lose()
+     {
+          _loseCanvas.ChangeState(true,true,true);
      }
 
      /// <summary>
@@ -99,8 +114,7 @@ public class FactoryManager : Singleton<FactoryManager>
           
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
-
-          _loseCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<LoseCanvas>("LoseCanvas");
+          
      }
 
      public void TurnInit()

@@ -26,7 +26,7 @@ public class MapGenerator
             {
                 floor.Add(new MapNode
                 {
-                    nodeCoord = new NodeCoord(y+1,x,GetNodeType(y))
+                    nodeCoord = new NodeCoord(y,x,GetNodeType(y))
                 });
             }
             map.Add(floor);

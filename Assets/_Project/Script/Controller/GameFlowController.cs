@@ -7,12 +7,12 @@ namespace _Project.Script.Controller
 {
     public class GameFlowController : BaseController
     {
-        private NodeType curNodeType = NodeType.Shop;
+        private NodeType curNodeType = NodeType.Event;
 
         public override void OnInitialize()
         {
             base.OnInitialize();
-            curNodeType = DataManager.Inst.GetMapData().prevNodeCoord.type;
+            curNodeType = DataManager.Inst.GetMapData().curNodeCoord.type;
             SetFLow();
         }
 

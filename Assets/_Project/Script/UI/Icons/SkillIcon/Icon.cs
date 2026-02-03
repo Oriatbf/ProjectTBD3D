@@ -9,13 +9,13 @@ using UnityEngine.UI;
 public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMoveHandler
 {
     
-    protected SkillBase skillBase;
+    protected SkillBase _skillBase;
    
     
 
     public virtual void Init(SkillBase skillBase)
     {
-        this.skillBase = skillBase;
+        this._skillBase = skillBase;
         if (icon != null)
         {
             if(skillBase == null) AlphaIcon(0);
@@ -36,12 +36,12 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     
 
   
-    public SkillBase GetSkillBase() => skillBase;
+    public SkillBase GetSkillBase() => _skillBase;
     
     public void OnPointerMove(PointerEventData eventData)
     {
        // if(!Inside()) return;
-        ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(skillBase,Input.mousePosition);
+        ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(_skillBase,Input.mousePosition);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -55,6 +55,7 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     {
         //if(!Inside()) return;
         //if(skill ==null) return;
+        Debug.Log("OnPointerEnter");
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
     }
 

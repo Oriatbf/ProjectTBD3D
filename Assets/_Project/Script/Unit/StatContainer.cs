@@ -22,10 +22,11 @@ public class StatContainer
         intelligence = Stat.Create(0);
         barrier = Stat.Create(0);
         
-        hp = Stat.Create(data.Hp,data.Hp);
-        turnGauge = Stat.Create(0,data.TurnGauge);
+        hp = Stat.Create(data.Hp,false,data.Hp,data.Hp);
+        turnGauge = Stat.Create(0,false,data.TurnGauge,data.TurnGauge);
         charm = Stat.Create(0);
-        charmResist = Stat.Create(0,data.CharmResist);
+        charmResist = Stat.Create(0,false,data.CharmResist,data.CharmResist);
         isStun = false;
     }
+    
 }

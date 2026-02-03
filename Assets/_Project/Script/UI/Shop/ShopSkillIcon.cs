@@ -15,7 +15,7 @@ public class ShopSkillIcon : Icon,IBuyable
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(BtnAction);
         
-        value = ShopHelper.ReturnValue(skillBase.GetData().Rarity);
+        value = ShopHelper.ReturnValue(_skillBase.GetData().Rarity);
         priceTxt.text = $"{value}G";
     }
 
@@ -27,7 +27,7 @@ public class ShopSkillIcon : Icon,IBuyable
         var shopCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<ShopCanvas>("ShopCanvas");
         shopCanvas.ChangeState(false,true);
         ApplicationManager.Inst.GetModule<SkillChangeController>()
-            .SetLootSkill(skillBase,()=>shopCanvas.ChangeState(true,true,true));
+            .SetLootSkill(_skillBase,()=>shopCanvas.ChangeState(true,true,true));
 
     }
 

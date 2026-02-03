@@ -13,6 +13,7 @@ public class EventDialogueSO : ScriptableObject
     [Serializable]
     public struct DialogueData
     {
+        [TextArea]
         public string dialogueText;
         public DialogueType dialogueType;
         

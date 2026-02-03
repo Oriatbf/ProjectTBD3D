@@ -25,13 +25,13 @@ public class Stat
         return Create(baseValue, false,maxValue);
     }
     
-    private static Stat Create(float baseValue = 0,bool isInfinite = false,float maxValue = 0)
+    public static Stat Create(float baseValue = 0,bool isInfinite = false,float maxValue = 0,float originalValue = 0)
     {
         var stat = new Stat
         {
             _baseValue = baseValue,
             _isInfiniteValue = isInfinite,
-            _originalValue = baseValue,
+            _originalValue = originalValue,
             _maxValue = maxValue,
             _addModifiers = new StatModifierCollection(4),
             _multiplyModifiers = new StatModifierCollection(4)

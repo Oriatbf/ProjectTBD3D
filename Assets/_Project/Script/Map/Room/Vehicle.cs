@@ -9,8 +9,6 @@ public class Vehicle : MonoBehaviour
     [SerializeField] private float rotationSpeed = 100f; // 회전 속도 조절
     
     private List<Transform> wheels = new List<Transform>();
-    bool isMoving = false;
-    private bool isTargeting = false;
 
     /*
     private void Awake()

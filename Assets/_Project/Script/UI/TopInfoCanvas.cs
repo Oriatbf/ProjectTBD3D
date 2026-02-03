@@ -27,6 +27,7 @@ public class TopInfoCanvas : BaseCanvas
     private void UpdateTurnTxt()
     {
         var curTurn = InGameUnitInfo.PlayerMaxTurn - InGameUnitInfo.PlayerCurTurn;
+        curTurn = Mathf.Round(curTurn * 10f) / 10f;
         remainTurnTxt.text = $"남은 턴 : {curTurn}";
     }
     
@@ -42,6 +43,8 @@ public class TopInfoCanvas : BaseCanvas
         curGold += value;
         DataManager.Inst.SetGold(curGold);
     }
+
+    public int GetGold() => curGold;
 
     public void RefreshRelic()
     {

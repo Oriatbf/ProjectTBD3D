@@ -151,6 +151,7 @@ public class PlayerSpawnController : BaseController
         //부모에 스크립트 존재
         if (top.TryGetComponent(out UnitIcon unitIcon))
         {
+            if (unitIcon.GetUnitData() == null) return;
             if (spawnedUnits.Count>0&&spawnedUnits.ContainsKey(unitIcon.GetUnitData().constId)) return;
             UnitSelected(unitIcon);
         }
@@ -178,7 +179,8 @@ public class PlayerSpawnController : BaseController
         {
             if (hit.transform.TryGetComponent(out Tile tile))
             {
-               
+                if (tile.GetIndex().x >= ApplicationManager.Inst.GetModule<TileController>().GetHalfCount())
+                    return;
                 if(Input.GetMouseButtonDown(0))
                 {
                     if (EventSystem.current.IsPointerOverGameObject()) return;

@@ -82,3 +82,7 @@ MonoBehaviour:
     Prefab: {fileID: 1765680143217015501, guid: e7f0a0c52cbaf17439124f80e9a3c6b5, type: 3}
     SceneName:
     - GamePlay
+  - Key: VictoryCanvas
+    Prefab: {fileID: 553995174333583163, guid: 1c7324e9d60a74c49aadcde2526ddc98, type: 3}
+    SceneName:
+    - GamePlay

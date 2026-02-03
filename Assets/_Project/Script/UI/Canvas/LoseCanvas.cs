@@ -14,11 +14,13 @@ public class LoseCanvas : BaseCanvas
 
    private void MenuHandle()
    {
+      DataManager.Inst.DataReset();
       FadeInFadeOutManager.Inst.FadeOut("Title");
    }
 
    private void ExitHandle()
    {
+      DataManager.Inst.DataReset();
          Debug.Log("GameCloseHandle");
         #if UNITY_EDITOR
               UnityEditor.EditorApplication.isPlaying = false;

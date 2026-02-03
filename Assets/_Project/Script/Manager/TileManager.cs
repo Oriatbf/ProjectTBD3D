@@ -13,9 +13,9 @@ public class TileController : BaseController
     private Tile tilePrefab;
     private Transform tileParent; 
     private  int _rowCount=3; //행 개수
-    private int _halfCount=5; //열개수 /2
-    private float _interval=1; // 타일간의 간격
-    private float _rowInterval=3, _columnInterval=0;
+    private int _halfCount=4; //열개수 /2
+    private float _interval=1.2f; // 타일간의 간격
+    private float _rowInterval=3f, _columnInterval=.2f;
     [EndFoldout]
     private  Dictionary<Vector2,Tile> Tiles = new Dictionary<Vector2, Tile>();
     // vector2 에는 x,y형태로 들어감 {열,행} 순
@@ -41,32 +41,33 @@ public class TileController : BaseController
     /// </summary>
     public void InstanceTile()
     {
+        int totalColumn = _halfCount * 2 + 1;
+        float tileSpacing = 1f + _interval + _columnInterval;
+
         for (int j = 0; j < _rowCount; j++)
         {
-            Vector2 indexVec = Vector2.zero;
-            float zInterval = tileParent.position.z + (j*_rowInterval); //z축 인터벌
-            float startInterval = j%2==0?_interval:0; //짝수 홀수 행 인터벌
-            for (int i = 0; i < _halfCount; i++)
-            {
-                var obj = Object.Instantiate(tilePrefab, new Vector3(-(_halfCount -i)-(_interval*(_halfCount -i))+startInterval+_columnInterval*i,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
-                indexVec = new Vector2(i,j);
-                Tiles[indexVec] = obj;
-                obj.SetIndex(indexVec);
-            } 
-            var mid =Object.Instantiate(tilePrefab, new Vector3(0+startInterval+_columnInterval*_halfCount,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
-            indexVec = new Vector2(_halfCount,j);
-            Tiles[indexVec] = mid;
-            mid.SetIndex(indexVec);
+            float z = tileParent.position.z + j * _rowInterval;
+            float rowOffset = j % 2 == 0 ? _interval : 0;
 
-            for (int i = _halfCount - 1; i >= 0; i--)
+            float totalWidth = (totalColumn - 1) * tileSpacing;
+            float startX = -totalWidth / 2f;
+
+            for (int i = 0; i < totalColumn; i++)
             {
-                indexVec = new Vector2(_halfCount*2-i,j);
-                var obj = Object.Instantiate(tilePrefab, new Vector3((_halfCount -i)+(_interval*(_halfCount -i)+_columnInterval*(_halfCount*2-i))+startInterval,tileParent.position.y,zInterval), Quaternion.identity,tileParent);
-                Tiles[indexVec] = obj;
-                obj.SetIndex(indexVec);
+                float x = startX + i * tileSpacing + rowOffset;
+
+                Vector2 index = new Vector2(i, j);
+                var tile = Object.Instantiate(
+                    tilePrefab,
+                    new Vector3(x, tileParent.position.y, z),
+                    Quaternion.identity,
+                    tileParent
+                );
+
+                Tiles[index] = tile;
+                tile.SetIndex(index);
             }
         }
-       
     }
     
     /// <summary>

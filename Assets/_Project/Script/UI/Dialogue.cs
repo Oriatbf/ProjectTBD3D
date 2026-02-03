@@ -54,6 +54,14 @@ public class Dialogue : MonoBehaviour,IPoolable
         _curIndex++;
     }
     
+    public void SetTxt(string txt)
+    {
+        nextBtn.gameObject.SetActive(false);
+        acceptBtn.gameObject.SetActive(false);
+        rejectBtn.gameObject.SetActive(false);
+        dialogueTxt.text = txt;
+    }
+    
     
     
     

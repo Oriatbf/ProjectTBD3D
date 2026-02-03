@@ -39,7 +39,7 @@ public class MainCharacterSelectCanvas : BaseCanvas
     private void SelectTutorial()
     {
         DataManager.Inst.SetMainCharcter(  1);
-        DataManager.Inst.GetMapData().prevNodeCoord = new NodeCoord(0,0,NodeType.Tutorial);
+        DataManager.Inst.GetMapData().curNodeCoord = new NodeCoord(0,0,NodeType.Tutorial);
         FadeInFadeOutManager.Inst.FadeOut("GamePlay",true,.5f);
     }
 

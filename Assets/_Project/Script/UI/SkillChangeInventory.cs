@@ -41,12 +41,14 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         }
     }
 
-    private void Initialize(int constId,List<int> skillIds)
+    private void InitUnitSkills(int constId,List<int> skillIds)
     {
         this.constId = constId;
         curSkillIds = skillIds;
         var skillBases = SheetDataManager.Inst.GetSkillBaseList(skillIds);
         Debug.Log(skillBases.Count);
+        foreach (var skillIcon in skillIcons) skillIcon.Init(null);
+        
         for (int i = 0; i < skillBases.Count; i++)
         {
             Debug.Log("Skill Init");
@@ -102,7 +104,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
                  unitIcon.SetFrameColor(Color.green,true);
                  CancelTargeting();
                  var unitSaveData = unitIcon.GetUnitData();
-                 Initialize(unitSaveData.constId, unitSaveData.bringSkills);
+                 InitUnitSkills(unitSaveData.constId, unitSaveData.bringSkills);
              }
          }
      }
@@ -151,6 +153,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             {
                 if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
                 {
+                    if(skillIcon.GetSkillBase() == null)return;
                     targetIcon = skillIcon;
                     ChangeSkill();
                     isTargeting = false;

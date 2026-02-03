@@ -187,10 +187,7 @@ public class MapRenderer : MonoBehaviour
             foreach (var pair in nodeUIs)
                 pair.Value.SetInteractable(false,MapNodeUI.NodeInteract.UnInteract);
 
-            nodeUIs[currentNode.nodeCoord].SetInteractable(true,MapNodeUI.NodeInteract.Interact);
-
-            foreach (var next in currentNode.next)
-                nodeUIs[next].SetInteractable(false,MapNodeUI.NodeInteract.Visualize);
+            nodeUIs[currentNode.nodeCoord].SetInteractable(true,MapNodeUI.NodeInteract.Visualize);
             return;
         }
         foreach (var pair in nodeUIs)

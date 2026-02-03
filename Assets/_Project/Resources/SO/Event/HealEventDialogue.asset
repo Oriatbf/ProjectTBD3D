@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c51bab1721fd78b46980d838b18c596a, type: 3}
-  m_Name: DemonEventDialogue
+  m_Name: HealEventDialogue
   m_EditorClassIdentifier: 
   dialogueDatas:
-  - dialogueText: "\uD788\uD788 \uB098\uB294 \uC545\uB9C8\uB2E4"
+  - dialogueText: "300G\uB85C \uBAA8\uB450\uC5D0\uAC8C 3\uC758 \uD68C\uBCF5\uC744
+      \uD574\uC8FC\uC9C0"
     dialogueType: 0
-  - dialogueText: "\uB3D9\uB8CC \uD55C\uBA85\uC5D0\uAC8C \uC545\uB9C8\uC758 \uB2A5\uB825\uC744
-      \uC950\uC5B4\uC8FC\uC9C0"
-    dialogueType: 0
-  - dialogueText: "\uB3D9\uB8CC \uD55C\uBA85\uC744 \uC545\uB9C8\uB85C \uBC14\uAFB8\uACA0\uB098?"
+  - dialogueText: "\uAC70\uB798\uD558\uACA0\uB098? 300G -> \uC804\uCCB4 3 \uD68C\uBCF5"
     dialogueType: 1

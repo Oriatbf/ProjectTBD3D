@@ -258,13 +258,13 @@ namespace _Project.Script.Controller
 
             var skillStackInfo = new SkillStackInfo(originalSkillBase);
             var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
-        
             // 턴 게이지 체크
-            if (reqTurn + curTurnStack > maxTurnStack)
+            if (Mathf.Floor((reqTurn + curTurnStack) * 10f) / 10f> maxTurnStack)
             {
+                Debug.Log($"{reqTurn} {curTurnStack} {maxTurnStack}");
                 var mousePos  =Input.mousePosition;
                 var popUpTxt= ApplicationManager.Inst.GetModule<PoolController>().Spawn<PopUpTxt>("PopUpTxt",mousePos);
-                popUpTxt.SetTxt("턴 게이지가 부족합니다",Color.red,true).Forget();
+                popUpTxt.SetTxt("턴 게이지가 부족합니다",Color.red,true,true).Forget();
                 return false;
             }
 

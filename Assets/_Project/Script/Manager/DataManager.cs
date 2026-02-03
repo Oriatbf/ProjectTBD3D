@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 /// <summary>
 /// json에 저장하기 위한 unit 데이터
@@ -15,20 +16,33 @@ public class UnitSaveData
     public int id;
     public List<int> bringSkills = new List<int>();
     public StatContainer statContainer;
-    public string iconKey;
+    public string animatorName;
     public Rarity rarity;
     public float charm;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
     {
-        iconKey = unitData.AnimatorName;
+        animatorName = unitData.AnimatorName;
         constId = RandomID.GetConstID();
         id = unitData.Id;
         bringSkills = unitData.BringSkill;
         statContainer = new StatContainer(unitData);
         rarity = unitData.Rarity;
         charm = unitData.Charm;
+    }
+    
+    public UnitSaveData(UnitSaveData targetSaveData)
+    {
+        /*
+        animatorName = targetSaveData.animatorName;
+        constId = RandomID.GetConstID();
+        id = targetSaveData.id;
+        bringSkills = unitData.BringSkill;
+        statContainer = new StatContainer(unitData);
+        rarity = unitData.Rarity;
+        charm = unitData.Charm;
+        */
     }
 }
 
@@ -37,8 +51,7 @@ public class MapData
 {
     public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
-    public NodeCoord curNodeCoord = new NodeCoord();
-    public NodeCoord prevNodeCoord = new NodeCoord();
+    [FormerlySerializedAs("prevNodeCoord")] public NodeCoord curNodeCoord = new NodeCoord();
     public int curFloor = 0;
 }
 
@@ -77,6 +90,7 @@ public class GameData
     public int gold;
     public int constId = 0;
     public int mainCharacterID = 0;
+    public bool isNewData = false;
     public bool isFirstGame = true;
 }
 
@@ -87,8 +101,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     private Action saveAction;
     private string fileName = "GameData.json";
     
-    //새로운 데이터
-    [SerializeField]private bool isNewData = false;
 
 
     protected override void Awake()
@@ -113,11 +125,6 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             FileReset();
         }
         
-        if (Input.GetKeyDown(KeyCode.F8))
-        {
-            TBDLogger.CommandLog(KeyCode.F8,this);
-            SaveUnit(new UnitSaveData(SheetDataManager.Inst.GetUnitData(1)));
-        }
 
         
         if (Input.GetKeyDown(KeyCode.F7))
@@ -134,13 +141,11 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         {
             Data = new GameData();
             Data.isFirstGame = true;
-            isNewData = true; 
+            Data.isNewData = true; 
             JsonSave();
         }
         else
         {
-            isNewData = false;
-            Data.isFirstGame = false;
             string loadJson = File.ReadAllText(path);
             Data = JsonConvert.DeserializeObject<GameData>(loadJson);
             /*
@@ -168,10 +173,12 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void DataReset()
     {
-        var nodeCoord = Data.mapData.prevNodeCoord;
+        var nodeCoord = Data.mapData.curNodeCoord;
         Data = new GameData();
         Data.isFirstGame = false;
-        Data.mapData.prevNodeCoord = nodeCoord;
+        Data.isNewData = true;
+        Data.mapData.curNodeCoord = nodeCoord;
+        JsonSave();
     }
     #endregion
     
@@ -183,7 +190,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// </summary>
     public void SaveUnitSkills(int constID,List<int> skillList)
     {
-        if (Data.mapData.prevNodeCoord.type == NodeType.Tutorial) return;
+        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
         var unit = Data.units.FirstOrDefault(u=>u.constId==constID);
         unit.bringSkills = skillList;
         JsonSave();
@@ -193,6 +200,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         DataReset();
         Data.units.Add(new UnitSaveData(UnitData.Data.DataList[id]));
         Data.mainCharacterID = id;
+        Data.isNewData = false;
         JsonSave();
         Debug.Log("MainChaarcter");
     }
@@ -213,7 +221,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         {
             constId = unitSaveData.constId,
             id= unitSaveData.id,
-            iconKey = unitSaveData.iconKey,
+            animatorName = unitSaveData.animatorName,
             statContainer = originalStatContainer,
             bringSkills = unit.GetOriginalBringSkills()
         };
@@ -245,7 +253,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         {
             constId = RandomID.GetConstID(),
             id= id,
-            iconKey = originalData.AnimatorName,
+            animatorName = originalData.AnimatorName,
             statContainer = originalStatContainer,
             bringSkills = originalData.BringSkill,
         };
@@ -284,14 +292,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void SaveCurNodeType(NodeCoord prevNodeCoord)
     {
-        Data.mapData.prevNodeCoord = prevNodeCoord;
+        Data.mapData.curNodeCoord = prevNodeCoord;
         saveAction?.Invoke();
     }
 
     public void ClearMap()
-    { 
-        Data.mapData.curNodeCoord = Data.mapData.prevNodeCoord;
-        Data.mapData.prevNodeCoord = new NodeCoord();
+    {
+        Data.mapData.curFloor += 1;
         saveAction?.Invoke();
     }
 
@@ -321,7 +328,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     #endregion
 
-    public bool IsNewData() => isNewData;
+    public bool IsNewData() => Data.isNewData;
     public bool IsFirstGame() => Data.isFirstGame;
     
     public int GetConstId() => Data.constId;
@@ -338,7 +345,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void SetGold(int value)
     {
-        if (Data.mapData.prevNodeCoord.type == NodeType.Tutorial) return;
+        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
         Data.gold = value;
         JsonSave();
     }
