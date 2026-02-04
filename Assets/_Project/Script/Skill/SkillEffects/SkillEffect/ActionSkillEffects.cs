@@ -34,6 +34,24 @@ public class Damage : SkillEffect
     }
 }
 
+public class PenetrationAttack: SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Penetration;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        int finalValue = (int)skillContext.SourceUnit.GetStatContainer().str.FinalValue() + values[0];
+        skillContext.ForEachTarget(unit =>
+        {
+            unit.GetDamage(finalValue,skillContext,SkillType);
+        });
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{GetTextColor(TxtColorType.Str)}{values[0]}</color>만큼의 관통 데미지를 줍니다";
+    }
+}
+
 
 public class BloodSuck : SkillEffect
 {

@@ -61,6 +61,7 @@ namespace _Project.Script.Controller
 
         private void SetShop()
         {
+            ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("ShopBGM");
             var shop = UnityEngine.Resources.Load<GameObject>("Shop");
             Object.Instantiate(shop,Vector3.zero + new Vector3(0,3,0),Quaternion.identity);
             ApplicationManager.Inst.GetModule<TurnController>().MapStage();
@@ -68,6 +69,7 @@ namespace _Project.Script.Controller
 
         private void SetEvent()
         {
+            ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("ShopBGM");
             var demon =  UnityEngine.Resources.Load<GameObject>("Demon");
             var a = Object.Instantiate(demon,Vector3.zero + new Vector3(0,.7f,0),Quaternion.identity);
             ApplicationManager.Inst.GetModule<TurnController>().MapStage();

@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,7 @@ namespace _Project.Script.UI.Canvas
             if (DataManager.Inst.IsNewData())
             {
                 loadGameBtn.enabled = false;
+                loadGameBtn.transform.parent.GetComponentInChildren<TextMeshProUGUI>().color = new Color(1f, 1f, 1f, 0f);
             }
 
         }

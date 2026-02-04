@@ -5567,9 +5567,11 @@ MonoBehaviour:
     units: []
     mapData:
       isMapGenerated: 0
-      curNodeType: 0
+      curNodeCoord:
+        floor: 0
+        index: 0
+        type: 0
       curFloor: 0
-      curIndex: 0
     soundData:
       masterVolume: 0.5
       bgmVolume: 0.5
@@ -5579,6 +5581,8 @@ MonoBehaviour:
     gold: 0
     constId: 0
     mainCharacterID: 0
+    isNewData: 0
+    isFirstGame: 1
 --- !u!4 &731872366
 Transform:
   m_ObjectHideFlags: 0
@@ -6434,7 +6438,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 413910406}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.7222222
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6870,7 +6874,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &909774312
 Transform:
   m_ObjectHideFlags: 0

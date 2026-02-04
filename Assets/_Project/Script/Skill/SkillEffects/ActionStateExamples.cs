@@ -13,7 +13,8 @@ namespace SkillData.SkillEffects
                 stack: _stack,
                 turn: 999,
                 decreaseType: DecreaseType.None,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Buff
             );
 
             damageBuffData.action = (data, context) =>
@@ -38,7 +39,8 @@ namespace SkillData.SkillEffects
                 stack: 0,
                 turn: turn,
                 decreaseType: DecreaseType.OnlyTurn,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Debuff
             );
 
             faintingBuff.action = (data, context) =>
@@ -69,7 +71,8 @@ namespace SkillData.SkillEffects
                 stack: 1,           // 1의 데미지
                 turn: 3,            // 3턴 동안
                 decreaseType: DecreaseType.OnlyTurn,
-                targetType: ActionTargetType.AllEnemy
+                targetType: ActionTargetType.AllEnemy,
+                buffType: SkillType.Debuff
             );
 
             // 실행할 액션 정의
@@ -102,7 +105,9 @@ namespace SkillData.SkillEffects
                 stack: 3,           // 3번 반격
                 turn: 3,            // 3턴 유지
                 decreaseType: DecreaseType.TurnAndStack,  // 둘다 감소
-                targetType: ActionTargetType.Attacker     // 공격자에게
+                targetType: ActionTargetType.Attacker,     // 공격자에게
+                buffType: SkillType.Buff
+                
             );
 
             counterData.action = (data, context) =>
@@ -136,7 +141,8 @@ namespace SkillData.SkillEffects
                 stack: 2,           // 2 힐
                 turn: 5,            // 5턴 동안
                 decreaseType: DecreaseType.OnlyTurn,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Buff
             );
 
             regenData.action = (data, context) =>
@@ -160,7 +166,8 @@ namespace SkillData.SkillEffects
                 stack: 3,           // 3의 추가 데미지
                 turn: 999,          // 무한 지속
                 decreaseType: DecreaseType.None,
-                targetType: ActionTargetType.RandomEnemy
+                targetType: ActionTargetType.RandomEnemy,
+                buffType: SkillType.Buff
             );
             splashData.randomCount = 2; // 랜덤 2명
 
@@ -185,7 +192,8 @@ namespace SkillData.SkillEffects
                 stack: poisonStack,  // 독 스택
                 turn: 0,
                 decreaseType: DecreaseType.OnlyStack,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Debuff
             );
 
             poisonData.action = (data, context) =>
@@ -212,7 +220,8 @@ namespace SkillData.SkillEffects
                 stack: 1,           
                 turn: 1,
                 decreaseType: DecreaseType.OnlyTurn,
-                targetType: ActionTargetType.Attacker
+                targetType: ActionTargetType.Attacker,
+                buffType: SkillType.Buff
             );
 
             bloodSuckData.action = (data, context) =>
@@ -240,7 +249,8 @@ namespace SkillData.SkillEffects
                 stack: 5,           // 5 공격력 증가
                 turn: 1,
                 decreaseType: DecreaseType.None,
-                targetType: ActionTargetType.AllAlly
+                targetType: ActionTargetType.AllAlly,
+                buffType: SkillType.Buff
             );
 
             deathBuffData.action = (data, context) =>

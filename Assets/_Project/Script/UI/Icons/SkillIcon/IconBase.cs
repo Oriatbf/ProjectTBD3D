@@ -1,3 +1,4 @@
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using TMPro;
@@ -28,6 +29,8 @@ public class IconBase : MonoBehaviour
     public void SetFrameColor(Color color,bool isDotween = false,float duration = 0.25f)
     {
         frame.DOKill();
+        if(DataManager.Inst.GetMapData().curNodeCoord.type != NodeType.Tutorial)
+            ApplicationManager.Inst.GetModule<AudioController>().PlayAudio("Btn");
         if (isDotween)
         {
             frame.DOColor(color, duration);

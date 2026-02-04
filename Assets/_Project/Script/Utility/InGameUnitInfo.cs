@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.Utility
 {
@@ -12,6 +13,8 @@ namespace Core.Utility
         public static float PlayerCurTurn = 0,PlayerMaxTurn = 0;
         public static float EnemyCurTurn = 0,EnemyMaxTurn = 0;
         public static int PlayersCharms = 0;
+        private static Stat playerCharms = new Stat();
+        
         
         public static Action playerTurnValueHandle,playerCharmsValueHandle;
 
@@ -21,6 +24,8 @@ namespace Core.Utility
             PlayerMaxTurn = 0;
             EnemyCurTurn = 0;
             EnemyMaxTurn = 0;
+            
+            playerCharms = Stat.Create(0);
             
             PlayerUnits.Clear();
             AllUnits.Clear();
@@ -75,8 +80,16 @@ namespace Core.Utility
                 playerCharmValue+=(int)unit.GetUnitData().charm;
             }
               
-            
-            PlayersCharms = playerCharmValue;
+            playerCharms.SetBaseValue(playerCharmValue);
+            if(playerCharms == null)Debug.LogError("No Charm");
+            PlayersCharms = (int)playerCharms.FinalValue();
+            playerCharmsValueHandle?.Invoke();
+        }
+
+        public static void AddCharm(int value)
+        {
+            playerCharms.AddModifier(new StatModifier(EStatModifier.Add,value));
+            PlayersCharms = (int)playerCharms.FinalValue();
             playerCharmsValueHandle?.Invoke();
         }
         

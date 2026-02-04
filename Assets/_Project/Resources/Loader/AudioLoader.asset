@@ -19,3 +19,12 @@ MonoBehaviour:
   - audioName: BattleBGM
     clip: {fileID: 8300000, guid: a6054b7c9bec37c4c893953a42963dff, type: 3}
     audioType: 0
+  - audioName: ShopBGM
+    clip: {fileID: 8300000, guid: 18d17947a12d96e4a93bf7e3eebe1080, type: 3}
+    audioType: 0
+  - audioName: TitleBGM
+    clip: {fileID: 8300000, guid: 0a0860460ecb0b74b8702c40f8d543c9, type: 3}
+    audioType: 0
+  - audioName: Btn
+    clip: {fileID: 8300000, guid: d6804366541e1e24da4ab949196ae9d2, type: 3}
+    audioType: 1

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Project.Script.Controller;
+using Core.Utility;
 using SkillData;
 using SkillData.SkillEffects;
 using UnityEngine;
@@ -21,7 +22,8 @@ public class Fire : SkillEffect
                 stack: values[1],      // 데미지
                 turn: values[0],       // 턴 수
                 decreaseType: DecreaseType.OnlyTurn,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Debuff
             );
 
             // 시전자 정보 저장
@@ -64,7 +66,8 @@ public class Poison : SkillEffect
                 stack: values[0],
                 turn: 0,
                 decreaseType: DecreaseType.OnlyStack,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Debuff
             );
 
             poisonData.sourceUnit = skillContext.SourceUnit;
@@ -101,12 +104,13 @@ public class Ice : SkillEffect
                 stack: values[0],
                 turn: 999,
                 decreaseType: DecreaseType.None,
-                targetType: ActionTargetType.Self
+                targetType: ActionTargetType.Self,
+                buffType: SkillType.Debuff
             );
 
             iceData.action = (data, context) =>
             {
-                if (data.stack >= 3)
+                if (data.stack >= 5)
                 {
                     data.ownerUnit.GetActionStateContainer().RemoveActionState(ActionTrigger.None, iceData.id);
                     ApplicationManager.Inst.GetModule<ActionStateStackController>().UnStackBuff(data.ownerTile,data.id);
@@ -142,7 +146,52 @@ public class Fainting : SkillEffect
 
     public override string ReturnInformation()
     {
-        throw new NotImplementedException();
+        return $"적을 {values[0]}턴 동안 기절시킵니다";
+    }
+}
+
+public class SourceFainting : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Buff;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var unit = skillContext.SourceUnit;
+        ActionStateExamples.FaintingBuff(unit, values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"자신을을 {values[0]}턴 동안 기절시킵니다";
+    }
+}
+
+public class TeamCharm : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Buff;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        InGameUnitInfo.AddCharm(values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"팀 매혹도를 {ColorText.GetTextColor(TxtColorType.Charm)}{values[0]}</color>만큼 올립니다";
+    }
+}
+
+public class Purify : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Buff;
+    public override void SkillAction(SkillContext skillContext)
+    { 
+        var unit = skillContext.TargetUnit;
+        unit.GetActionStateContainer().DeleteBuffState(SkillType.Debuff);
+        
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"디버프를 정화합니다";
     }
 }
 public class DamageBuff : SkillEffect
@@ -174,7 +223,8 @@ public class BloodBuff : SkillEffect
             stack: values[0],
             turn: 999,
             decreaseType: DecreaseType.None,
-            targetType: ActionTargetType.Self
+            targetType: ActionTargetType.Self,
+            buffType: SkillType.Buff
         );
 
         bloodBuffData.action = (data, context) =>

@@ -11,7 +11,7 @@ public static class EffectTypeFactory
         BarrierToSource,
         SelfPDamage,
         Fire,
-        Posion,
+        Poison,
         InCreaseCharm,
         BloodSuck,
         Ice,
@@ -23,7 +23,12 @@ public static class EffectTypeFactory
         Summon,
         BarrierAttack,
         TurnDelete,
-        Taming
+        Taming,
+        Fainting,
+        SourceFainting,
+        TeamCharm,
+        PenetrationAttack,
+        Purify
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -36,7 +41,7 @@ public static class EffectTypeFactory
             EffectType.BarrierToSource => new BarrierToSource(),
             EffectType.SelfPDamage => new SelfPDamage(),
             EffectType.Fire => new Fire(),
-            EffectType.Posion => new Poison(),
+            EffectType.Poison => new Poison(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
             EffectType.BloodSuck => new BloodSuck(),
             EffectType.Ice => new Ice(),
@@ -49,7 +54,11 @@ public static class EffectTypeFactory
             EffectType.BarrierAttack => new BarrierAttack(),
             EffectType.TurnDelete => new TurnDelete(),
             EffectType.Taming => new Taming(),
-            
+            EffectType.Fainting => new Fainting(),
+            EffectType.SourceFainting => new SourceFainting(),
+            EffectType.TeamCharm => new TeamCharm(),
+            EffectType.PenetrationAttack => new PenetrationAttack(),
+            EffectType.Purify => new Purify(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

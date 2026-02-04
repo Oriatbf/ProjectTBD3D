@@ -76,7 +76,8 @@ public class SkillTurnCounter
             
         }
         //한 턴에 해당하는 UI gameObject 삭제
-        foreach (var obj in destroyObj) GameObject.Destroy(obj);
+        foreach (var obj in destroyObj) Object.Destroy(obj);
+        RefreshUI();
         Debug.Log("SkillTurnCounterOriginLook");
         ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
@@ -158,6 +159,9 @@ public class SkillTurnCounter
         turnQueue.Clear();
     }
 
+    /// <summary>
+    /// 예상 스킬 보여주기
+    /// </summary>
     public TurnImage EnqueueExpectSkill(SkillBase skillBase)
     {
         var skillContext = skillBase.GetSkillContext();
@@ -223,7 +227,6 @@ public class SkillTurnCounter
 
         turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
         turnImageQueue = new Queue<TurnImage>(turnImages);
-        RefreshUI();
         
     }
 

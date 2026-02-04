@@ -94,8 +94,6 @@ namespace SkillData
             skillAction?.Invoke(skillContext);
         }
 
-        public float GetFinalDamage(int value) => 1;//_data.SkillType.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());
-
         /// <summary>
         /// SkillBase 깊은 복사
         /// </summary>

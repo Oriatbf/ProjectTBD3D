@@ -74,6 +74,15 @@ public class Unit : MonoBehaviour
         this.unitData = unitData;
         this.team = team;
         this.constID = unitData.constId;
+
+        if (team == Team.PlayerTeam)
+        {
+            if(Mathf.Approximately(unitData.flipDir, -1))spr.flipX = true;
+        }
+        else if (team == Team.EnemyTeam)
+        {
+            if(Mathf.Approximately(unitData.flipDir, 1))spr.flipX = true;
+        }
     }
     
     public void SetTile(Tile tile)
@@ -179,12 +188,22 @@ public class Unit : MonoBehaviour
         Debug.Log($"{damage} 만큼 데미지를 받음");
         if (damage > 0)
         {
-            ApplicationManager.Inst.GetModule<PoolController>().Spawn<HitEffect>("HitEffect",transform.position + new Vector3(0,2,-1),Quaternion.identity);
+            switch (skillType)
+            {
+                case SkillType.Penetration:
+                    _statContainer.hp.AddBaseValue( -damage);
+                    break;
+                default:
+                    var remainDamage = damage - _statContainer.barrier._baseValue;
+                    _statContainer.barrier.AddBaseValue(-damage);
+                    if(remainDamage > 0)
+                        _statContainer.hp.AddBaseValue( -remainDamage);
+                    break;
+            }
             
-            var remainDamage = damage - _statContainer.barrier._baseValue;
-            _statContainer.barrier.AddBaseValue(-damage);
-            if(remainDamage > 0)
-                _statContainer.hp.AddBaseValue( -remainDamage);
+            ApplicationManager.Inst.GetModule<PoolController>()
+                .Spawn<HitEffect>("HitEffect",transform.position + new Vector3(0,2,-1),Quaternion.identity);
+           
             if (skillContext != null)
             {
                 skillContext.SourceUnit.GetActionStateContainer().ExecuteTrigger(ActionTrigger.OnAttack,skillContext); 

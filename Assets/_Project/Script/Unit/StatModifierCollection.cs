@@ -118,6 +118,7 @@ public class StatModifierCollection
         EnsureInitialized();
         
         var sum = 0f;
+        Debug.Log($" count : {_count}  length : {_entries.Length}");
         for (int i = 0; i < _count; i++)
         {
             if (_entries[i].IsActive)

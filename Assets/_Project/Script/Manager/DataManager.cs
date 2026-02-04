@@ -19,6 +19,7 @@ public class UnitSaveData
     public string animatorName;
     public Rarity rarity;
     public float charm;
+    public float flipDir = 0;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
@@ -30,20 +31,9 @@ public class UnitSaveData
         statContainer = new StatContainer(unitData);
         rarity = unitData.Rarity;
         charm = unitData.Charm;
+        flipDir = unitData.Flip;
     }
-    
-    public UnitSaveData(UnitSaveData targetSaveData)
-    {
-        /*
-        animatorName = targetSaveData.animatorName;
-        constId = RandomID.GetConstID();
-        id = targetSaveData.id;
-        bringSkills = unitData.BringSkill;
-        statContainer = new StatContainer(unitData);
-        rarity = unitData.Rarity;
-        charm = unitData.Charm;
-        */
-    }
+
 }
 
 [Serializable]

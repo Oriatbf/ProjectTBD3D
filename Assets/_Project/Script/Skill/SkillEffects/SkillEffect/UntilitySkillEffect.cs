@@ -16,7 +16,8 @@ public class Counter : SkillEffect
             stack: values[0],      // 데미지
             turn: 1,       // 턴 수
             decreaseType: DecreaseType.OnlyTurn,
-            targetType: ActionTargetType.Self
+            targetType: ActionTargetType.Self,
+            buffType: SkillType.Buff
         );
 
         // 시전자 정보 저장

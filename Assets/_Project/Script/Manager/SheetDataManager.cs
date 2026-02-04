@@ -23,7 +23,7 @@ public enum ManualType
 [UGS(typeof(SkillType))]
 public enum SkillType
 {
-    Attack,Utility,Buff,Debuff
+    Attack,Utility,Buff,Debuff,Penetration //Penetration : 관통
 }
 
 
@@ -80,7 +80,7 @@ public class SheetDataManager : Singleton<SheetDataManager>
     #region Skills
 
     //특정 ID의 스킬베이스 가져오기
-    public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id).Clone();
+    public SkillBase GetSkillBase(int id) => skillList.FirstOrDefault(s=>s.GetData().ID==id)?.Clone();
 
     //id리스트로 스킬베이스들 가져오기
     public List<SkillBase> GetSkillBaseList(List<int> ids)

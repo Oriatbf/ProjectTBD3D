@@ -98,6 +98,22 @@ public class ActionStateContainer
         }
     }
 
+    public void DeleteBuffState(SkillType buffType)
+    {
+        foreach (var triggerDict in actionStates.Values)
+        {
+            var removeKeys = triggerDict
+                .Where(kv => kv.Value.GetData().buffType == buffType)
+                .Select(kv => kv.Key)
+                .ToList();
+
+            foreach (var key in removeKeys)
+            {
+                triggerDict.Remove(key);
+            }
+        }
+    }
+
     /// <summary>
     /// 특정 트리거의 ActionState 개수
     /// </summary>

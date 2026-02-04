@@ -1,5 +1,6 @@
 ﻿using _Project.Script.Caster;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace _Project.Script.Controller
 {
@@ -9,7 +10,7 @@ namespace _Project.Script.Controller
         private AudioCaster _audioCaster;
         public override ControllerInfo ControllerInfo { get; } = new()
         {
-            ContainSceneNames = new string[] {"GamePlay" ,"MapScene"},
+            ContainSceneNames = new string[] {"GamePlay" ,"MapScene","Title"},
             Priority = 0,
             UpdateInterval = 1,
             LateUpdateInterval = 1,
@@ -24,6 +25,13 @@ namespace _Project.Script.Controller
             _audioCaster = audioCaster.GetComponent<AudioCaster>();
             if(_audioCaster == null)Debug.Log("AudioCaster spawn not found");
             SetDataVolume();
+            SetTitleBgm();
+        }
+
+        private void SetTitleBgm()
+        {
+            if(SceneManager.GetActiveScene().name == "Title")
+                _audioCaster.PlayAudio("TitleBGM");
         }
 
         private void SetDataVolume()

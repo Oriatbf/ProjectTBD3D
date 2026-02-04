@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _Project.Resources.Loader;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 namespace _Project.Script.Caster
 {
@@ -37,7 +38,24 @@ namespace _Project.Script.Caster
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (EventSystem.current.currentSelectedGameObject != null)
+                {
+                    var button = EventSystem.current.currentSelectedGameObject
+                        .GetComponent<UnityEngine.UI.Button>();
+
+                    if (button != null && button.interactable)
+                    {
+                        PlayAudio("Btn");
+                    }
+                }
+            }
+        }
+
         public void ChangeMasterVolume(float value)
         {
             DataManager.Inst.SaveMasterVolume(value);

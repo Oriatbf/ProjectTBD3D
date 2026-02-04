@@ -61,6 +61,7 @@ public class ActionData
     
     // 조건 필터
     public SkillType? triggerSkillType = null;  // 특정 스킬 타입만 트리거 (null이면 모두)
+    public SkillType buffType;
     public bool requireDamage = false;          // 데미지가 있어야 트리거
     
     public Unit ownerUnit;                      // 소유자 유닛
@@ -72,7 +73,7 @@ public class ActionData
 
     public ActionData(string id, Unit owner, int stack = 1, int turn = 1, 
         DecreaseType decreaseType = DecreaseType.OnlyTurn, 
-        ActionTargetType targetType = ActionTargetType.Single)
+        ActionTargetType targetType = ActionTargetType.Single,SkillType buffType = SkillType.Debuff)
     {
         this.id = id;
         this.ownerUnit = owner;
@@ -81,6 +82,7 @@ public class ActionData
         this.turn = turn;
         this.decreaseType = decreaseType;
         this.targetType = targetType;
+        this.buffType = buffType;
     }
 
     /// <summary>

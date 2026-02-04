@@ -171,7 +171,7 @@ public class EnemyController : UnitController
             if (score > maxScore)
             {
                 targetTiles = new  List<(Tile,int)>() ;
-               
+                targetTiles.Add((enemyTiles[i], score));
                 maxScore = score;
             }
             else if (score == maxScore)
@@ -179,7 +179,7 @@ public class EnemyController : UnitController
                 targetTiles.Add((enemyTiles[i],score));
             }
         }
-        
+        if(targetTiles.Count == 0)Debug.LogError("No TargetTiles");
         var random = Random.Range(0, targetTiles.Count);
         var finalTile = targetTiles[random].Item1;
         return finalTile;
