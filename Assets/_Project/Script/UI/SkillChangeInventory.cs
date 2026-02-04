@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
 using SkillData;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -39,6 +40,11 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             var u = unitIcon.GetComponent<UnitIcon>();
             unitIcons.Add(u);
         }
+    }
+
+    private void Start()
+    {
+        RegisterTutorial();
     }
 
     private void InitUnitSkills(int constId,List<int> skillIds)
@@ -91,22 +97,23 @@ public class SkillChangeInventoryCanvas : BaseCanvas
          _pointerEventData.position = Input.mousePosition;
          _raycastResults.Clear();
          EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
-
-         foreach (var result in _raycastResults)
+         if (_raycastResults[0].gameObject.TryGetComponent(out UnitIcon unitIcon))
          {
-             if (result.gameObject.TryGetComponent(out UnitIcon unitIcon))
-             {
-                 if(unitIcon.GetUnitData() == null)return;
-                 foreach (var u in unitIcons)
-                 {
-                     u.SetFrameColor(Color.white,true);
-                 }
-                 unitIcon.SetFrameColor(Color.green,true);
-                 CancelTargeting();
-                 var unitSaveData = unitIcon.GetUnitData();
-                 InitUnitSkills(unitSaveData.constId, unitSaveData.bringSkills);
-             }
+             SelectUnit(unitIcon);
          }
+     }
+
+     private void SelectUnit(UnitIcon unitIcon)
+     {
+         if(unitIcon.GetUnitData() == null)return;
+         foreach (var u in unitIcons)
+         {
+             u.SetFrameColor(Color.white,true);
+         }
+         unitIcon.SetFrameColor(Color.green,true);
+         CancelTargeting();
+         var unitSaveData = unitIcon.GetUnitData();
+         InitUnitSkills(unitSaveData.constId, unitSaveData.bringSkills);
      }
         
     /// <summary>
@@ -119,17 +126,18 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         _raycastResults.Clear();
         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
 
-        foreach (var result in _raycastResults)
-        {
-            if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
-            {
-                if(skillIcon.GetSkillBase() == null)return;
-                curIcon = skillIcon;
-                curIcon.SetFrameColor(Color.green,true);
-                isTargeting = true;
-                return;
-            }
-        }
+        if (_raycastResults[0].gameObject.TryGetComponent(out ChangeIcon unitIcon))
+                SelectSkill(changeIcon);
+            
+        
+    }
+
+    private void SelectSkill(ChangeIcon skillIcon)
+    {
+        if(skillIcon.GetSkillBase() == null)return;
+        curIcon = skillIcon;
+        curIcon.SetFrameColor(Color.green,true);
+        isTargeting = true;
     }
     
     /// <summary>
@@ -149,19 +157,21 @@ public class SkillChangeInventoryCanvas : BaseCanvas
             _raycastResults.Clear();
             EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
 
-            foreach (var result in _raycastResults)
+            if (_raycastResults[0].gameObject.TryGetComponent(out ChangeIcon skillIcon))
             {
-                if (result.gameObject.TryGetComponent(out ChangeIcon skillIcon))
-                {
-                    if(skillIcon.GetSkillBase() == null)return;
-                    targetIcon = skillIcon;
-                    ChangeSkill();
-                    isTargeting = false;
-                    return;
-                }
+                SelectChangedSkill(skillIcon);
             }
         }
 
+    }
+
+    private void SelectChangedSkill(ChangeIcon skillIcon)
+    {
+        if(skillIcon.GetSkillBase() == null)return;
+        targetIcon = skillIcon;
+        ChangeSkill();
+        isTargeting = false;
+        return;
     }
 
 
@@ -229,4 +239,78 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         closeBtn.onClick.RemoveAllListeners();
         closeBtn.onClick.AddListener(()=>closeAction?.Invoke());
     }
+
+    #region Tutorial
+
+    private void RegisterTutorial()
+    {
+        SetTutorial1();
+        SetTutorial2();
+        SetTutorial3();
+    }
+    
+    private void SetTutorial1()
+    {
+        var targetRect = unitIcons[0].GetComponent<RectTransform>();
+        Canvas.ForceUpdateCanvases();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(targetRect);
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 1,
+            informationTxt = "유닛을 선택하세요",
+            tutorialKey = "Loot",
+            highLightRect = targetRect,
+            transformType = TransformType.Rect,
+            highLightSize = targetRect.sizeDelta,
+            textOffset = new Vector2(0,100),
+            btnAction = ()=>
+            {
+                SelectUnit(unitIcons[0]);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        var targetRect = skillIcons[0].GetComponent<RectTransform>();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 2,
+            informationTxt = "유닛의 스킬 개수를 제한되어 있습니다\n스킬을 선택하세요",
+            highLightRect = targetRect,
+            tutorialKey = "Loot",
+            transformType = TransformType.Rect,
+            highLightSize = targetRect.sizeDelta,
+            textOffset = new Vector2(0,100),
+            btnAction = ()=>
+            {
+                SelectSkill(skillIcons[0]);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial3()
+    {
+        var targetRect = changeIcon.GetComponent<RectTransform>();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 3,
+            informationTxt = "바꿀 스킬을 선택하세요",
+            highLightRect = targetRect,
+            tutorialKey = "Loot",
+            transformType = TransformType.Rect,
+            highLightSize = targetRect.sizeDelta,
+            textOffset = new Vector2(0,100),
+            btnAction = ()=>
+            {
+                SelectChangedSkill(changeIcon);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+
+    #endregion
 }

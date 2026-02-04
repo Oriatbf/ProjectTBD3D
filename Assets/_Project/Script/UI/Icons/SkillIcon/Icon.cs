@@ -47,15 +47,14 @@ public class Icon : IconBase,IPointerEnterHandler,IPointerExitHandler,IPointerMo
     public void OnPointerExit(PointerEventData eventData)
     {
         //if(!Inside()) return;
-        //if(skill ==null) return;
+        if(_skillBase ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Skill);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         //if(!Inside()) return;
-        //if(skill ==null) return;
-        Debug.Log("OnPointerEnter");
+        if(_skillBase ==null) return;
         ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
     }
 

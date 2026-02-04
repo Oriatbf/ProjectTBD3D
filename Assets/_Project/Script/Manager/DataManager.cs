@@ -192,7 +192,16 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data.mainCharacterID = id;
         Data.isNewData = false;
         JsonSave();
-        Debug.Log("MainChaarcter");
+        Debug.Log("MainChaarcter초뭏ㄷ");
+    }
+
+    public void SetCharacter(int id)
+    {
+        Data.units = new List<UnitSaveData>();
+        Data.units.Add(new UnitSaveData(UnitData.Data.DataList[id]));
+        Data.mainCharacterID = id;
+        Data.isNewData = false;
+        JsonSave();
     }
     
     public List<UnitSaveData> GetAllSavedUnits() => Data.units;
@@ -204,6 +213,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unit"></param>
     public void SaveUnit(Unit unit)
     {
+        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
         var unitSaveData = unit.GetUnitData();
         var originalData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         var originalStatContainer = new StatContainer(originalData);
@@ -230,6 +240,10 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         Data.units.Add(newUnitSaveData);
     }
 
+    /// <summary>
+    /// Shop, event전용
+    /// </summary>
+    /// <param name="unitSaveData"></param>
     public void SaveUnit(UnitSaveData unitSaveData)
     {
         Data.units.Add(unitSaveData);

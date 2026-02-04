@@ -16,6 +16,7 @@ public class SkillInfoCardCanvas : BaseCanvas
 
     public void InitData(SkillBase skillBase,Vector3 targetPos)
     {
+        if (skillBase == null) return;
         var skill = skillBase;
          nameTxt.text = skill.GetData().Name;
        // string attribute = skillBase._data.SkillType == SkillType.Physical 

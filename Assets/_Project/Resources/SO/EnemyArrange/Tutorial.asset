@@ -22,3 +22,5 @@ MonoBehaviour:
   EnemyArranges:
   - unitIndex: 14
     posIndex: {x: 2, y: 1}
+  - unitIndex: 16
+    posIndex: {x: 3, y: 0}

@@ -1,3 +1,4 @@
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -15,6 +16,8 @@ public class LootController : BaseController
 
     public void InitEnemyArrange(EnemyArrangeSO enemyArrangeSo)
     {
+        if(DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial)
+            ApplicationManager.Inst.GetModule<TutorialController>().StartTutorial("Loot");
         lootCanvas.Init(enemyArrangeSo);
     }
 

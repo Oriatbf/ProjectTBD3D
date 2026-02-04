@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace _Project.Script.Controller
 {
@@ -20,13 +22,15 @@ namespace _Project.Script.Controller
         public Vector2 textOffset = Vector2.zero;
         public Vector2 highLightSize = new Vector2(100,100);
         public Action btnAction;
-        
+        public bool entireRay = false;
+        public string tutorialKey = "Battle";
+
     }
     public class TutorialController : BaseController
     {
         private TutorialCanvas _tutorialCanvas;
         
-        private List<TutorialInfo> _tutorialInfos = new List<TutorialInfo>();
+        private Dictionary<string, List<TutorialInfo>> _tutorialDict= new Dictionary<string, List<TutorialInfo>>();
         private int curIndex = 0;
         public override ControllerInfo ControllerInfo { get; } = new()
         {
@@ -50,47 +54,54 @@ namespace _Project.Script.Controller
             base.OnUpdate();
         }
 
-        public void StartTutorial()
+        public void StartTutorial(string key)
         {
-            if(_tutorialInfos.Count == 0)Debug.LogError("튜토리얼이 없음");
-            if (curIndex >= _tutorialInfos.Count)
+            var tutorialInfos = _tutorialDict[key];
+            if(tutorialInfos.Count == 0)Debug.LogError("튜토리얼이 없음");
+            if (curIndex >= tutorialInfos.Count)
             {
                 _tutorialCanvas.ChangeState(false,true);
-                TutorialEnd();
+                if(key == "Loot") TutorialEnd(true);
+                else TutorialEnd();
                 return;
             }
             Debug.Log("튜토리얼 시작");
             _tutorialCanvas.ChangeState(true, true,true);
-            var curTutorial = _tutorialInfos[curIndex++];
-            _tutorialCanvas.MoveHighlight(curTutorial);
-            _tutorialCanvas.SetHighlightSize(curTutorial.highLightSize);
-            _tutorialCanvas.SetHighlightAction(curTutorial.btnAction);
-            _tutorialCanvas.SetText(curTutorial.informationTxt);
+            var curTutorial = tutorialInfos[curIndex++];
+            _tutorialCanvas.TutorialInfoInit(curTutorial);
             
         }
         
 
         public void SetTutorial(TutorialInfo tutorialInfo)
         {
-            tutorialInfo.btnAction += StartTutorial;
-            _tutorialInfos.Add(tutorialInfo);
-            SortTutorial();
+            if(!_tutorialDict.ContainsKey(tutorialInfo.tutorialKey))
+                _tutorialDict.Add(tutorialInfo.tutorialKey, new List<TutorialInfo>());
+            _tutorialDict[tutorialInfo.tutorialKey].Add(tutorialInfo);
+            tutorialInfo.btnAction += ()=>StartTutorial(tutorialInfo.tutorialKey);
+            SortTutorial(tutorialInfo.tutorialKey);
         }
 
-        private void TutorialEnd()
+        private void TutorialEnd(bool endStage = false)
         {
             Debug.Log("튜토리얼 끝");
-            var mainCharacterId = DataManager.Inst.Data.mainCharacterID;
-            DataManager.Inst.SetMainCharcter(mainCharacterId);
+            if (endStage)
+            {
+                var mainCharacterId = DataManager.Inst.Data.mainCharacterID;
+                DataManager.Inst.SetMainCharcter(1);    
+            }
+            curIndex = 0;
+            
         }
         public void HideTutorial()
         {
             _tutorialCanvas.ChangeState(false, true);
         }
 
-        private void SortTutorial()
+        private void SortTutorial(string key)
         {
-            _tutorialInfos.Sort((x, y) => x.order - y.order);
+            var tutorialInfos = _tutorialDict[key];
+            tutorialInfos.Sort((x, y) => x.order - y.order);
         }
         
     }

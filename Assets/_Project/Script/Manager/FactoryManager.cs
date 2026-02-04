@@ -22,6 +22,7 @@ public class FactoryManager : Singleton<FactoryManager>
      private EnemyArrangeSO curEnemyArrange;
      private LoseCanvas _loseCanvas;
      private VictoryCanvas _victoryCanvas;
+     private bool isGameStart = false;
 
      private void Awake()
      {
@@ -114,7 +115,7 @@ public class FactoryManager : Singleton<FactoryManager>
           
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
-          
+          isGameStart = true;
      }
 
      public void TurnInit()
@@ -217,6 +218,7 @@ public class FactoryManager : Singleton<FactoryManager>
      }
      
      public List<Unit> GetPlayerUnits()=>playerUnits;
+     public bool IsGameStart() => isGameStart;
 
      private void UnitAddtionHandle()
      {

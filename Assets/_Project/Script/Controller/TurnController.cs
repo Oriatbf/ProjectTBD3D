@@ -12,6 +12,7 @@ public class TurnController : BaseController
     private List<StateControllerBase> enemys = new List<StateControllerBase>();
     private List<Unit> allUnits = new List<Unit>();
     private Team AttackTurn = Team.EnemyTeam;
+    private bool isBattling = false;
     TurnEndCanvas turnEndCanvas;
 
     public override void OnInitialize()
@@ -31,7 +32,8 @@ public class TurnController : BaseController
     /// </summary>
     public async UniTask PlayerTurnEndAction()
     {
-        if (AttackTurn == Team.EnemyTeam) return;
+        if (isBattling) return;
+        isBattling = true;
         ApplicationManager.Inst.GetModule<CharacterSkillController>().CancelTargeting();
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Hide();
         await ApplicationManager.Inst.GetModule<SkillProgressController>().ActionSkill();
@@ -39,9 +41,11 @@ public class TurnController : BaseController
         {
             unit.OnTurnEnd();
         }
-        
+
+        Debug.Log("TurnEnd");
         ChangeStates(State.Idle, Team.PlayerTeam);
         ChangeStates(State.Attack, Team.EnemyTeam);
+        isBattling = false;
         
     }
 

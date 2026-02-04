@@ -11,7 +11,7 @@ public class PlayerController : UnitController
     {
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-        if (_unit.GetStatContainer().isStun) return;
+        if (_unit.GetStatContainer().isStun || !FactoryManager.Inst.IsGameStart()) return;
         ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
             (_unit,_unit.GetSkillList(),curTile);
          

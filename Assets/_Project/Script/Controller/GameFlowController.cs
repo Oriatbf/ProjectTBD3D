@@ -43,7 +43,7 @@ namespace _Project.Script.Controller
                     break;
                 case NodeType.Tutorial:
                     SetEnemy(EnemyArrangeType.Tutorial); 
-                    ApplicationManager.Inst.GetModule<TutorialController>().StartTutorial();
+                    ApplicationManager.Inst.GetModule<TutorialController>().StartTutorial("Battle");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

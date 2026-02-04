@@ -10,6 +10,7 @@ public class TutorialCanvas : BaseCanvas
     [SerializeField] private RectTransform highlightRect;
     [SerializeField] private Image dimmedImage;
     [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private Button entireBtn;
 
     private Material _runtimeMat;
     private Button highlightBtn;
@@ -33,8 +34,14 @@ public class TutorialCanvas : BaseCanvas
     {
         ChangeHighlightSize();
     }
+
+    public void TutorialInfoInit(TutorialInfo tutorialInfo)
+    {
+        MoveHighlight(tutorialInfo);
+        SetHighlightUI(tutorialInfo);
+    }
     
-    public void MoveHighlight(TutorialInfo tutorialInfo)
+    private void MoveHighlight(TutorialInfo tutorialInfo)
     {
         var targetTrans = tutorialInfo.highlightTrans;
         var targetRect = tutorialInfo.highLightRect;
@@ -42,6 +49,9 @@ public class TutorialCanvas : BaseCanvas
         var textOffset = tutorialInfo.textOffset;
         Vector2 screenPos = Vector2.zero;
         Vector2 localPos = Vector2.zero;
+        
+        entireBtn.enabled = tutorialInfo.entireRay;
+        
         if (tutorialInfo.transformType == TransformType.Rect)
         {
             // 타겟의 월드 위치를 스크린 포인트로 변환
@@ -73,20 +83,17 @@ public class TutorialCanvas : BaseCanvas
         infoText.rectTransform.anchoredPosition = localPos + textOffset;
     }
 
-    public void SetHighlightSize(Vector2 size)
+    private void SetHighlightUI(TutorialInfo tutorialInfo)
     {
-        highlightRect.sizeDelta = size;
-    }
-
-    public void SetHighlightAction(Action action)
-    {
+        highlightRect.sizeDelta = tutorialInfo.highLightSize;
         highlightBtn.onClick.RemoveAllListeners();
-        highlightBtn.onClick.AddListener(action.Invoke);
-    }
-
-    public void SetText(string text)
-    {
-        infoText.text = text;
+        highlightBtn.onClick.AddListener(tutorialInfo.btnAction.Invoke);
+        if (tutorialInfo.entireRay)
+        {
+            entireBtn.onClick.RemoveAllListeners();
+            entireBtn.onClick.AddListener(tutorialInfo.btnAction.Invoke);
+        }
+        infoText.text = tutorialInfo.informationTxt;
     }
 
     private void ChangeHighlightSize()

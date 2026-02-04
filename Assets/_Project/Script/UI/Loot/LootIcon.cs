@@ -27,4 +27,6 @@ public class LootIcon : MonoBehaviour
         nameTxt.text = skill.GetData().Infor;
         selectBtn.onClick.AddListener(() => action?.Invoke());
     }
+    
+    public Button GetSelectBtn()=>selectBtn;
 }

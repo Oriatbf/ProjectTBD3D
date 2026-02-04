@@ -187,6 +187,7 @@ public class Purify : SkillEffect
         var unit = skillContext.TargetUnit;
         unit.GetActionStateContainer().DeleteBuffState(SkillType.Debuff);
         
+        
     }
 
     public override string ReturnInformation()

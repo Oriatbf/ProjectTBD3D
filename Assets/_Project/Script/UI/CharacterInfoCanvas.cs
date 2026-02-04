@@ -21,7 +21,6 @@ public class CharacterSkillCanvas : BaseCanvas
         base.Awake();
     }
     
-    public List<InventoryIcon> GetInventoryIcons()=> inventoryIcons;
 
     private void Start()
     {
@@ -50,5 +49,8 @@ public class CharacterSkillCanvas : BaseCanvas
         var tamingSkill = SheetDataManager.Inst.GetSkillBase(34);
         uniqueSkill.Init(tamingSkill);
     }
+    
+    public List<InventoryIcon> GetInventoryIcons()=> inventoryIcons;
+    public InventoryIcon GetUniqueSkillIcon() => uniqueSkill;
    
 }

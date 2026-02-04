@@ -51,11 +51,18 @@ namespace _Project.Script.Controller
                 characterSkillCanvas = characterInfoCanvas;
                 characterInfoCanvas.SetPos(InitializePos);
             }
-            SetTutorial();
-            SetTutorial2();
+            RegisterTutorial();
         }
 
         #region Tutorial
+
+        private void RegisterTutorial()
+        {
+            SetTutorial();
+            SetTutorial2();
+            SetTutorial3();
+            SetTutorial4();
+        }
         
         /// <summary>
         /// 튜토리얼 등록
@@ -92,6 +99,48 @@ namespace _Project.Script.Controller
                 btnAction = ()=>
                 {
                     curIcon = characterSkillCanvas.GetInventoryIcons()[0];
+                    ExcuteSkill(tile);
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+
+        public void SetTutorial3()
+        {
+            var targetRect = characterSkillCanvas.GetUniqueSkillIcon().GetComponent<RectTransform>();
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 8,
+                informationTxt = "테이밍 스킬을 선택하세요",
+                highLightRect = targetRect,
+                transformType = TransformType.Rect,
+                highLightSize = targetRect.sizeDelta,
+                highlightOffset = new Vector2(0,0),
+                textOffset = new Vector2(0,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
+                    SelectSkill(characterSkillCanvas.GetUniqueSkillIcon());
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial4()
+        {
+            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(3, 0));
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 9,
+                informationTxt = "타일을 선택하여 스킬을 등록하세요",
+                highlightTrans = tile.transform,
+                transformType = TransformType.Transform,
+                highLightSize = new Vector2(140,50),
+                highlightOffset = new Vector2(0,10),
+                textOffset = new Vector2(-50,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
                     ExcuteSkill(tile);
                 }
             };
@@ -258,8 +307,10 @@ namespace _Project.Script.Controller
 
             var skillStackInfo = new SkillStackInfo(originalSkillBase);
             var reqTurn = skillStackInfo.skill.GetData().RequireTurn;
+            reqTurn = Mathf.Round(reqTurn * 10f) / 10f;
+            Debug.Log($"{Mathf.Round((reqTurn + curTurnStack) * 10f) / 10} {maxTurnStack}");
             // 턴 게이지 체크
-            if (Mathf.Floor((reqTurn + curTurnStack) * 10f) / 10f> maxTurnStack)
+            if (Mathf.Round((reqTurn + curTurnStack) * 10f) / 10f> maxTurnStack+0.05f)
             {
                 Debug.Log($"{reqTurn} {curTurnStack} {maxTurnStack}");
                 var mousePos  =Input.mousePosition;
@@ -269,6 +320,7 @@ namespace _Project.Script.Controller
             }
 
             curTurnStack += reqTurn;
+            curTurnStack = Mathf.Round(curTurnStack * 10f) / 10f;
             skillStackInfo.stackTurn = curTurnStack;
             InGameUnitInfo.SetPlayerCurTurn(curTurnStack);
 

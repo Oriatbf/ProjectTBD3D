@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Project.Pooling;
+using _Project.Script.Controller;
 using Core.Utility;
 using DG.Tweening;
 using TMPro;
@@ -22,7 +23,56 @@ public class TopInfoCanvas : BaseCanvas
         InGameUnitInfo.playerCharmsValueHandle += () => UpdateCharmsTxt();
         curGold = DataManager.Inst.GetGold();
         goldTxt.text=curGold+"G";
+        RegisterTutorial();
     }
+
+
+    #region Tutorial
+
+    private void RegisterTutorial()
+    {
+        SetTutorial1();
+        SetTutorial2();
+    }
+
+    private void SetTutorial1()
+    {
+        var rect = remainTurnTxt.GetComponent<RectTransform>();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 6,
+            informationTxt = "스킬을 등록하면 턴이 소모됩니다\n스킬마다 소모되는 턴이 다릅니다",
+            highLightRect = rect,
+            transformType = TransformType.Rect,
+            highLightSize = rect.sizeDelta,
+            highlightOffset = new Vector2(0,0),
+            textOffset = new Vector2(0,-100),
+            btnAction = ()=> { },
+            entireRay = true
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        var rect = teamCharmTxt.GetComponent<RectTransform>();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 7,
+            informationTxt = "팀의 매혹도입니다\n매혹도에 따라 테이밍 확률이 달라집니다",
+            highLightRect = rect,
+            transformType = TransformType.Rect,
+            highLightSize = rect.sizeDelta,
+            highlightOffset =new Vector2(0,0),
+            textOffset = new Vector2(0,-100),
+            btnAction = ()=> { },
+            entireRay = true
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+
+    #endregion
 
     private void UpdateTurnTxt()
     {
@@ -36,6 +86,8 @@ public class TopInfoCanvas : BaseCanvas
         var value = InGameUnitInfo.PlayersCharms;
         teamCharmTxt.text = $"팀 매혹도 : {value}";
     }
+    
+    
 
     public void AddGold(int value)
     {

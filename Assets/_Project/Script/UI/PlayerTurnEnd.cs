@@ -21,10 +21,9 @@ public class TurnEndCanvas : BaseCanvas
     }
     private void SetTutorial()
     {
-            
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
-            order = 6,
+            order = 10,
             informationTxt = "턴이 종료되면 스킬이 시전됩니다",
             highLightRect = turnEndBtn.GetComponent<RectTransform>(),
             transformType = TransformType.Rect,
@@ -36,13 +35,13 @@ public class TurnEndCanvas : BaseCanvas
     }
     
 
-    public void SetTurnEndAction()
+    private void SetTurnEndAction()
     {
         turnEndBtn.onClick.AddListener(() => ApplicationManager.Inst.GetModule<TurnController>().PlayerTurnEndAction().Forget());
        
     }
 
-    public void SetNextStageAction()
+    private void SetNextStageAction()
     {
         nextStageBtn.onClick.AddListener(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
         nextStageBtn.onClick.AddListener(() =>

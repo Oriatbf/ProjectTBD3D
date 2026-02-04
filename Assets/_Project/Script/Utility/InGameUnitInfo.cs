@@ -50,7 +50,8 @@ namespace Core.Utility
         }
         public static void SetPlayerCurTurn(float playerCurTurn)
         {
-            PlayerCurTurn = playerCurTurn;
+            PlayerCurTurn = Mathf.Round(playerCurTurn * 10f) / 10f;
+            Debug.Log(PlayerCurTurn);
             PlayerTurnValueHandle();
         }
 

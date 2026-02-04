@@ -5,6 +5,7 @@ public static class TamingHelper
 {
     public static float TaimgCalculator(Unit targetUnit)
     {
+        if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return 1;
         float charms = InGameUnitInfo.GetPlayersCharms();
         var targetCharmResist = targetUnit.GetStatContainer().charmResist;
         float resist = targetCharmResist._maxValue - targetCharmResist._baseValue;
