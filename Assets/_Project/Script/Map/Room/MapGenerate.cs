@@ -67,7 +67,6 @@ public class MapGenerate
            var neighbor = GetAvailableNeighborIndex(curIndex,CreateDistanceType.Far);
            if (neighbor.Item1 == false)
            {
-               Debug.LogError("MainPath의 길이 막힘");
                curIndex = roomStack.Pop().GetIndex();
                lastIndex = curIndex;
                continue;

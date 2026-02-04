@@ -815,7 +815,7 @@ MonoBehaviour:
     constId: 0
     mainCharacterID: 0
     isNewData: 0
-    isFirstGame: 1
+    isFirstGame: 0
 --- !u!4 &1878071355
 Transform:
   m_ObjectHideFlags: 0

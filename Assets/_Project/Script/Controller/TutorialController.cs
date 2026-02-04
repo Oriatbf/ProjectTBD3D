@@ -69,9 +69,7 @@ namespace _Project.Script.Controller
             _tutorialCanvas.ChangeState(true, true,true);
             var curTutorial = tutorialInfos[curIndex++];
             _tutorialCanvas.TutorialInfoInit(curTutorial);
-            
         }
-        
 
         public void SetTutorial(TutorialInfo tutorialInfo)
         {

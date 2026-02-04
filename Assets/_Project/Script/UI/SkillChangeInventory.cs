@@ -25,6 +25,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
     private bool isTargeting = false;
     private bool isActive = false;
     private ChangeIcon curIcon,targetIcon;
+    private UnitIcon curUnitIcon;
     
     protected override void Awake()
     {
@@ -59,6 +60,11 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         {
             Debug.Log("Skill Init");
             skillIcons[i].Init(skillBases[i]);
+        }
+
+        for (int i = skillBases.Count; i < skillIcons.Count; i++)
+        {
+            skillIcons[i].SetFrameColor(Color.red,true);
         }
     }
     
@@ -110,6 +116,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
          {
              u.SetFrameColor(Color.white,true);
          }
+         curUnitIcon = unitIcon;
          unitIcon.SetFrameColor(Color.green,true);
          CancelTargeting();
          var unitSaveData = unitIcon.GetUnitData();
@@ -122,19 +129,18 @@ public class SkillChangeInventoryCanvas : BaseCanvas
     private void HandleSkillSelection()
     {
         if (!Input.GetMouseButtonDown(0)) return;
+        if(curUnitIcon == null) return;
         _pointerEventData.position = Input.mousePosition;
         _raycastResults.Clear();
         EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
-
         if (_raycastResults[0].gameObject.TryGetComponent(out ChangeIcon unitIcon))
-                SelectSkill(changeIcon);
-            
-        
+                SelectSkill(unitIcon);
     }
 
     private void SelectSkill(ChangeIcon skillIcon)
     {
         if(skillIcon.GetSkillBase() == null)return;
+        Debug.Log(skillIcon.GetSkillBase().GetData().Name);
         curIcon = skillIcon;
         curIcon.SetFrameColor(Color.green,true);
         isTargeting = true;
@@ -153,6 +159,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if(curUnitIcon == null) return;
             _pointerEventData.position = Input.mousePosition;
             _raycastResults.Clear();
             EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);

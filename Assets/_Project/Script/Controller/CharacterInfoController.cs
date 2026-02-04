@@ -20,11 +20,13 @@ namespace _Project.Script.Controller
 
         private Stat turnGauage;
         private Tile lastTile;
+        private Tile curTile;
         //범위 공격일 경우
         private List<Tile> lastTiles = new List<Tile>();
 
         private bool isUniqueSkill = false;
         private bool isTargeting = false;
+        private bool autoTarget = false;
         private float maxTurnStack = 0;
         private float curTurnStack = 0;
         private int curConstId = -1;
@@ -105,18 +107,18 @@ namespace _Project.Script.Controller
             ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
         }
 
-        public void SetTutorial3()
+        private void SetTutorial3()
         {
             var targetRect = characterSkillCanvas.GetUniqueSkillIcon().GetComponent<RectTransform>();
             TutorialInfo tutorialInfo = new TutorialInfo()
             {
                 order = 8,
-                informationTxt = "테이밍 스킬을 선택하세요",
+                informationTxt = "테이밍 스킬을 통해 적을 편입시킬 수 있습니다.\n테이밍 스킬을 선택하세요",
                 highLightRect = targetRect,
                 transformType = TransformType.Rect,
                 highLightSize = targetRect.sizeDelta,
                 highlightOffset = new Vector2(0,0),
-                textOffset = new Vector2(0,100),
+                textOffset = new Vector2(100,100),
                 btnAction = ()=>
                 {
                     curIcon = characterSkillCanvas.GetUniqueSkillIcon();
@@ -137,7 +139,7 @@ namespace _Project.Script.Controller
                 transformType = TransformType.Transform,
                 highLightSize = new Vector2(140,50),
                 highlightOffset = new Vector2(0,10),
-                textOffset = new Vector2(-50,100),
+                textOffset = new Vector2(-150,100),
                 btnAction = ()=>
                 {
                     curIcon = characterSkillCanvas.GetUniqueSkillIcon();
@@ -183,6 +185,12 @@ namespace _Project.Script.Controller
             base.OnUpdate();
             if (characterSkillCanvas == null || !characterSkillCanvas.isShow) return;
 
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                TBDLogger.CommandLog(KeyCode.M,this);
+                autoTarget = !autoTarget;
+            }
+            
             if (!isTargeting)
             {
                 HandleSkillSelection();
@@ -191,6 +199,7 @@ namespace _Project.Script.Controller
             {
                 HandleSkillTargeting();
             }
+            
         
         }
     
@@ -245,33 +254,44 @@ namespace _Project.Script.Controller
                 CancelTargeting();
                 return;
             }
-
-            Tile _tile = null;
         
             if (curTargetType == TargetType.Area)
             {
                 var ray = _camera.ScreenPointToRay(Input.mousePosition);
-                if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-                if (!hit.transform.TryGetComponent(out Tile tile)) return;
-                
-                _tile = tile;
-                
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    if (hit.transform.TryGetComponent(out Tile tile))
+                    {
+                        if (!autoTarget)
+                        {
+                            curTile = tile;   
+                        }
+                        else
+                        {
+                            if (tile.GetUnit() != null)
+                                curTile = tile;
+                        }
+                      
+                    }
+                       
+                }
             }
             
 
             // 타일 선택 확정
             if (Input.GetMouseButtonDown(0))
             {
-                if (EventSystem.current.IsPointerOverGameObject())
+                if (curTile == null) return;
+                if (RaycastHelper.IsPointerOverTargetUI<Unit>())
                     return; 
-               ExcuteSkill(_tile);
+                ExcuteSkill(curTile);
                 return;
             }
 
             // 타일 하이라이트 업데이트
-            if (lastTile != _tile && _tile != null)
+            if (lastTile != curTile && curTile != null)
             {
-                UpdateTargetHighlight(_tile);
+                UpdateTargetHighlight(curTile);
             }
         }
 
@@ -310,8 +330,9 @@ namespace _Project.Script.Controller
             reqTurn = Mathf.Round(reqTurn * 10f) / 10f;
             Debug.Log($"{Mathf.Round((reqTurn + curTurnStack) * 10f) / 10} {maxTurnStack}");
             // 턴 게이지 체크
-            if (Mathf.Round((reqTurn + curTurnStack) * 10f) / 10f> maxTurnStack+0.05f)
+            if (Mathf.Round((reqTurn + curTurnStack) * 10f) / 10f> maxTurnStack+0.09f)
             {
+                Debug.Log("텐게이지 버그");
                 Debug.Log($"{reqTurn} {curTurnStack} {maxTurnStack}");
                 var mousePos  =Input.mousePosition;
                 var popUpTxt= ApplicationManager.Inst.GetModule<PoolController>().Spawn<PopUpTxt>("PopUpTxt",mousePos);

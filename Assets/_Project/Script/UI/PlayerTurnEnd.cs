@@ -28,7 +28,7 @@ public class TurnEndCanvas : BaseCanvas
             highLightRect = turnEndBtn.GetComponent<RectTransform>(),
             transformType = TransformType.Rect,
             highLightSize =turnEndBtn.GetComponent<RectTransform>().sizeDelta,
-            textOffset = new Vector2(-100,100),
+            textOffset = new Vector2(-150,100),
             btnAction = ()=>turnEndBtn.onClick.Invoke()
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);

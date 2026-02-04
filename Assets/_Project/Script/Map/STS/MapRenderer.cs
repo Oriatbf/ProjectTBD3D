@@ -17,7 +17,7 @@ public class MapRenderer : MonoBehaviour
     [Header("Layout")]
     [SerializeField] private float xSpacing = 180f;
     [SerializeField] private float ySpacing = 220f;
-    [SerializeField] private int floorCount = 15;
+    [SerializeField] private int floorCount = 10;
 
     private List<List<MapNode>> map;
     private Dictionary<NodeCoord, MapNodeUI> nodeUIs = new();
@@ -58,7 +58,7 @@ public class MapRenderer : MonoBehaviour
             _curNodeCoord = DataManager.Inst.GetMapData().curNodeCoord;
         }
         Debug.Log(map.Count);
-
+        
         SetContentSize();
         CreateNodes();
         DrawConnections();

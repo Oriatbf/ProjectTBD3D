@@ -160,7 +160,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         }
         
     }
-
+    
     public void DataReset()
     {
         var nodeCoord = Data.mapData.curNodeCoord;

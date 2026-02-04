@@ -50,6 +50,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2a19d13730cfef54bb4cf940bd8116ab
+    m_Address: Assets/_Project/Art/Animator/Orc.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e3345dc41ec0c14d8156ff823b913c1
     m_Address: Assets/_Project/Prefab/UI/SkillStackCanvas.prefab
     m_ReadOnly: 0
@@ -57,6 +62,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 308d1b7b2fe8bd14983c4846f0b20efc
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Magic.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3104bdac253e32d499897ec9c8f289ef
+    m_Address: Assets/_Project/Art/Animator/OrangeGolem.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -87,6 +97,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4aed078d80f365c4796830a62ca9f8f7
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Heal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57486eb4ee5eed449b2ed947a64ac578
+    m_Address: Assets/_Project/Art/Animator/Mushroom.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -147,6 +162,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a6085db89d5d6ae43b34503c15fe313b
     m_Address: Assets/_Project/Art/Icons/UsingIcon/DamageBuff.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad43ef2275eed7e4ea3b450f7571ea95
+    m_Address: Assets/_Project/Art/Animator/Golem.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
