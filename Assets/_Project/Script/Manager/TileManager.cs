@@ -25,6 +25,7 @@ public class TileController : BaseController
         ContainSceneNames = new string[] {"GamePlay" },
         Priority = 0,
         UpdateInterval = 0,
+        
         LateUpdateInterval = 0,
         FixedUpdateInterval = 0,
     };

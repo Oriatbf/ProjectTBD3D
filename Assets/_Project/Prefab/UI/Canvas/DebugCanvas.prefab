@@ -785,6 +785,7 @@ GameObject:
   - component: {fileID: 1750973265828149173}
   - component: {fileID: 3418792029307159416}
   - component: {fileID: 6668420879068393015}
+  - component: {fileID: 179941807695006508}
   m_Layer: 5
   m_Name: DebugCanvas
   m_TagString: Untagged
@@ -890,10 +891,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3270837fa5f424d954e00cc42d2471d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 0}
+  isShow: 0
   unitSkillCheck: {fileID: 7212069040269293033}
   skillIconCheck: {fileID: 3777855424918817614}
   unitCheck: {fileID: 3978921449708903270}
   untiIconCheck: {fileID: 5165213980845802676}
+--- !u!225 &179941807695006508
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315807230441473441}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &9172092985350808184
 GameObject:
   m_ObjectHideFlags: 0

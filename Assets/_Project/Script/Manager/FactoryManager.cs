@@ -158,8 +158,22 @@ public class FactoryManager : Singleton<FactoryManager>
      /// </summary>
      public void EnemySpawn(EnemyArrangeType enemyArrangeType)
      {
+          var curFloor = DataManager.Inst.GetMapData().curNodeCoord.floor;
+          int diffculty = 0;
+          switch (curFloor)
+          {
+               case <=2:
+                    diffculty = 0;
+                    break;
+               case <=5:
+                    diffculty = 1;
+                    break;
+               case >= 6:
+                    diffculty = 2;
+                    break;
+          }
           enemyArrangeSOs = Resources.LoadAll<EnemyArrangeSO>("SO/EnemyArrange")
-               .Where(s => s.enemyArrangeType == enemyArrangeType).ToList();
+               .Where(s => s.enemyArrangeType == enemyArrangeType && s.appearAct == 0 && s.difficulty ==diffculty).ToList();
           var random = Random.Range(0,enemyArrangeSOs.Count);
           curEnemyArrange = enemyArrangeSOs[random];
           var so = curEnemyArrange;

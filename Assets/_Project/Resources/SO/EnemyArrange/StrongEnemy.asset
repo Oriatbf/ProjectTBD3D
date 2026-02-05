@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: StrongEnemy
   m_EditorClassIdentifier: 
   appearAct: 0
+  difficulty: 2
   enemyArrangeType: 1
   lootDatas:
   - lootType: 0

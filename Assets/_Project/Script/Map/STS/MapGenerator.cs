@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Resources.SO;
 using UnityEngine;
 
 public class MapGenerator
 {
     private int floorCount;
+    private MapDataSO mapDataSO;
 
-    public MapGenerator(int floorCount)
+    public MapGenerator()
     {
-        this.floorCount = floorCount;
+        mapDataSO = Resources.Load<MapDataSO>("SO/MapDataSO");
+        this.floorCount = mapDataSO.maxFloor;
     }
 
     public List<List<MapNode>> Generate()
@@ -76,16 +79,26 @@ public class MapGenerator
 
     private NodeType GetNodeType(int floor)
     {
-        if (floor == floorCount - 1)
-            return NodeType.Boss;
-
+        var curNodeData = mapDataSO.mapDatas[floor];
+        List<(float,NodeType)> ratios = new List<(float,NodeType)>();
+        float curRatio = 0;
+        for (int i = 0; i < curNodeData.mapRatios.Count; i++)
+        {
+            curRatio += curNodeData.mapRatios[i].ratio;
+            if (curRatio > 1)
+            {
+                Debug.LogError($"맵 확률 버그 현재 확률{curRatio}");
+            }
+            ratios.Add((curRatio,curNodeData.mapRatios[i].nodeType));
+        }
         float r = Random.value;
-
-        if (floor < 2) return NodeType.Enemy;
-        if (r < 0.6f) return NodeType.Enemy;
-        if (r < 0.75f) return NodeType.Event;
-        if (r < 0.9f) return NodeType.Shop;
-        return NodeType.Shop;
+        for (int i = 0; i < ratios.Count; i++)
+        {
+            if(r<= ratios[i].Item1)return ratios[i].Item2;
+        }
+        
+        Debug.Log("랜덤값이 지정값을 뛰쳐나옴");
+        return NodeType.Enemy;
     }
     
 }

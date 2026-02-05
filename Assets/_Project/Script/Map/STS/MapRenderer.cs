@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -31,6 +32,7 @@ public class MapRenderer : MonoBehaviour
     {
         GetSprite();
         GenerateAndRender();
+        
     }
 
     private void GetSprite()
@@ -47,7 +49,7 @@ public class MapRenderer : MonoBehaviour
     {
         if (!DataManager.Inst.GetMapData().isMapGenerated)
         {
-            MapGenerator generator = new MapGenerator(floorCount);
+            MapGenerator generator = new MapGenerator();
             map = generator.Generate();
             DataManager.Inst.SaveMapData(map);   
         }

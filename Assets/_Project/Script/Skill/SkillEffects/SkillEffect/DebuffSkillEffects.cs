@@ -13,7 +13,7 @@ public class Fire : SkillEffect
 
     public override void SkillAction(SkillContext skillContext)
     {
-       skillContext.ForEachTarget(unit =>
+        skillContext.ForEachTarget(unit =>
         {
             Debug.Log($"fire {unit.name}");
             ActionData fireData = new ActionData(
@@ -36,7 +36,7 @@ public class Fire : SkillEffect
 
             fireData.finishAction = (data) =>
             {
-                Debug.Log($"{data.ownerUnit.name}의 화상이 끝났습니다.");
+                
             };
 
             ActionState fireState = new ActionState(fireData);

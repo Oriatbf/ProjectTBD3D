@@ -1866,7 +1866,7 @@ GameObject:
   - component: {fileID: 249246668}
   - component: {fileID: 249246667}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MapRenderCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6438,7 +6438,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 413910406}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.7222222
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

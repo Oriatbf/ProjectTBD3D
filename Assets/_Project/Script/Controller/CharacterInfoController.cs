@@ -191,6 +191,7 @@ namespace _Project.Script.Controller
                 autoTarget = !autoTarget;
             }
             
+            
             if (!isTargeting)
             {
                 HandleSkillSelection();
@@ -209,6 +210,7 @@ namespace _Project.Script.Controller
         private void HandleSkillSelection()
         {
             if (!Input.GetMouseButtonDown(0)) return;
+            
             _pointerEventData.position = Input.mousePosition;
             _raycastResults.Clear();
             EventSystem.current.RaycastAll(_pointerEventData, _raycastResults);
@@ -220,6 +222,7 @@ namespace _Project.Script.Controller
             if (!top.TryGetComponent(out InventoryIcon  _skillIcon)) return;
             if (top.TryGetComponent(out InventoryIcon skillIcon))
             {
+                if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
                 SelectSkill(skillIcon);
                 return;
             }
@@ -281,7 +284,8 @@ namespace _Project.Script.Controller
             // 타일 선택 확정
             if (Input.GetMouseButtonDown(0))
             {
-                if (curTile == null) return;
+                if (curTile == null && curTargetType == TargetType.Area) return;
+                if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
                 if (RaycastHelper.IsPointerOverTargetUI<Unit>())
                     return; 
                 ExcuteSkill(curTile);

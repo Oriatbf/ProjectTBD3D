@@ -83,7 +83,7 @@ public class TopInfoCanvas : BaseCanvas
     
     private void UpdateCharmsTxt()
     {
-        var value = InGameUnitInfo.PlayersCharms;
+        var value = InGameUnitInfo.GetPlayersCharms();
         teamCharmTxt.text = $"팀 매혹도 : {value}";
     }
     

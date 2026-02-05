@@ -93,7 +93,10 @@ public class LootCanvas : MonoBehaviour
 
     private void RegisterTutorial()
     {
-        SetTutorial1();
+        if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial)
+        {
+            SetTutorial1();
+        }
     }
     private void SetTutorial1()
     {

@@ -1,6 +1,7 @@
 using _Project.Script.Controller;
 using Core.Utility;
 using SkillData;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Counter : SkillEffect
@@ -86,6 +87,7 @@ public class Taming : SkillEffect
     protected override SkillType SkillType => SkillType.Utility;
     public override void SkillAction(SkillContext skillContext)
     {
+        if (skillContext.TargetUnit.GetTeam() == Team.PlayerTeam) return;
         var rate = TamingHelper.TaimgCalculator(skillContext.TargetUnit);
         Debug.Log($"테이밍 확률은 {rate}");
         if (Random.value < rate)

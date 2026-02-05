@@ -60,7 +60,7 @@ namespace _Project.Pooling
         /// <summary>
         /// PoolingLoader 정보로 풀 생성
         /// </summary>
-        private void CreatePoolFromLoader(PoolingLoader.PoolInfo poolInfo, int initialSize = 5, int maxSize = 50)
+        private void CreatePoolFromLoader(PoolingLoader.PoolInfo poolInfo, int initialSize = 10, int maxSize = 50)
         {
             var key = poolInfo.Key;
             var prefab = poolInfo.Prefab;

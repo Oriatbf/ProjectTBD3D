@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a6125a61f725b043b17f8712b81d612
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Orc.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1cb6dc90bfb4eff4b9bddf8e1a2ec16d
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Samurai.png
     m_ReadOnly: 0
@@ -45,8 +50,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 248eaca33017117428ec2e9a67b5956b
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/BlueGolem.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 24b2a44d47b807e4887ddb400535d0fb
     m_Address: Assets/_Project/Prefab/UI/PopUp/DamagePopUp.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 27f1fe4caea3d944f828dc851f552604
+    m_Address: Assets/_Project/Art/Animator/Soldier.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -95,13 +110,33 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 47450526ada95ba4c97d676220c0efe1
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/OrangeGolem.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4aed078d80f365c4796830a62ca9f8f7
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Heal.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4e06ac70422b53d4c81bcc8be0da2c31
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/RedKnight.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 56ef28db1719b6d4ea3ead9dd925d214
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Mushroom.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57486eb4ee5eed449b2ed947a64ac578
     m_Address: Assets/_Project/Art/Animator/Mushroom.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57725932654060e418d313a7b8c8cc38
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Soldier.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -132,6 +167,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6faaf0995581ef1459a7c75cc07bc331
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/BloodBuff.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a3b1abb44d86e442aa464470c6aeaaa
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Shadow.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -222,6 +262,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ece6a576709129b4fbc798e24d86a1ea
+    m_Address: Assets/_Project/Art/Animator/RedKnight.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
