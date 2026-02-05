@@ -38,7 +38,7 @@ public class SkillCheatCanvas : BaseCanvas
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            TBDLogger.CommandLog(KeyCode.P, this);
+            if (!TBDLogger.CommandLog(KeyCode.P, this)) return;
             if(!isShow)ChangeState(true,true,true);
             else ChangeState(false,true);
         }

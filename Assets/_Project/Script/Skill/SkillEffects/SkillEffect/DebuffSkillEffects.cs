@@ -243,6 +243,6 @@ public class BloodBuff : SkillEffect
 
     public override string ReturnInformation()
     {
-        return $"보유한 피버프를 {values[0]}만큼 획득합니다.";
+        return $"{ColorText.GetTextColor(TxtColorType.Str)}피</color> 버프를 {values[0]}만큼 획득합니다.";
     }
 }

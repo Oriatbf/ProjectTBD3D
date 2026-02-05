@@ -237,7 +237,6 @@ namespace _Project.Script.Controller
                 .GetSkillTurnCounter().EnqueueExpectSkill(skillIcon.GetSkillBase());
             //TODO 테이밍 스킬 판단
             isUniqueSkill = skillIcon.GetSkillBase().GetData().ID == 34;
-            if (isUniqueSkill) SetEnemyRate(true);
             
             curIcon = skillIcon;
             curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
@@ -293,7 +292,7 @@ namespace _Project.Script.Controller
             }
 
             // 타일 하이라이트 업데이트
-            if (lastTile != curTile && curTile != null)
+            if (lastTile != curTile && curTile != null && curTargetType == TargetType.Area)
             {
                 UpdateTargetHighlight(curTile);
             }
@@ -368,16 +367,7 @@ namespace _Project.Script.Controller
             foreach(var tile in lastTiles)tile.UnTarget();
             lastTiles.Clear();
         }
-
-        private void SetEnemyRate(bool isShow)
-        {
-            var enemies = InGameUnitInfo.EnemyUnits;
-            foreach (var unit in enemies)
-            {
-                if(isShow) unit.ShowRate();
-                else unit.HideRate();
-            }
-        }
+        
         
         /// <summary>
         /// 타겟팅 취소
@@ -396,7 +386,6 @@ namespace _Project.Script.Controller
             isTargeting = false;
             lastTile = null;
             isUniqueSkill = false;
-            SetEnemyRate(false);
             lastTiles.Clear();
         }
 

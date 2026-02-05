@@ -33,7 +33,16 @@ public class TurnEndCanvas : BaseCanvas
         };
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.Q, this)) return;
+            nextStageBtn.onClick.Invoke();
+        }
+    }
+
 
     private void SetTurnEndAction()
     {

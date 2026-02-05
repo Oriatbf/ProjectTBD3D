@@ -31,13 +31,14 @@ namespace _Project.Script.Controller
             _titleMenuCanvas.SetNewGameHandle(MainCharacterSelectHandle);
         }
 
-        private void TitleEndHandle()
+        public void TitleEndHandle()
         {
             _titleCanvas.ChangeState(false,true);
             _titleMenuCanvas.ChangeState(true,false,true);
+            _mainCharacterSelectCanvas.ChangeState(false,true,false);
         }
 
-        private void MainCharacterSelectHandle()
+        public void MainCharacterSelectHandle()
         {
             _titleCanvas.ChangeState(false);
             _titleMenuCanvas.ChangeState(false,true);

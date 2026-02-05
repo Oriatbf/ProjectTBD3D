@@ -80,7 +80,7 @@ namespace Core.Utility
             {
                 playerCharmValue+=(int)unit.GetUnitData().charm;
             }
-              
+              Debug.Log($"Player charms = {playerCharmValue}");
             playerCharms.SetBaseValue(playerCharmValue);
             if(playerCharms == null)Debug.LogError("No Charm");
             PlayersCharms = (int)playerCharms.FinalValue();

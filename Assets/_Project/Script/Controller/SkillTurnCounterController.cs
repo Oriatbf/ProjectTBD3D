@@ -79,7 +79,7 @@ public class SkillTurnCounter
         foreach (var obj in destroyObj) Object.Destroy(obj);
         RefreshUI();
         Debug.Log("SkillTurnCounterOriginLook");
-        ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
+        await ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }

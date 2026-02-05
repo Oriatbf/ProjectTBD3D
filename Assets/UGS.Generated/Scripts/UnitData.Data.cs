@@ -59,7 +59,7 @@ namespace UnitData
 		public System.Int32 Id;
 		public System.String Name;
 		public System.String Infor;
-		public System.Single Flip;
+		public System.Int32 Flip;
 		public System.String AnimatorName;
 		public ManualType ManualType;
 		public Rarity Rarity;

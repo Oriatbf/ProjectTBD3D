@@ -56,11 +56,12 @@ public class CameraController : BaseController
         _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
     }
 
-    public void OriginLook()
+    public async UniTask OriginLook()
     {
         _camera.DOKill();
-        _camera.transform.DORotateQuaternion(originalRot, dur);
-        _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad);
+        var rotTask =  _camera.transform.DORotateQuaternion(originalRot, dur).ToUniTask();
+        var fovTask =  _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
+        await UniTask.WhenAll(rotTask, fovTask);
     }
 
     private void Rotate()

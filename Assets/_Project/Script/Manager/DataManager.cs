@@ -90,7 +90,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public GameData Data;
     private Action saveAction;
     private string fileName = "GameData.json";
-    
+    public bool debugMode = false;
 
 
     protected override void Awake()
@@ -111,17 +111,26 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     {
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            TBDLogger.CommandLog(KeyCode.F5,this);
+            if (!TBDLogger.CommandLog(KeyCode.F5,this))return;
             FileReset();
         }
         
-
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.S, this)) return;
+            Data.mapData.curNodeCoord.type = NodeType.Shop;
+            FadeInFadeOutManager.Inst.FadeOut("GamePlay");
+        }
         
         if (Input.GetKeyDown(KeyCode.F7))
         {
-            TBDLogger.CommandLog(KeyCode.F7,this);
+            if (!TBDLogger.CommandLog(KeyCode.F7,this))return;
             JsonSave();
         }
+
+        var k = Input.GetKey(KeyCode.K);
+        var j = Input.GetKey(KeyCode.J);
+        if(Input.GetKeyDown(KeyCode.W) && k && j) debugMode = !debugMode;
     }
 
     #region 데이터 저장 관련
@@ -246,6 +255,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unitSaveData"></param>
     public void SaveUnit(UnitSaveData unitSaveData)
     {
+        if(unitSaveData == null)Debug.LogError("unitSaveData = null");
         Data.units.Add(unitSaveData);
     }
 

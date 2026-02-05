@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainCharacterSelectCanvas : BaseCanvas
 {
-    [SerializeField] private Button selectButton,tutorialSelectBtn,tutorialUnSelectBtn;
+    [SerializeField] private Button selectButton,tutorialSelectBtn,tutorialUnSelectBtn,backBtn;
 
     [SerializeField] private Transform content, tutorialPopUp;
     [SerializeField]private List<MainCharacterIcon> characterIcons = new List<MainCharacterIcon>();
@@ -18,6 +19,7 @@ public class MainCharacterSelectCanvas : BaseCanvas
         tutorialSelectBtn.onClick.AddListener(SelectTutorial);
         selectButton.onClick.AddListener(SelectCharacter);
         tutorialUnSelectBtn.onClick.AddListener(Map);
+        backBtn.onClick.AddListener(BackBtnHandle);
 
         foreach (Transform child in content)
         {
@@ -28,6 +30,11 @@ public class MainCharacterSelectCanvas : BaseCanvas
         {
             mainCharacterIcon.AddCharacterBtnAction(CharacterBtnAction);
         }
+    }
+
+    private void BackBtnHandle()
+    {
+        ApplicationManager.Inst.GetModule<TitleFlowController>().TitleEndHandle();
     }
 
     private void CharacterBtnAction()

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using _Project.Pooling;
 using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
@@ -52,13 +53,13 @@ public class Unit : MonoBehaviour
         
         _actionStateContainer = new ActionStateContainer(this);
         unitController = GetComponent<UnitController>();
-        ratePopUpTxt = ApplicationManager.Inst.GetModule<PoolController>().Spawn<PopUpTxt>("PopUpTxt");
+       
         HideOutLine();
     }
     private void Start()
     {
         animator.Play("Idle");
-    }
+      }
     
 
     #region 생성 시
@@ -77,11 +78,13 @@ public class Unit : MonoBehaviour
 
         if (team == Team.PlayerTeam)
         {
-            if(Mathf.Approximately(unitData.flipDir, -1))spr.flipX = true;
+            if(unitData.flipDir == -1)spr.flipX = true;
+            Debug.Log($"playerFlip {unitData.flipDir}");
         }
         else if (team == Team.EnemyTeam)
         {
-            if(Mathf.Approximately(unitData.flipDir, 1))spr.flipX = true;
+            if(unitData.flipDir == 1)spr.flipX = true;
+            ratePopUpTxt = ApplicationManager.Inst.GetModule<PoolController>().Spawn<PopUpTxt>("PopUpTxt");
         }
     }
     
@@ -109,7 +112,7 @@ public class Unit : MonoBehaviour
     {
         _statContainer.turnGauge.SetBaseValue(0);
         _actionStateContainer.ExecuteTrigger(ActionTrigger.OnTurnStart);
-
+        ShowRate();
     }
     
 
@@ -280,6 +283,8 @@ public class Unit : MonoBehaviour
         FactoryManager.Inst.RegisterDeadUnit(this);
         if(healthContent != null)
             ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("HealthContent",healthContent.transform);
+        if(ratePopUpTxt != null)
+            ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("PopUpTxt",ratePopUpTxt.transform);
         ApplicationManager.Inst.GetModule<SkillProgressController>().UnStackAll(tile);
         ApplicationManager.Inst.GetModule<ActionStateStackController>().UnstackAllUnitBuffs(tile);
         tile.DestroyUnit();
@@ -301,14 +306,18 @@ public class Unit : MonoBehaviour
 
     public void ShowRate()
     {
+        if (team == Team.PlayerTeam) return;
+        Debug.Log("ShowRate");
         var rate = TamingHelper.TaimgCalculator(this);
         ratePopUpTxt.SetTxt($"약 {Mathf.Floor((rate*100))}%",Color.red,true).Forget();
-        var pos = Camera.main.WorldToScreenPoint(tile.GetPos()) + new Vector3(150, 150);
+        var pos = Camera.main.WorldToScreenPoint(tile.GetPos()) + new Vector3(100, 100);
         ratePopUpTxt.transform.position = pos;
     }
-    
+
     public void HideRate()
     {
+        if (team == Team.PlayerTeam) return;
         ratePopUpTxt.Hide();
     }
+    
 }

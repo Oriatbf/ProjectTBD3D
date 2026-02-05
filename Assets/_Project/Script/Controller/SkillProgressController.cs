@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Core.Utility;
+using Cysharp.Threading.Tasks;
 
 namespace _Project.Script.Controller
 {
@@ -55,6 +56,7 @@ namespace _Project.Script.Controller
 
         public async UniTask ActionSkill()
         {
+            foreach (var unit in InGameUnitInfo.EnemyUnits)unit.HideRate();
             await _skillTurnCounter.ActionSkill();
         }
         

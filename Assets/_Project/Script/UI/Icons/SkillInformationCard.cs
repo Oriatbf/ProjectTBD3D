@@ -11,6 +11,7 @@ public class SkillInfoCardCanvas : BaseCanvas
     [SerializeField] private TextMeshProUGUI nameTxt;
     [SerializeField] private TextMeshProUGUI arrtibuteTxt;
     [SerializeField] private TextMeshProUGUI descriptionTxt;
+    [SerializeField] private TextMeshProUGUI turnTxt;
     [SerializeField] private Image icon;
     
 
@@ -19,6 +20,7 @@ public class SkillInfoCardCanvas : BaseCanvas
         if (skillBase == null) return;
         var skill = skillBase;
          nameTxt.text = skill.GetData().Name;
+         turnTxt.text = $"{skillBase.GetData().RequireTurn} 턴";
        // string attribute = skillBase._data.SkillType == SkillType.Physical 
            // ? ColorText.GetTextColor(TxtColorType.Str) +"물리" :  ColorText.GetTextColor(TxtColorType.Intelligence)+"마법";
       //  arrtibuteTxt.text = attribute;

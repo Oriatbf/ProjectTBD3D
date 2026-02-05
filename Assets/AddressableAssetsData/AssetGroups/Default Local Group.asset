@@ -185,8 +185,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98a4f2349f9f1314db97db57fa94f90a
+    m_Address: Assets/_Project/Art/Animator/Wendsday.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9a3adca6998be1740b93c1e8a3916264
     m_Address: Assets/_Project/Art/Animator/Skeleton.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9af42a956d48f8047a7ff61f50add3d6
+    m_Address: Assets/_Project/Art/Animator/ChainSawMan.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -260,8 +270,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0dc972dfe86ee64fad6e96de0ecdb45
+    m_Address: Assets/_Project/Art/Animator/Shadow.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e9e5e9036639daa4b8ec1154c1509554
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Wendsday.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
