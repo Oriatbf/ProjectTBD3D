@@ -26,5 +26,6 @@ namespace Core.Utility
   
             Debug.Log("현재 타임스케일 : " + Time.timeScale);
         }
+        
     }
 }

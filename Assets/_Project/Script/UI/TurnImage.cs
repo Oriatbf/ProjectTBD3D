@@ -24,6 +24,8 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     private CanvasGroup canvasGroup;
     private SkillStackInfo skillStackInfo;
 
+    private bool _isForceShow = false;
+
     private void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -48,8 +50,9 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     }
 
     public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
-    private void ClickAction()
+    public void ClickAction(bool force = false)
     {
+        _isForceShow = force;
         TileController tileController = ApplicationManager.Inst.GetModule<TileController>();
         ResetVisualize();
         
@@ -78,8 +81,9 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         }
     }
 
-    private void ResetVisualize()
+    public void ResetVisualize(bool force = false)
     {
+        _isForceShow = force;
         TileController tileController = ApplicationManager.Inst.GetModule<TileController>();
         var allTiles = tileController.GetAllTiles();
         foreach (var tile in allTiles)tile.UnTarget();
@@ -93,12 +97,14 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (_isForceShow) return;
         ResetVisualize();
         ClickAction();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (_isForceShow) return;
         ResetVisualize();
     }
 }

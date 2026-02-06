@@ -16,8 +16,20 @@ namespace _Project.Script.Controller
             SetFLow();
         }
 
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            if(Input.GetKeyDown(KeyCode.F))
+                Debug.Log(curNodeType);
+        }
+
         private void SetFLow()
         {
+            if (DataManager.Inst.isTutorial)
+            {
+                curNodeType = NodeType.Tutorial;
+                DataManager.Inst.isTutorial = false;
+            }
             switch (curNodeType)
             {
                 case NodeType.Village:
@@ -30,6 +42,9 @@ namespace _Project.Script.Controller
                     break;
                 case NodeType.Boss:
                     SetEnemy(EnemyArrangeType.Boss);
+                    break;
+                case NodeType.MidBoss:
+                    SetEnemy(EnemyArrangeType.MidBoss);
                     break;
                 case NodeType.Event:
                     SetEvent();
@@ -57,6 +72,7 @@ namespace _Project.Script.Controller
             ApplicationManager.Inst.GetModule<CharacterSkillController>().SetCanvas();
             ApplicationManager.Inst.GetModule<PlayerSpawnController>().SetCanvas();
             FactoryManager.Inst.EnemySpawn(enemyArrangeType);
+            ApplicationManager.Inst.GetModule<SkillProgressController>().RegisterTutorial();
         }
 
         private void SetShop()
@@ -74,5 +90,7 @@ namespace _Project.Script.Controller
             var a = Object.Instantiate(demon,Vector3.zero + new Vector3(0,.7f,0),Quaternion.identity);
             ApplicationManager.Inst.GetModule<TurnController>().MapStage();
         }
+
+        public NodeType GetCurNodeType() => curNodeType;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ShopCanvas :  BaseCanvas
 {
     [SerializeField] private Transform skillContent,unitContent,relicContent;
-    [SerializeField] private Button exitBtn;
+    [SerializeField] private Button exitBtn,healBtn;
     private List<ShopSkillIcon> shopSkillIcons = new List<ShopSkillIcon>();
     private List<ShopUnitIcon> shopUnitIcons = new List<ShopUnitIcon>();
     private List<ShopRelicIcon> shopRelicIcons = new List<ShopRelicIcon>();
@@ -25,6 +25,8 @@ public class ShopCanvas :  BaseCanvas
         foreach (Transform child in relicContent)
             if (child.TryGetComponent(out ShopRelicIcon shopRelicIcon))
                 shopRelicIcons.Add(shopRelicIcon);
+        
+        healBtn.onClick.AddListener(HealHandle);
       
     }
 
@@ -62,5 +64,11 @@ public class ShopCanvas :  BaseCanvas
             shopRelicIcons[i].Init(randomRelics[i]);
             shopRelicIcons[i].SetBtn();
         }
+    }
+
+    private void HealHandle()
+    {
+        if(!ShopHelper.Buy(100))return;
+        DataManager.Inst.HealAll(1);
     }
 }

@@ -19,9 +19,8 @@ namespace SkillData.SkillEffects
 
             damageBuffData.action = (data, context) =>
             {
-                unit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add, data.stack));
+                unit.GetStatContainer().str.AddModifier(new StatModifier(EStatModifier.Add, _stack));
                 Debug.Log("데미지 증가 실행");
-                data.isExist = false;
             };
 
             ActionState damageBuffState = new ActionState(damageBuffData);

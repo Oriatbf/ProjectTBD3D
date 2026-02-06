@@ -9,7 +9,7 @@ namespace _Project.Script.Controller
 
     public enum TransformType
     {
-        Rect,Transform
+        Rect,Transform,Position
     }
     public class TutorialInfo
     {
@@ -18,11 +18,15 @@ namespace _Project.Script.Controller
         public TransformType transformType;
         public RectTransform highLightRect;
         public Transform highlightTrans;
+        public Vector2 highlightPos;
         public Vector2 highlightOffset = Vector2.zero;
         public Vector2 textOffset = Vector2.zero;
         public Vector2 highLightSize = new Vector2(100,100);
         public Action btnAction;
         public bool entireRay = false;
+        public bool btnRay = true;
+        public bool isKeyAction = false;
+        public KeyCode keyCode = KeyCode.None;
         public string tutorialKey = "Battle";
 
     }

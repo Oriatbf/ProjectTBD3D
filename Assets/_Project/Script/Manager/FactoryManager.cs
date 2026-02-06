@@ -76,7 +76,7 @@ public class FactoryManager : Singleton<FactoryManager>
                ApplicationManager.Inst.GetModule<ActionStateStackController>().ResetAllBuffs();
                ApplicationManager.Inst.GetModule<SkillProgressController>().Reset();
 
-               if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
+               if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
                //전투가 끝나고 남은 유닛들 세이브
                foreach (var unit in playerUnits)
                {
@@ -162,18 +162,29 @@ public class FactoryManager : Singleton<FactoryManager>
           int diffculty = 0;
           switch (curFloor)
           {
-               case <=2:
+               case <=4:
                     diffculty = 0;
                     break;
-               case <=5:
+               case <=9:
                     diffculty = 1;
                     break;
-               case >= 6:
+               case >= 10:
                     diffculty = 2;
                     break;
           }
-          enemyArrangeSOs = Resources.LoadAll<EnemyArrangeSO>("SO/EnemyArrange")
-               .Where(s => s.enemyArrangeType == enemyArrangeType && s.appearAct == 0 && s.difficulty ==diffculty).ToList();
+
+          Debug.Log(enemyArrangeType);
+          if (enemyArrangeType == EnemyArrangeType.enemy)
+          {
+               enemyArrangeSOs = Resources.LoadAll<EnemyArrangeSO>("SO/EnemyArrange")
+                    .Where(s => s.enemyArrangeType == enemyArrangeType && s.appearAct == 0 && s.difficulty ==diffculty).ToList();
+          }
+          else
+          {
+               enemyArrangeSOs = Resources.LoadAll<EnemyArrangeSO>("SO/EnemyArrange")
+                    .Where(s => s.enemyArrangeType == enemyArrangeType).ToList();
+          }
+         
           var random = Random.Range(0,enemyArrangeSOs.Count);
           curEnemyArrange = enemyArrangeSOs[random];
           var so = curEnemyArrange;

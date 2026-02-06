@@ -5,7 +5,7 @@ using UnityEngine;
 
 public enum EnemyArrangeType
 {
-    enemy,strongEnemy,Boss,Tutorial
+    enemy,strongEnemy,Boss,Tutorial,MidBoss
 }
 
 [CreateAssetMenu(fileName = "EnemyArrangeSO",menuName = "Scriptable Enemy/EnemyArrange",order = 1)]

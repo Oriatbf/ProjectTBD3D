@@ -10,20 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04854441d06be174bafa8a776337e1ca, type: 3}
-  m_Name: Enemy9_2
+  m_Name: MidBoss1
   m_EditorClassIdentifier: 
   appearAct: 0
-  difficulty: 2
-  enemyArrangeType: 0
+  difficulty: 0
+  enemyArrangeType: 4
   lootDatas:
   - lootType: 0
-    value: 1
+    value: 2
   - lootType: 1
-    value: 380
+    value: 400
   EnemyArranges:
-  - unitIndex: 2
-    posIndex: {x: 0, y: 1}
-  - unitIndex: 4
-    posIndex: {x: 1, y: 2}
-  - unitIndex: 6
-    posIndex: {x: 1, y: 0}
+  - unitIndex: 17
+    posIndex: {x: 1, y: 1}

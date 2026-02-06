@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using _Project.Script.Controller;
+using Core.Utility;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -82,6 +84,18 @@ public class GameData
     public int mainCharacterID = 0;
     public bool isNewData = false;
     public bool isFirstGame = true;
+
+    public void Reset()
+    {
+        units.Clear();
+        mapData = new MapData();
+        relicSaveData = new RelicSaveData();
+        gold = 0;
+        constId = 0;
+        mainCharacterID = 0;
+        isNewData = false;
+        isFirstGame = true;
+    }
 }
 
 public class DataManager : SingletonDontDestroyOnLoad<DataManager>
@@ -91,6 +105,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     private Action saveAction;
     private string fileName = "GameData.json";
     public bool debugMode = false;
+    public bool isTutorial = false;
 
 
     protected override void Awake()
@@ -122,6 +137,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             FadeInFadeOutManager.Inst.FadeOut("GamePlay");
         }
         
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.E, this)) return;
+            Data.mapData.curNodeCoord.type = NodeType.Event;
+            FadeInFadeOutManager.Inst.FadeOut("GamePlay");
+        }
+        
         if (Input.GetKeyDown(KeyCode.F7))
         {
             if (!TBDLogger.CommandLog(KeyCode.F7,this))return;
@@ -131,6 +153,19 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
         var k = Input.GetKey(KeyCode.K);
         var j = Input.GetKey(KeyCode.J);
         if(Input.GetKeyDown(KeyCode.W) && k && j) debugMode = !debugMode;
+
+
+        if (debugMode && Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.Keypad5,this))return;
+            TimeScaler.ChangeTimeScale(5);
+        }
+        
+        if (debugMode && Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.Keypad1,this))return;
+            TimeScaler.ChangeTimeScale(1);
+        }
     }
 
     #region 데이터 저장 관련
@@ -173,7 +208,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void DataReset()
     {
         var nodeCoord = Data.mapData.curNodeCoord;
-        Data = new GameData();
+        Data.Reset();
         Data.isFirstGame = false;
         Data.isNewData = true;
         Data.mapData.curNodeCoord = nodeCoord;
@@ -189,7 +224,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// </summary>
     public void SaveUnitSkills(int constID,List<int> skillList)
     {
-        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
         var unit = Data.units.FirstOrDefault(u=>u.constId==constID);
         unit.bringSkills = skillList;
         JsonSave();
@@ -222,7 +257,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unit"></param>
     public void SaveUnit(Unit unit)
     {
-        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
         var unitSaveData = unit.GetUnitData();
         var originalData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         var originalStatContainer = new StatContainer(originalData);
@@ -255,6 +290,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unitSaveData"></param>
     public void SaveUnit(UnitSaveData unitSaveData)
     {
+        if (Data.units.Count > 8) return;
         if(unitSaveData == null)Debug.LogError("unitSaveData = null");
         Data.units.Add(unitSaveData);
     }
@@ -359,8 +395,16 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void SetGold(int value)
     {
-        if (Data.mapData.curNodeCoord.type == NodeType.Tutorial) return;
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
         Data.gold = value;
         JsonSave();
+    }
+
+    public void HealAll(int value)
+    {
+        for (int i = 0; i < Data.units.Count; i++)
+        {
+            Data.units[i].statContainer.hp.AddBaseValue(value);
+        }
     }
 }

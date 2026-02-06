@@ -17,13 +17,13 @@ public class TurnEndCanvas : BaseCanvas
         turnEndBtn.gameObject.SetActive(true);
         SetNextStageAction();
         SetTurnEndAction();
-        SetTutorial();
+        SetTutorial_TurnEnd();
     }
-    private void SetTutorial()
+    private void SetTutorial_TurnEnd()
     {
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
-            order = 10,
+            order = 16,
             informationTxt = "턴이 종료되면 스킬이 시전됩니다",
             highLightRect = turnEndBtn.GetComponent<RectTransform>(),
             transformType = TransformType.Rect,
@@ -52,10 +52,20 @@ public class TurnEndCanvas : BaseCanvas
 
     private void SetNextStageAction()
     {
-        nextStageBtn.onClick.AddListener(() => FadeInFadeOutManager.Inst.FadeOut("MapScene",true));
-        nextStageBtn.onClick.AddListener(() =>
-            DataManager.Inst.ClearMap());
-        nextStageBtn.onClick.AddListener(()=>DataManager.Inst.JsonSave());
+        nextStageBtn.onClick.AddListener(NextStageHandle);
+    }
+
+    private void NextStageHandle()
+    {
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) 
+        {
+            FadeInFadeOutManager.Inst.FadeOut("Title", true);
+            return;
+        }
+
+        FadeInFadeOutManager.Inst.FadeOut("MapScene", true);
+        DataManager.Inst.ClearMap();
+        DataManager.Inst.JsonSave();
     }
 
     public void NextStageActive()

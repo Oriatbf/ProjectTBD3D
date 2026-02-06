@@ -27,11 +27,13 @@ public class Demon : FieldObject
 
     private void SetChainSawDemon()
     {
-        Debug.Log("체인소맨으로 변경");
         var savedUnits = DataManager.Inst.Data.units;
         var randomIndex = Random.Range(0, savedUnits.Count);
         var targetUnit = savedUnits[randomIndex];
-        targetUnit.bringSkills = new List<int>() { 22 };
+        var unitData = SheetDataManager.Inst.GetUnitData(targetUnit.id);
+        DataManager.Inst.DeleteUnit(targetUnit.constId);
+        DataManager.Inst.SaveUnit(7);
+        dialogue.SetTxt($"너의 {unitData.Name}가 체인소의 악마로 변했어");
     }
 
     private void SetHealToGold()
@@ -44,6 +46,7 @@ public class Demon : FieldObject
         {
             unitSaveData.statContainer.hp.AddBaseValue(3);
         }
+        dialogue.SetTxt($"너의 유닛들이 회복됐어");
     }
 
     private void Gamble()

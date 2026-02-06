@@ -24,6 +24,12 @@ namespace _Project.Script.Controller
             _skillTurnCounter.SetCanvas();
         }
 
+        public void RegisterTutorial()
+        {
+            _skillStack.RegisterTutorial();
+            _skillTurnCounter.RegisterTutorial();
+        }
+
         public void Reset()
         {
             _skillTurnCounter.ResetAllSkillTurnCounter();

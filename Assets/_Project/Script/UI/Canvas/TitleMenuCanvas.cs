@@ -7,7 +7,7 @@ namespace _Project.Script.UI.Canvas
 {
     public class TitleMenuCanvas : BaseCanvas
     {
-        [SerializeField] private Button newGameBtn,loadGameBtn,exitGameBtn;
+        [SerializeField] private Button newGameBtn,loadGameBtn,tutorialBtn,exitGameBtn;
         private Action onNewGame;
 
         private void Start()
@@ -26,6 +26,14 @@ namespace _Project.Script.UI.Canvas
             newGameBtn.onClick.AddListener(NewGamehandle);
             loadGameBtn.onClick.AddListener(LoadGamehandle);
             exitGameBtn.onClick.AddListener(ExitGamehandle);
+            tutorialBtn.onClick.AddListener(TutorialHandle);
+        }
+
+        private void TutorialHandle()
+        {
+            DataManager.Inst.isTutorial = true;
+            DataManager.Inst.SetCharacter(  15);
+            FadeInFadeOutManager.Inst.FadeOut("GamePlay",true);
         }
 
         private void NewGamehandle()

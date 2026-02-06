@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 
 public class SkillStackInfo
 {
@@ -164,4 +167,61 @@ public class SkillStack
             list[i].transform.position = pos;
         }
     }
+    
+    #region Tutorial
+
+    public void RegisterTutorial()
+    {
+        SetTutorial();
+        SetTutorial2();
+    }
+        
+    /// <summary>
+    /// 튜토리얼 등록
+    /// </summary>
+    private void SetTutorial()
+    {
+        var targetTile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(2,1));
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 4,
+            informationTxt = "적 스킬 아이콘 위에 마우스를 올리세요",
+            highlightTrans = targetTile.transform,
+            highlightOffset = new Vector2(0,400),
+            transformType = TransformType.Transform,
+            highLightSize = new Vector2(100,100),
+            textOffset = new Vector2(0,500),
+            btnRay = true,
+            btnAction = () =>
+            {
+                var tile =  InGameUnitInfo.EnemyUnits[0].GetTile();
+                var list = stackData[tile].ToList();
+                var skill = list[0].GetSkillBase();
+                ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(skill,Input.mousePosition);
+                ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        var targetRect = ApplicationManager.Inst.GetModule<InformationController>().GetSkillUnfoCard().GetParent();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 5,
+            informationTxt = "일부 아이콘들은 호버 시 정보를 표시합니다",
+            highLightRect = targetRect,
+            highlightOffset = new Vector2(0,0),
+            transformType = TransformType.Rect,
+            highLightSize =targetRect.sizeDelta,
+            textOffset = new Vector2(0,250),
+            btnAction = () =>
+            {
+                ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Skill);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    #endregion
 }

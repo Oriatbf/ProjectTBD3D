@@ -65,7 +65,11 @@ public class SheetDataManager : Singleton<SheetDataManager>
 
     public List<RelicBase> GetRelicDataByIds(List<int> ids)
     {
-        var list =  relicList.Where(s => ids.Contains(s.GetData().ID)).Select(s=>s.Clone()).ToList();
+        List<RelicBase> list = new List<RelicBase>();
+        for (int i = 0; i < ids.Count; i++)
+        {
+            list.Add(relicList[ids[i]].Clone());
+        }
         return list;
     }
     

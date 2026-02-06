@@ -19,7 +19,7 @@ MonoBehaviour:
   - lootType: 0
     value: 1
   - lootType: 1
-    value: 150
+    value: 200
   EnemyArranges:
   - unitIndex: 4
     posIndex: {x: 1, y: 2}

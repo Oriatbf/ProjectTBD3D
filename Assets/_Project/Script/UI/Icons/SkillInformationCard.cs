@@ -30,8 +30,12 @@ public class SkillInfoCardCanvas : BaseCanvas
 
     private void SetPos(Vector3 targetPos)
     {
-        if (targetPos.y <= 400) card.pivot = Vector2.zero;
-        else card.pivot = new Vector2(0,1);
+        var yPivot = 0;
+        var xPivot = 0;
+        if (targetPos.y <= 400) yPivot = 0;
+        else yPivot = 1;
+        if(targetPos.x >= 400) xPivot = 1;
+        card.pivot = new Vector2(xPivot, yPivot);
         card.position = targetPos;
     }
     

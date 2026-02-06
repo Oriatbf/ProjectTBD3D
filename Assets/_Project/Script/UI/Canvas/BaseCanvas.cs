@@ -78,4 +78,6 @@ public class BaseCanvas : MonoBehaviour
         }
         canvasGroup.blocksRaycasts = isRaycast;
     }
+    
+    public RectTransform GetParent() => parent;
 }

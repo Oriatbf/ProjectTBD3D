@@ -14,6 +14,7 @@ public class TutorialCanvas : BaseCanvas
 
     private Material _runtimeMat;
     private Button highlightBtn;
+    private TutorialInfo _curTutorialInfo;
 
     protected override void Awake()
     {
@@ -33,20 +34,35 @@ public class TutorialCanvas : BaseCanvas
     void Update()
     {
         ChangeHighlightSize();
+
+        if (_curTutorialInfo != null)
+        {
+            if (_curTutorialInfo.isKeyAction)
+            {
+                if(Input.GetKeyDown(_curTutorialInfo.keyCode))
+                    _curTutorialInfo.btnAction?.Invoke();
+            }
+        }
     }
 
     public void TutorialInfoInit(TutorialInfo tutorialInfo)
     {
+        _curTutorialInfo = tutorialInfo;
+        highlightBtn.enabled = tutorialInfo.btnRay;
         MoveHighlight(tutorialInfo);
         SetHighlightUI(tutorialInfo);
     }
+    
+    
     
     private void MoveHighlight(TutorialInfo tutorialInfo)
     {
         var targetTrans = tutorialInfo.highlightTrans;
         var targetRect = tutorialInfo.highLightRect;
+        var targetPos = tutorialInfo.highlightPos;
         var highlightOffset = tutorialInfo.highlightOffset;
         var textOffset = tutorialInfo.textOffset;
+        
         Vector2 screenPos = Vector2.zero;
         Vector2 localPos = Vector2.zero;
         
@@ -63,8 +79,9 @@ public class TutorialCanvas : BaseCanvas
                 null, 
                 out localPos
             );
+            localPos += GetPivotOffset(targetRect);
         }
-        else
+        else if(tutorialInfo.transformType == TransformType.Transform)
         { 
             screenPos = Camera.main.WorldToScreenPoint(targetTrans.position);
             // 스크린 포인트를 하이라이트 부모 rect의 로컬 위치로 변환
@@ -76,11 +93,23 @@ public class TutorialCanvas : BaseCanvas
                 out localPos
             );     
         }
-       
+        else
+        {
+            localPos = targetPos;
+
+        }
 
         // 앵커드 포지션 설정 (UI 요소는 anchoredPosition 사용)
         highlightRect.anchoredPosition = localPos+highlightOffset;
         infoText.rectTransform.anchoredPosition = localPos + textOffset;
+    }
+    
+    private Vector2 GetPivotOffset(RectTransform rect)
+    {
+        return new Vector2(
+            (0.5f - rect.pivot.x) * rect.rect.width,
+            (0.5f - rect.pivot.y) * rect.rect.height
+        );
     }
 
     private void SetHighlightUI(TutorialInfo tutorialInfo)

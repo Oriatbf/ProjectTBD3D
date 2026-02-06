@@ -99,7 +99,7 @@ public class SkillTurnCounter
     public void Enqueue(SkillStackInfo skillStackInfo)
     {
         var image = skillStackInfo.team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
-        var obj = GameObject.Instantiate(image, parent);
+        var obj = Object.Instantiate(image, parent);
         if (obj.TryGetComponent(out TurnImage turnImage))
         {
             turnImage.SetInfo(skillStackInfo);
@@ -250,4 +250,59 @@ public class SkillTurnCounter
         turnImageQueue = new Queue<TurnImage>(turnImages);
         RefreshUI();
     }
+
+    #region Tutorial
+
+    public void RegisterTutorial()
+    {
+        SetTutorial();
+        SetTutorial2();
+    }
+        
+    /// <summary>
+    /// 튜토리얼 등록
+    /// </summary>
+    private void SetTutorial()
+    {
+        var obj = Object.Instantiate(playerTurnImage, parent);
+        RectTransform targetRect = obj.GetComponent<RectTransform>();
+        targetRect.DOAnchorPos(new Vector2(0, -130 ), 0);
+        obj.gameObject.SetActive(false);
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 6,
+            informationTxt = "적과 아군이 등록한 스킬은\n이쪽에 등록됩니다",
+            highLightRect = targetRect,
+            transformType = TransformType.Rect,
+            highLightSize = targetRect.sizeDelta,
+            textOffset = new Vector2(50,100),
+            btnAction = () =>
+            {
+                var list  = turnImageQueue.ToList();
+                list[0].ClickAction(true);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 7,
+            informationTxt = "등록된 턴을 호버 시 시전자와 피격자가 표시됩니다.",
+            highlightPos = new Vector2(0,0),
+            transformType = TransformType.Position,
+            highLightSize = new Vector2(1800,600),
+            textOffset = new Vector2(0,400),
+            btnAction = () =>
+            {
+                var list  = turnImageQueue.ToList();
+                list[0].ResetVisualize(true);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+
+    #endregion
 }

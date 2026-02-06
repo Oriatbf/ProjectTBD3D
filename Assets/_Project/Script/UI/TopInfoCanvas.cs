@@ -31,16 +31,16 @@ public class TopInfoCanvas : BaseCanvas
 
     private void RegisterTutorial()
     {
-        SetTutorial1();
-        SetTutorial2();
+        SetTutorial_TurnTxt();
+        SetTutorial_TeamCharm();
     }
 
-    private void SetTutorial1()
+    private void SetTutorial_TurnTxt()
     {
         var rect = remainTurnTxt.GetComponent<RectTransform>();
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
-            order = 6,
+            order = 12,
             informationTxt = "스킬을 등록하면 턴이 소모됩니다\n스킬마다 소모되는 턴이 다릅니다",
             highLightRect = rect,
             transformType = TransformType.Rect,
@@ -53,12 +53,12 @@ public class TopInfoCanvas : BaseCanvas
         ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
     }
     
-    private void SetTutorial2()
+    private void SetTutorial_TeamCharm()
     {
         var rect = teamCharmTxt.GetComponent<RectTransform>();
         TutorialInfo tutorialInfo = new TutorialInfo()
         {
-            order = 7,
+            order = 13,
             informationTxt = "팀의 매혹도입니다\n매혹도에 따라 테이밍 확률이 달라집니다",
             highLightRect = rect,
             transformType = TransformType.Rect,
@@ -86,8 +86,18 @@ public class TopInfoCanvas : BaseCanvas
         var value = InGameUnitInfo.GetPlayersCharms();
         teamCharmTxt.text = $"팀 매혹도 : {value}";
     }
-    
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            if (TBDLogger.CommandLog(KeyCode.F1, this))
+            {
+                AddGold(1000);
+            }
+        }
+    }
+
 
     public void AddGold(int value)
     {
@@ -100,6 +110,10 @@ public class TopInfoCanvas : BaseCanvas
 
     public void RefreshRelic()
     {
+        var poolController = ApplicationManager.Inst.GetModule<PoolController>();
+        for(int i = 0;i<relicIcons.Count;i++)
+            poolController.ReturnToPool("RelicIcon", relicIcons[i].transform);
+            
         var relics = DataManager.Inst.GetRelicSaveData().relicIDList;
         var relicDatas = SheetDataManager.Inst.GetRelicDataByIds(relics);   
         Debug.Log(relicDatas.Count);

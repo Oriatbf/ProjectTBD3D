@@ -61,6 +61,7 @@ namespace _Project.Script.Caster
             DataManager.Inst.SaveMasterVolume(value);
             float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
             audioMixer.SetFloat("Master", _volume);
+            DataManager.Inst.JsonSave();
         }
         
         public void ChangeBGMVolume(float value)
@@ -68,6 +69,7 @@ namespace _Project.Script.Caster
             DataManager.Inst.SaveBGMVolume(value);
             float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
             audioMixer.SetFloat("BGM", _volume);
+            DataManager.Inst.JsonSave();
         }
         
     
@@ -76,6 +78,7 @@ namespace _Project.Script.Caster
             DataManager.Inst.SaveSFXVolume(value);
             float _volume = value == 0 ? -80f : Mathf.Log10(value) * 20;
             audioMixer.SetFloat("SFX", _volume);
+            DataManager.Inst.JsonSave();
         }
     }
     

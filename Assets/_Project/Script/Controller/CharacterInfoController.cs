@@ -55,101 +55,7 @@ namespace _Project.Script.Controller
             }
             RegisterTutorial();
         }
-
-        #region Tutorial
-
-        private void RegisterTutorial()
-        {
-            SetTutorial();
-            SetTutorial2();
-            SetTutorial3();
-            SetTutorial4();
-        }
         
-        /// <summary>
-        /// 튜토리얼 등록
-        /// </summary>
-        private void SetTutorial()
-        {
-            var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
-            TutorialInfo tutorialInfo = new TutorialInfo()
-            {
-                order = 4,
-                informationTxt = "스킬을 클릭하여 선택하세요",
-                highLightRect = targetRect,
-                highlightOffset = new Vector2(0,400),
-                transformType = TransformType.Rect,
-                highLightSize = new Vector2(400,100),
-                textOffset = new Vector2(0,500),
-                btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
-            };
-            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
-        }
-        
-        private void SetTutorial2()
-        {
-            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(2, 1));
-            TutorialInfo tutorialInfo = new TutorialInfo()
-            {
-                order = 5,
-                informationTxt = "타일을 선택하여 스킬을 등록하세요",
-                highlightTrans = tile.transform,
-                transformType = TransformType.Transform,
-                highLightSize = new Vector2(140,50),
-                highlightOffset = new Vector2(0,10),
-                textOffset = new Vector2(0,100),
-                btnAction = ()=>
-                {
-                    curIcon = characterSkillCanvas.GetInventoryIcons()[0];
-                    ExcuteSkill(tile);
-                }
-            };
-            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
-        }
-
-        private void SetTutorial3()
-        {
-            var targetRect = characterSkillCanvas.GetUniqueSkillIcon().GetComponent<RectTransform>();
-            TutorialInfo tutorialInfo = new TutorialInfo()
-            {
-                order = 8,
-                informationTxt = "테이밍 스킬을 통해 적을 편입시킬 수 있습니다.\n테이밍 스킬을 선택하세요",
-                highLightRect = targetRect,
-                transformType = TransformType.Rect,
-                highLightSize = targetRect.sizeDelta,
-                highlightOffset = new Vector2(0,0),
-                textOffset = new Vector2(100,100),
-                btnAction = ()=>
-                {
-                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
-                    SelectSkill(characterSkillCanvas.GetUniqueSkillIcon());
-                }
-            };
-            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
-        }
-        
-        private void SetTutorial4()
-        {
-            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(3, 0));
-            TutorialInfo tutorialInfo = new TutorialInfo()
-            {
-                order = 9,
-                informationTxt = "타일을 선택하여 스킬을 등록하세요",
-                highlightTrans = tile.transform,
-                transformType = TransformType.Transform,
-                highLightSize = new Vector2(140,50),
-                highlightOffset = new Vector2(0,10),
-                textOffset = new Vector2(-150,100),
-                btnAction = ()=>
-                {
-                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
-                    ExcuteSkill(tile);
-                }
-            };
-            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
-        }
-        #endregion
-
         /// <summary>
         /// 클릭한 캐릭터의 데이터와 타일정보를 받음
         /// </summary>
@@ -222,7 +128,7 @@ namespace _Project.Script.Controller
             if (!top.TryGetComponent(out InventoryIcon  _skillIcon)) return;
             if (top.TryGetComponent(out InventoryIcon skillIcon))
             {
-                if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
+               // if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
                 SelectSkill(skillIcon);
                 return;
             }
@@ -284,7 +190,7 @@ namespace _Project.Script.Controller
             if (Input.GetMouseButtonDown(0))
             {
                 if (curTile == null && curTargetType == TargetType.Area) return;
-                if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial) return;
+                if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
                 if (RaycastHelper.IsPointerOverTargetUI<Unit>())
                     return; 
                 ExcuteSkill(curTile);
@@ -406,7 +312,139 @@ namespace _Project.Script.Controller
 
         #endregion
        
-    
+      #region Tutorial
+
+        private void RegisterTutorial()
+        {
+            SetTutorial_fSkillSelect();
+            SetTutorial_skillCancel();
+            SetTutorial_attackSKillReg();
+            SetTutorial_ReFSkillSelect();
+            SetTutorial_TamingSelect();
+            SetTutorial_TamingReg();
+        }
+        
+        /// <summary>
+        /// 튜토리얼 등록
+        /// </summary>
+        private void SetTutorial_fSkillSelect()
+        {
+            var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 8,
+                informationTxt = "스킬을 클릭하여 선택하세요",
+                highLightRect = targetRect,
+                highlightOffset = new Vector2(0,0),
+                transformType = TransformType.Rect,
+                highLightSize = new Vector2(400,100),
+                textOffset = new Vector2(0,100),
+                btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial_skillCancel()
+        {
+            var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 9,
+                informationTxt = "마우스 우클릭 시 선택한 스킬을 취소할 수 있습니다.",
+                highLightRect = targetRect,
+                highlightOffset = new Vector2(0,0),
+                transformType = TransformType.Rect,
+                highLightSize = new Vector2(400,100),
+                textOffset = new Vector2(0,100),
+                btnRay = false,
+                isKeyAction = true,
+                keyCode = KeyCode.Mouse1,
+                btnAction = CancelTargeting
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial_ReFSkillSelect()
+        {
+            var targetRect = characterSkillCanvas.GetInventoryIcons()[0].GetComponent<RectTransform>();
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 10,
+                informationTxt = "다시 스킬을 클릭하여 선택하세요",
+                highLightRect = targetRect,
+                highlightOffset = new Vector2(0,0),
+                transformType = TransformType.Rect,
+                highLightSize = new Vector2(400,100),
+                textOffset = new Vector2(0,100),
+                btnAction = ()=>SelectSkill(characterSkillCanvas.GetInventoryIcons()[0])
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial_attackSKillReg()
+        {
+            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(2, 1));
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 11,
+                informationTxt = "타일을 선택하여 스킬을 등록하세요",
+                highlightTrans = tile.transform,
+                transformType = TransformType.Transform,
+                highLightSize = new Vector2(140,50),
+                highlightOffset = new Vector2(0,10),
+                textOffset = new Vector2(0,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetInventoryIcons()[0];
+                    ExcuteSkill(tile);
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+
+        private void SetTutorial_TamingSelect()
+        {
+            var targetRect = characterSkillCanvas.GetUniqueSkillIcon().GetComponent<RectTransform>();
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 14,
+                informationTxt = "테이밍 스킬을 통해 적을 편입시킬 수 있습니다.\n테이밍 스킬을 선택하세요",
+                highLightRect = targetRect,
+                transformType = TransformType.Rect,
+                highLightSize = targetRect.sizeDelta,
+                highlightOffset = new Vector2(0,0),
+                textOffset = new Vector2(100,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
+                    SelectSkill(characterSkillCanvas.GetUniqueSkillIcon());
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        
+        private void SetTutorial_TamingReg()
+        {
+            var tile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(3, 0));
+            TutorialInfo tutorialInfo = new TutorialInfo()
+            {
+                order = 15,
+                informationTxt = "타일을 선택하여 테이밍스킬을 등록하세요",
+                highlightTrans = tile.transform,
+                transformType = TransformType.Transform,
+                highLightSize = new Vector2(140,50),
+                highlightOffset = new Vector2(0,10),
+                textOffset = new Vector2(-150,100),
+                btnAction = ()=>
+                {
+                    curIcon = characterSkillCanvas.GetUniqueSkillIcon();
+                    ExcuteSkill(tile);
+                }
+            };
+            ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+        }
+        #endregion
+
     
     }
 }

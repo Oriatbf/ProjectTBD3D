@@ -223,7 +223,10 @@ public class SkillChangeInventoryCanvas : BaseCanvas
     {
         foreach (var skillIcon in skillIcons)
         {
-            skillIcon.SetFrameColor(Color.white,true);
+            if (skillIcon.GetSkillBase() != null)
+            {
+                skillIcon.SetFrameColor(Color.white,true);
+            }
         }
         changeIcon.SetFrameColor(Color.white,true);
     }

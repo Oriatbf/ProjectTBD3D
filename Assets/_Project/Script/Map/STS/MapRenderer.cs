@@ -119,6 +119,9 @@ public class MapRenderer : MonoBehaviour
                 break;
             case NodeType.Rebellion:
                 break;
+            case NodeType.MidBoss:
+                spr = bossSpr;
+                break;
             case NodeType.None:
                 break;
             default:

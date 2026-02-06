@@ -21,16 +21,18 @@ public class LootCanvas : MonoBehaviour
     private void Awake()
     {
         Hide();
-        SetLootIcon();  
+        SetLootIcon().Forget();  
         closeBtn.onClick.AddListener(Hide);
     }
 
-    private async void SetLootIcon()
+    private async UniTask SetLootIcon()
     {
         var obj = await Addressables.LoadAssetAsync<GameObject>(lootPath).ToUniTask();
         lootIcon = obj.GetComponent<LootIcon>();
+        await UniTask.WaitForEndOfFrame();
         RegisterTutorial();
     }
+    
 
     public void Init(EnemyArrangeSO enemyArrangeSo)
     {
@@ -93,14 +95,16 @@ public class LootCanvas : MonoBehaviour
 
     private void RegisterTutorial()
     {
-        if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial)
-        {
-            SetTutorial1();
-        }
+       SetTutorial1();
+        
     }
     private void SetTutorial1()
     {
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() != NodeType.Tutorial)
+            return;
         CreateSkillLoot(SheetDataManager.Inst.GetRandomSkillBaseList(1)[0]);
+        
+        Debug.Log(ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType());
         var targetRect = lootIcons[0].GetComponent<RectTransform>();
         TutorialInfo tutorialInfo = new TutorialInfo()
         {

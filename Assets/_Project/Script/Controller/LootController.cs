@@ -16,7 +16,7 @@ public class LootController : BaseController
 
     public void InitEnemyArrange(EnemyArrangeSO enemyArrangeSo)
     {
-        if(DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Tutorial)
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial)
             ApplicationManager.Inst.GetModule<TutorialController>().StartTutorial("Loot");
         lootCanvas.Init(enemyArrangeSo);
     }

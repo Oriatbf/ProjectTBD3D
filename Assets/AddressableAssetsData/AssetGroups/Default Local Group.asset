@@ -95,6 +95,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36c71bdb5a17de344bdf66eba3fe2715
+    m_Address: Assets/_Project/Art/Animator/PlagueDoctor.overrideController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b18aaab9d650434eb633d2b5b598565
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Gold.png
     m_ReadOnly: 0
@@ -142,6 +147,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5a194ceafc3996043b325150904502ad
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Baldo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5bed905f34a9a3f40a1d79316f6c72c5
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/PlagueDoctor.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -216,7 +226,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad43ef2275eed7e4ea3b450f7571ea95
-    m_Address: Assets/_Project/Art/Animator/Golem.overrideController
+    m_Address: Assets/_Project/Art/Animator/BlueGolem.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -237,6 +247,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b36e9ecb90c95d945bb97fe52148c72f
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Bomb.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c367b441563abef42bbff5ee5104656b
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/ChainSawMan.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

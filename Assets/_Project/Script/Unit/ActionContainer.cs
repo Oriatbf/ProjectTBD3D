@@ -35,14 +35,17 @@ public class ActionStateContainer
         {
             // 이미 존재하면 데이터 병합
             actionStates[trigger][id].GetData().MergeWith(state.GetData());
+            if(trigger == ActionTrigger.None)
+                actionStates[trigger][id].Execute();
         }
         else
         {
             actionStates[trigger][id] = state;
+            if(trigger == ActionTrigger.None)
+                state.Execute();
         }
         
-        if(trigger == ActionTrigger.None)
-            state.Execute();
+      
     }
 
     /// <summary>

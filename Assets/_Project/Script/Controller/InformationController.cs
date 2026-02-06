@@ -77,6 +77,8 @@ public class InformationController : BaseController
         }
     }
 
+    public SkillInfoCardCanvas GetSkillUnfoCard() => _skillInfoCardCanvas;
+
     public void Hide(DataType dataType)
     {
         switch (dataType)

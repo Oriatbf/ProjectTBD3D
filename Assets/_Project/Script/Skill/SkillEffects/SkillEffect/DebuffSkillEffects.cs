@@ -110,8 +110,10 @@ public class Ice : SkillEffect
 
             iceData.action = (data, context) =>
             {
+                Debug.Log("ice");
                 if (data.stack >= 5)
                 {
+                    Debug.Log("iceExcute");
                     data.ownerUnit.GetActionStateContainer().RemoveActionState(ActionTrigger.None, iceData.id);
                     ApplicationManager.Inst.GetModule<ActionStateStackController>().UnStackBuff(data.ownerTile,data.id);
                     ApplicationManager.Inst.GetModule<SkillProgressController>().UnStackAll(context.TargetTile);

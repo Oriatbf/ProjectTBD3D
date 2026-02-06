@@ -20,7 +20,7 @@ public class Dialogue : MonoBehaviour,IPoolable
         nextBtn.onClick.RemoveAllListeners();
         acceptBtn.onClick.AddListener(eventDialogueSO.eventAction.Invoke);
         acceptBtn.onClick.AddListener(ExcuteDialogue);
-        rejectBtn.onClick.AddListener(ExcuteDialogue);
+        rejectBtn.onClick.AddListener(Close);
         nextBtn.onClick.AddListener(ExcuteDialogue);
         
         ExcuteDialogue();
@@ -33,7 +33,7 @@ public class Dialogue : MonoBehaviour,IPoolable
 
         if (_curIndex >= dialogueCnt)
         {
-            ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("Dialogue",transform);
+           // ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("Dialogue",transform);
             return;
         }
         var data = _eventDialogueSO.dialogueDatas[_curIndex];
@@ -60,6 +60,11 @@ public class Dialogue : MonoBehaviour,IPoolable
         acceptBtn.gameObject.SetActive(false);
         rejectBtn.gameObject.SetActive(false);
         dialogueTxt.text = txt;
+    }
+
+    public void Close()
+    {
+        ApplicationManager.Inst.GetModule<PoolController>().ReturnToPool("Dialogue",transform);
     }
     
     
