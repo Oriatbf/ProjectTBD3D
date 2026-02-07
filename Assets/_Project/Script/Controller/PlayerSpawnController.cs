@@ -57,7 +57,7 @@ public class PlayerSpawnController : BaseController
         if (spawnedUnits.Count <= 0) return;
         _playerSpawnCanvas.SetPos(new Vector2(0,-300),true);
         _playerSpawnCanvas.ChangeState(false,true);
-         FactoryManager.Inst.GameStart();
+         FactoryManager.Inst.GameStart().Forget();
     }
 
     private void SetTutorial()

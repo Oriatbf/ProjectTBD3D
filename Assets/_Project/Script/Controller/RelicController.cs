@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Utility;
+using Cysharp.Threading.Tasks;
 
 namespace _Project.Script.Controller
 {
@@ -22,12 +23,14 @@ namespace _Project.Script.Controller
             relics = SheetDataManager.Inst.GetRelicDataByIds(relicIds);
         }
 
-        public void ExcuteAllRelic()
+        public async UniTask ExcuteAllRelic()
         {
+            await UniTask.WaitForSeconds(1f);
             for(int i = 0; i < relics.Count; i++)
             {
                 relics[i].Excute();
             }
+            await UniTask.WaitForSeconds(0.5f);
         }
     }
 }

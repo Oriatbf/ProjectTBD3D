@@ -37,3 +37,7 @@ MonoBehaviour:
     Prefab: {fileID: 3332520036445807150, guid: ad95f09489a06144c8216e9069223953, type: 3}
     poolType: 0
     canvasOrder: 0
+  - Key: ThunderEffect
+    Prefab: {fileID: 8592025396316687487, guid: 3a1a46f0f082adc4b8bf061a97084ce5, type: 3}
+    poolType: 1
+    canvasOrder: 0

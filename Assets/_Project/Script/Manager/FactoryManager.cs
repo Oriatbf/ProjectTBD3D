@@ -80,7 +80,7 @@ public class FactoryManager : Singleton<FactoryManager>
                //전투가 끝나고 남은 유닛들 세이브
                foreach (var unit in playerUnits)
                {
-                    DataManager.Inst.SaveUnit(unit);
+                    DataManager.Inst.SaveSurviveUnit(unit);
                }
 
                if (DataManager.Inst.GetMapData().curNodeCoord.type == NodeType.Boss)
@@ -100,7 +100,7 @@ public class FactoryManager : Singleton<FactoryManager>
      /// <summary>
      /// //TODO **게임 시작 함수**
      /// </summary>
-     public void GameStart()
+     public async UniTask GameStart()
      {
           UnitAddtionHandle();
           TurnInit();
@@ -108,14 +108,17 @@ public class FactoryManager : Singleton<FactoryManager>
           ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
           ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
           ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
-          ApplicationManager.Inst.GetModule<RelicController>().ExcuteAllRelic();
           
           ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
           
           
           foreach (var unit in playerUnits)unit.Initalize();
           foreach (var unit in enemyUnits) unit.Initalize();
+          
+          await ApplicationManager.Inst.GetModule<RelicController>().ExcuteAllRelic();
           isGameStart = true;
+          
+         
      }
 
      public void TurnInit()

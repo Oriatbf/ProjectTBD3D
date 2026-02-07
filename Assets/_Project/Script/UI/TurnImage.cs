@@ -50,6 +50,10 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
     }
 
     public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
+    
+    /// <summary>
+    /// 시전자, 피격자와 피격 타일 보이기
+    /// </summary>
     public void ClickAction(bool force = false)
     {
         _isForceShow = force;
@@ -71,16 +75,29 @@ public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
         }
        
         List<Tile> targetTiles = new List<Tile>();
+        //시전할 위치 타일
         var standardTile = skill.GetData().TargetType 
                            == TargetType.Source?skillContext.SourceTile:skillContext.TargetTile;
-        targetTiles  =tileController.GetTiles
+        if(skill.GetData().TargetType == TargetType.All)
+        {
+            //전체 타일을 타겟으로
+            targetTiles = tileController.GetAllTiles();
+        }
+        else
+        {
+            targetTiles  =tileController.GetTiles
                 (standardTile,skillContext.rowCount,skillContext.columnCount);
+        }
+       
         foreach (var targetTile in targetTiles)
         {
             targetTile.Target();
         }
     }
 
+    /// <summary>
+    /// 시전자, 피격자와 피격 타일 보이기 삭제
+    /// </summary>
     public void ResetVisualize(bool force = false)
     {
         _isForceShow = force;

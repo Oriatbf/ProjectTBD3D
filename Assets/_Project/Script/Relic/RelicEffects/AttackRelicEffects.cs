@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using _Project.Pooling;
+using Core.Utility;
+using UnityEngine;
 
 namespace _Project.Script.Relic
 {
@@ -7,6 +9,9 @@ namespace _Project.Script.Relic
         public override void Excute()
         {
             var targetTile = ApplicationManager.Inst.GetModule<TileController>().GetRandomTile();
+            var thunderEffect = ApplicationManager.Inst.GetModule<PoolController>()
+                .Spawn<ThunderEffect>("ThunderEffect",targetTile.GetPos(),Quaternion.identity);
+            
             if (targetTile.GetUnit() != null)
             {
                 targetTile.GetUnit().GetDamage(values[0],null,SkillType.Attack);

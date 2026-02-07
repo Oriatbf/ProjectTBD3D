@@ -18,7 +18,19 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 264582b93aca6f14cb1b4ac686fbf966, type: 3}
     - target: {fileID: 2595652482046221116, guid: c3370da3946c7c54e814a47ced721500, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 105
+      value: 76.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949357378334746050, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+      propertyPath: m_text
+      value: "\uC774\uB984"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949357378334746050, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+      propertyPath: m_margin.z
+      value: 26.391754
+      objectReference: {fileID: 0}
+    - target: {fileID: 4949357378334746050, guid: c3370da3946c7c54e814a47ced721500, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6461471924645653192, guid: c3370da3946c7c54e814a47ced721500, type: 3}
       propertyPath: m_Name

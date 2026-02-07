@@ -144,6 +144,20 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             FadeInFadeOutManager.Inst.FadeOut("GamePlay");
         }
         
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.W, this)) return;
+            Data.mapData.curNodeCoord.type = NodeType.Enemy;
+            FadeInFadeOutManager.Inst.FadeOut("GamePlay");
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            if (!TBDLogger.CommandLog(KeyCode.T, this)) return;
+            Data.mapData.curNodeCoord.type = NodeType.TestEnemy;
+            FadeInFadeOutManager.Inst.FadeOut("GamePlay");
+        }
+        
+        
         if (Input.GetKeyDown(KeyCode.F7))
         {
             if (!TBDLogger.CommandLog(KeyCode.F7,this))return;
@@ -255,7 +269,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// 살아남은 플레이어 유닛 저장
     /// </summary>
     /// <param name="unit"></param>
-    public void SaveUnit(Unit unit)
+    public void SaveSurviveUnit(Unit unit)
     {
         if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
         var unitSaveData = unit.GetUnitData();
@@ -290,13 +304,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     /// <param name="unitSaveData"></param>
     public void SaveUnit(UnitSaveData unitSaveData)
     {
-        if (Data.units.Count > 8) return;
+        if (Data.units.Count >= 8) return;
         if(unitSaveData == null)Debug.LogError("unitSaveData = null");
         Data.units.Add(unitSaveData);
     }
 
     public void SaveUnit(int id)
     {
+        if (Data.units.Count >= 8) return;
         var originalData = SheetDataManager.Inst.GetUnitData(id);
         var originalStatContainer = new StatContainer(originalData);
         UnitSaveData newUnitSaveData = new UnitSaveData()

@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 11f1f69c64a2a784cb0ea83e0eee4706
-    m_Address: Assets/_Project/Art/Animator/Samurai.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 174569cc378fb1a42884a58923549611
     m_Address: Assets/_Project/Prefab/UI/Loot/LootCanvas.prefab
     m_ReadOnly: 0
@@ -60,16 +55,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 27f1fe4caea3d944f828dc851f552604
-    m_Address: Assets/_Project/Art/Animator/Soldier.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2a19d13730cfef54bb4cf940bd8116ab
-    m_Address: Assets/_Project/Art/Animator/Orc.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e3345dc41ec0c14d8156ff823b913c1
     m_Address: Assets/_Project/Prefab/UI/SkillStackCanvas.prefab
     m_ReadOnly: 0
@@ -77,11 +62,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 308d1b7b2fe8bd14983c4846f0b20efc
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Magic.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3104bdac253e32d499897ec9c8f289ef
-    m_Address: Assets/_Project/Art/Animator/OrangeGolem.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -95,11 +75,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 36c71bdb5a17de344bdf66eba3fe2715
-    m_Address: Assets/_Project/Art/Animator/PlagueDoctor.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3b18aaab9d650434eb633d2b5b598565
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Gold.png
     m_ReadOnly: 0
@@ -107,11 +82,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3ebe15f6a5c2b6a4aa857e40039305d5
     m_Address: Assets/_Project/Prefab/UI/Buff/BuffInfoCanvas.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 402948ee01662924da0fcea9a3f56f2a
-    m_Address: Assets/_Project/Art/Animator/Warrior.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -132,11 +102,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 56ef28db1719b6d4ea3ead9dd925d214
     m_Address: Assets/_Project/Art/Icons/UsingIcon/Mushroom.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 57486eb4ee5eed449b2ed947a64ac578
-    m_Address: Assets/_Project/Art/Animator/Mushroom.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -190,26 +155,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8f993d05cfa669045a7f5aee1b1d8df0
-    m_Address: Assets/_Project/Art/Animator/Mage.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 98a4f2349f9f1314db97db57fa94f90a
-    m_Address: Assets/_Project/Art/Animator/Wendsday.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9a3adca6998be1740b93c1e8a3916264
-    m_Address: Assets/_Project/Art/Animator/Skeleton.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9af42a956d48f8047a7ff61f50add3d6
-    m_Address: Assets/_Project/Art/Animator/ChainSawMan.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9cac916381ca45c479892472de799724
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/FaintingBuff.png
     m_ReadOnly: 0
@@ -222,11 +167,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a6085db89d5d6ae43b34503c15fe313b
     m_Address: Assets/_Project/Art/Icons/UsingIcon/DamageBuff.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ad43ef2275eed7e4ea3b450f7571ea95
-    m_Address: Assets/_Project/Art/Animator/BlueGolem.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -280,16 +220,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: de488c870e1eadd4da6a566c63c88593
-    m_Address: Assets/_Project/Art/Animator/Cat.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e0dc972dfe86ee64fad6e96de0ecdb45
-    m_Address: Assets/_Project/Art/Animator/Shadow.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e3698944243d6c743aa6fb418dbc06e6
     m_Address: Assets/_Project/Prefab/UI/Loot/LootIcon.prefab
     m_ReadOnly: 0
@@ -300,18 +230,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ece6a576709129b4fbc798e24d86a1ea
-    m_Address: Assets/_Project/Art/Animator/RedKnight.overrideController
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fd94cb483cfb96a4faa32a66dffc4bf0
     m_Address: Assets/_Project/Prefab/UI/Buff/BuffInfoUI.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ff37decee169bbd48a783a70bf2bcfa5
-    m_Address: Assets/_Project/Art/Animator/Necromancer.overrideController
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

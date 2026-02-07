@@ -23,7 +23,8 @@ public class ShopUnitIcon : UnitIcon,IBuyable
 
     private void BtnAction()
     {
-        if(!ShopHelper.Buy(value) || isBuyed)return;
+        if (isBuyed) return;
+        if(!ShopHelper.Buy(value))return;
         isBuyed = true;
         SetFrameColor(Color.red,true);
         DataManager.Inst.SaveUnit(_unitSaveData);

@@ -46,6 +46,9 @@ namespace _Project.Script.Controller
                 case NodeType.MidBoss:
                     SetEnemy(EnemyArrangeType.MidBoss);
                     break;
+                case NodeType.TestEnemy:
+                    SetEnemy(EnemyArrangeType.TestEnemy);
+                    break;
                 case NodeType.Event:
                     SetEvent();
                     break;

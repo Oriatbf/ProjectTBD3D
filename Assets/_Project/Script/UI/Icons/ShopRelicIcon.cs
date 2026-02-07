@@ -21,7 +21,8 @@ public class ShopRelicIcon : RelicIcon,IBuyable
 
    private void BtnAction()
    {
-      if(!ShopHelper.Buy(value) || isBuyed)return;
+      if (isBuyed) return;
+      if(!ShopHelper.Buy(value))return;
       SetFrameColor(Color.red,true);
       DataManager.Inst.SaveRelic(_relicBase.GetData().ID);
       isBuyed = true;

@@ -64,10 +64,9 @@ public class Unit : MonoBehaviour
 
     #region 생성 시
 
-    public async void Init(UnitSaveData unitData,string animatorName, Team team)
+    public void Init(UnitSaveData unitData,string animatorName, Team team)
     {
-        var animator = await Addressables.LoadAssetAsync<AnimatorOverrideController>
-            (animatorPath+animatorName+".overrideController").Task;
+        var animator = Resources.Load<AnimatorOverrideController>($"Animator/{animatorName}");
         this.animator.runtimeAnimatorController = animator;
         _statContainer =  unitData.statContainer;
         originalBringSkills = unitData.bringSkills;
@@ -119,6 +118,7 @@ public class Unit : MonoBehaviour
 
     private void SetAction()
     {
+        Debug.Log($"SetStatAction {unitData.animatorName}");
         _statContainer.hp.OnValueChanged += OnHpChange;
         _statContainer.turnGauge.OnValueChanged += OnCostChange;
         _statContainer.charmResist.OnValueChanged += OnCharmResistChange;
@@ -255,8 +255,10 @@ public class Unit : MonoBehaviour
     
     private void OnHpChange(float value)
     {
+        Debug.Log($"{unitData.animatorName}의 남은피는 {value}");
         if (value <= 0)
         {
+            Debug.Log($"{unitData.animatorName} 사망");
             isDead = true;
             OnDispos();
         }
@@ -268,7 +270,7 @@ public class Unit : MonoBehaviour
         {
             ApplicationManager.Inst.GetModule<PoolController>()
                 .Spawn<CharmEffect>("CharmEffect",transform.position + new Vector3(0,0.3f));
-            DataManager.Inst.SaveUnit(this);
+            DataManager.Inst.SaveSurviveUnit(this);
             OnDispos(true);
         }
     }
