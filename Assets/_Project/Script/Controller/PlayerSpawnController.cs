@@ -162,7 +162,7 @@ public class PlayerSpawnController : BaseController
     {
         Debug.Log(unitIcon.name + " is Selected");
         _curUnitIcon = unitIcon;
-        _curUnitIcon.SetFrameColor(Color.green,true);
+        _curUnitIcon.SetFrameColor(IconState.Selected,true);
         isTargeting = true;
     }
 
@@ -170,7 +170,7 @@ public class PlayerSpawnController : BaseController
     {
         if (Input.GetMouseButtonDown(1))
         {
-            CancelTargeting(Color.white);
+            CancelTargeting(IconState.None);
             return;
         }
         
@@ -203,14 +203,14 @@ public class PlayerSpawnController : BaseController
     {
         FactoryManager.Inst.PlayerSpawn(_curUnitIcon.GetUnitData(),tile);
         RegisterUnit(_curUnitIcon.GetUnitData().constId);
-        CancelTargeting(Color.red);
+        CancelTargeting(IconState.Blocked);
     }
     
     private void Spawn(UnitIcon unitIcon,Tile tile)
     {
         FactoryManager.Inst.PlayerSpawn(unitIcon.GetUnitData(),tile);
         RegisterUnit(unitIcon.GetUnitData().constId);
-        CancelTargeting(Color.red);
+        CancelTargeting(IconState.Blocked);
     }
 
     private void RegisterUnit(int constId)
@@ -222,9 +222,9 @@ public class PlayerSpawnController : BaseController
         }
     }
 
-    private void CancelTargeting(Color frameColor)
+    private void CancelTargeting(IconState iconState)
     {
-        _curUnitIcon.SetFrameColor(frameColor,true);
+        _curUnitIcon.SetFrameColor(iconState,true);
         _curUnitIcon = null;
         isTargeting = false;
         ClearTiles();

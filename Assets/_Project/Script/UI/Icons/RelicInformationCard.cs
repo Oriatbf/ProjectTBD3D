@@ -11,11 +11,15 @@ public class RelicInfoCardCanvas : BaseCanvas
     [SerializeField] private Image icon;
     
 
-    public void InitData(RelicBase relicBase,Vector3 targetPos)
+    public void InitData(RelicBase relicBase)
     {
         var relic = relicBase;
         nameTxt.text = relic.GetData().Name;
         descriptionTxt.text = relic.GetRelicDescription();
+    }
+    
+    public void InitPos(Vector3 targetPos)
+    {
         SetPos(targetPos);
     }
 

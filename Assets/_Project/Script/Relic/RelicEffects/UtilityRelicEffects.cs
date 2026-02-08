@@ -6,10 +6,17 @@ namespace _Project.Script.Relic
 {
     public class DamageBuff : RelicEffect
     {
-        public override void Excute()
+        public DamageBuff()
+        {
+            triggerType = RelicTriggerType.BattleStart;
+            targetType = RelicTargetType.AllAllies;
+        }
+
+        protected override void OnExecute(RelicEffectContext context)
         {
             var players = InGameUnitInfo.PlayerUnits;
             Debug.Log($"데미지 버프를 받는 인원 {players.Count}");
+            
             foreach (var player in players)
             {
                 ActionStateExamples.DamageBuff(player, values[0]);

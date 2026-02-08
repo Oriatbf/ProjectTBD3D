@@ -45,7 +45,7 @@ public class MapData
 {
     public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
-    [FormerlySerializedAs("prevNodeCoord")] public NodeCoord curNodeCoord = new NodeCoord();
+    public NodeCoord curNodeCoord = new NodeCoord();
     public int curFloor = 0;
 }
 
@@ -57,6 +57,20 @@ public class RelicSaveData
     public void AddRelic(int id)
     {
         relicIDList.Add(id);
+    }
+
+    public void DeleteRelic(int id)
+    {
+        for (int i = relicIDList.Count-1; i >=0; i--)
+        {
+            if (relicIDList[i] == id)
+            {
+                relicIDList.RemoveAt(i);
+                return;
+            }
+        }
+        
+        Debug.Log("해당 아이디를 가진 유물이 없음");
     }
 }
 
@@ -223,11 +237,11 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     
     public void DataReset()
     {
-        var nodeCoord = Data.mapData.curNodeCoord;
+        //var nodeCoord = Data.mapData.curNodeCoord;
         Data.Reset();
         Data.isFirstGame = false;
         Data.isNewData = true;
-        Data.mapData.curNodeCoord = nodeCoord;
+        //Data.mapData.curNodeCoord = nodeCoord;
         JsonSave();
     }
     #endregion

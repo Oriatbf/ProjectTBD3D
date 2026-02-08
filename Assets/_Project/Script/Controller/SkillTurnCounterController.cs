@@ -235,7 +235,7 @@ public class SkillTurnCounter
         var skillStackInfos = turnQueue.ToList();
         var turnImages = turnImageQueue.ToList();
 
-        for (int i = 0; i < skillStackInfos.Count; i++)
+        for (int i = skillStackInfos.Count-1; i >= 0; i--)
         {
             var curSkillStackTurn = skillStackInfos[i].stackTurn;
             if (curSkillStackTurn >= curStackTurn && curSkillStackTurn <= deleteStackTurn)

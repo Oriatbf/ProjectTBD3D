@@ -11,7 +11,7 @@ public class SettingCanvas : BaseCanvas
     [SerializeField] private Transform menuContent,settingContent;
     [SerializeField] private Button backBtn;
     [Foldout("MenuContentSetting")]
-    [SerializeField] private Button backToGameBtn,settingBtn,gameCloseBtn;
+    [SerializeField] private Button backToGameBtn,settingBtn,gameCloseBtn,menuBtn;
     [EndFoldout]
     
     [Foldout("SettingContent")]
@@ -45,6 +45,7 @@ public class SettingCanvas : BaseCanvas
         settingBtn.onClick.AddListener(SettingHandle);
         gameCloseBtn.onClick.AddListener(GameCloseHandle);
         backBtn.onClick.AddListener(BackBtnHandle);
+        menuBtn.onClick.AddListener(BackToMenuHandle);
     }
     void Update()
     {
@@ -105,6 +106,11 @@ public class SettingCanvas : BaseCanvas
         backBtn.gameObject.SetActive(false);
         settingContent.gameObject.SetActive(false);
         menuContent.gameObject.SetActive(true);
+    }
+
+    private void BackToMenuHandle()
+    {
+        FadeInFadeOutManager.Inst.FadeOut("Title",true);
     }
 
     private void SetAudioHandler()

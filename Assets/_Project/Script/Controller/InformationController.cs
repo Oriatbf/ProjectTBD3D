@@ -54,10 +54,16 @@ public class InformationController : BaseController
         _unitInfoCardCanvas.InitPos(targetPos);
     }
 
-    public void InitRelicData(RelicBase relicBase, Vector3 targetPos)
+    public void InitRelicData(RelicBase relicBase)
     {
-        relicInfoCardCanvas.InitData(relicBase, targetPos);
+        relicInfoCardCanvas.InitData(relicBase);
     }
+    
+    public void InitRelicPos( Vector3 targetPos)
+    { 
+        relicInfoCardCanvas.InitPos(targetPos);
+    }
+
     
     public void Show(DataType dataType)
     {

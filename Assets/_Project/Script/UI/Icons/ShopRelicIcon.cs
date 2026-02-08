@@ -23,7 +23,7 @@ public class ShopRelicIcon : RelicIcon,IBuyable
    {
       if (isBuyed) return;
       if(!ShopHelper.Buy(value))return;
-      SetFrameColor(Color.red,true);
+      SetFrameColor(IconState.Blocked,true,false);
       DataManager.Inst.SaveRelic(_relicBase.GetData().ID);
       isBuyed = true;
       ApplicationManager.Inst.GetModule<TopInfoController>().GetTopInfoCanvas().RefreshRelic();

@@ -26,9 +26,8 @@ public class ShopUnitIcon : UnitIcon,IBuyable
         if (isBuyed) return;
         if(!ShopHelper.Buy(value))return;
         isBuyed = true;
-        SetFrameColor(Color.red,true);
+        SetFrameColor(IconState.Blocked,true,false);
         DataManager.Inst.SaveUnit(_unitSaveData);
-
     }
 
    

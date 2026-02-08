@@ -97,7 +97,7 @@ public class SkillStack
 
     public void UnstackSkillByTurn(float curStackTurn, float deleteStackTurn)
     {
-        for (int i = 0; i < stackIcons.Count; i++)
+        for (int i = stackIcons.Count-1; i >= 0; i--)
         {
             var iconTurnStack = stackIcons[i].Item1;
             if (iconTurnStack >= curStackTurn && iconTurnStack <= deleteStackTurn)

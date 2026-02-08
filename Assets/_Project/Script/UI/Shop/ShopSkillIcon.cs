@@ -24,7 +24,7 @@ public class ShopSkillIcon : Icon,IBuyable
         if (isBuyed) return;
         if (!ShopHelper.Buy(value)) return;
         isBuyed = true;
-        SetFrameColor(Color.red,true);
+        SetFrameColor(IconState.Blocked,true,false);
         var shopCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<ShopCanvas>("ShopCanvas");
         shopCanvas.ChangeState(false,true);
         ApplicationManager.Inst.GetModule<SkillChangeController>()

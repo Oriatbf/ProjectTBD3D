@@ -12,6 +12,7 @@ using System.IO;
 using GoogleSheet.Type;
 using System.Reflection;
 using UnityEngine;
+using _Project.Script.Relic;
 
 
 namespace RelicData
@@ -62,6 +63,7 @@ namespace RelicData
 		public System.String Infor;
 		public ManualType ManualType;
 		public Rarity Rarity;
+		public RelicTriggerType RelicTriggerType;
 		public System.Int32 RowCount;
 		public System.Int32 ColumnCount;
 		public System.String RelicEffectData;

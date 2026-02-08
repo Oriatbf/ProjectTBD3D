@@ -155,6 +155,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99c7fbaf9f6bc0e4fb8a707d6a0a50ef
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Cheating.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9cac916381ca45c479892472de799724
     m_Address: Assets/_Project/Art/Icons/UsingIcon/BuffIcons/FaintingBuff.png
     m_ReadOnly: 0
@@ -207,6 +212,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d186cad33bb3df64a9591f166f6e7b74
     m_Address: Assets/_Project/Prefab/UI/Buff/BuffIcon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d5a0e98e15c07a946b02a92d181d134c
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Roulette.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

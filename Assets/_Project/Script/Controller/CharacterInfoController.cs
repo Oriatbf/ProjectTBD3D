@@ -146,7 +146,7 @@ namespace _Project.Script.Controller
             
             curIcon = skillIcon;
             curTargetType = skillIcon.GetSkillBase().GetData().TargetType;
-            curIcon.SetFrameColor(Color.green,true);
+            curIcon.SetFrameColor(IconState.Selected,true);
             isTargeting = true;
         }
     
@@ -287,7 +287,7 @@ namespace _Project.Script.Controller
             }
             ClearTargetTiles();
             if(curIcon != null)
-                curIcon.SetFrameColor(Color.white,true);
+                curIcon.SetFrameColor(IconState.None,true);
             curIcon = null;
             isTargeting = false;
             lastTile = null;

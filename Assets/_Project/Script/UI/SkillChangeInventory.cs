@@ -64,7 +64,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
 
         for (int i = skillBases.Count; i < skillIcons.Count; i++)
         {
-            skillIcons[i].SetFrameColor(Color.red,true);
+            skillIcons[i].SetFrameColor(IconState.Blocked,true);
         }
     }
     
@@ -114,10 +114,10 @@ public class SkillChangeInventoryCanvas : BaseCanvas
          if(unitIcon.GetUnitData() == null)return;
          foreach (var u in unitIcons)
          {
-             u.SetFrameColor(Color.white,true);
+             u.SetFrameColor(IconState.None,true);
          }
          curUnitIcon = unitIcon;
-         unitIcon.SetFrameColor(Color.green,true);
+         unitIcon.SetFrameColor(IconState.Selected,true);
          CancelTargeting();
          var unitSaveData = unitIcon.GetUnitData();
          InitUnitSkills(unitSaveData.constId, unitSaveData.bringSkills);
@@ -142,7 +142,7 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         if(skillIcon.GetSkillBase() == null)return;
         Debug.Log(skillIcon.GetSkillBase().GetData().Name);
         curIcon = skillIcon;
-        curIcon.SetFrameColor(Color.green,true);
+        curIcon.SetFrameColor(IconState.Selected,true);
         isTargeting = true;
     }
     
@@ -195,8 +195,8 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         var targetSkillBase = targetIcon.GetSkillBase();
         targetIcon.Init(curSkillBase);
         curIcon.Init(targetSkillBase);
-        targetIcon.SetFrameColor(Color.white,true);
-        curIcon.SetFrameColor(Color.white,true);
+        targetIcon.SetFrameColor(IconState.None,true);
+        curIcon.SetFrameColor(IconState.None,true);
         SaveUnitSkills();
         
         
@@ -225,10 +225,10 @@ public class SkillChangeInventoryCanvas : BaseCanvas
         {
             if (skillIcon.GetSkillBase() != null)
             {
-                skillIcon.SetFrameColor(Color.white,true);
+                skillIcon.SetFrameColor(IconState.None,true);
             }
         }
-        changeIcon.SetFrameColor(Color.white,true);
+        changeIcon.SetFrameColor(IconState.None,true);
     }
     
     public void Show()
