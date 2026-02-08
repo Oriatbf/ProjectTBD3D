@@ -72,6 +72,9 @@ public class TurnController : BaseController
         }
     }
     
+    /// <summary>
+    /// 시작시 한번 만 실행
+    /// </summary>
     public void TurnStart()
     {
         ChangeStates(State.Idle,Team.PlayerTeam);
@@ -79,40 +82,24 @@ public class TurnController : BaseController
     }
 
     /// <summary>
-    /// 팀 추가
+    /// 유낫 설정
     /// </summary>
-    public void Add(List<Unit> units, Team team)
+    public void SetUnits()
     {
-        switch (team)
-        {
-            case Team.PlayerTeam:
-                players.Clear();
-                break;
-            case Team.EnemyTeam:
-                enemys.Clear();
-                break;
-        }
-        foreach (var unit in units)
-        {
-            allUnits.Add(unit);
-            if (unit.TryGetComponent(out StateControllerBase controllerBase))
-            {
-                switch (team)
-                {
-                    case Team.PlayerTeam:
-                        players.Add(controllerBase);
-                        break;
-                    case Team.EnemyTeam:
-                        enemys.Add(controllerBase);
-                        break;
-                }
-                Debug.Log($"{team}이 추가되었습니다");
-            }
-        }
-      
+        players.Clear();
+        enemys.Clear();
+        allUnits.Clear();
+        var playerUnits = InGameUnitInfo.PlayerUnits;
+        var enemyUnits = InGameUnitInfo.EnemyUnits;
+        for (int i = 0; i < playerUnits.Count; i++)
+            players.Add(playerUnits[i].GetComponent<StateControllerBase>());
+        for (int i = 0; i < enemyUnits.Count; i++)
+            enemys.Add(enemyUnits[i].GetComponent<StateControllerBase>());
+        allUnits.AddRange(playerUnits);
+        allUnits.AddRange(enemyUnits);
     }
 
-    public void ChangeStates(State state,Team team)
+    private void ChangeStates(State state,Team team)
     {
         List<StateControllerBase> selectedTeams = new List<StateControllerBase>();
         switch (team)

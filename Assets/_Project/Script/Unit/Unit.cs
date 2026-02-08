@@ -270,6 +270,7 @@ public class Unit : MonoBehaviour
         {
             ApplicationManager.Inst.GetModule<PoolController>()
                 .Spawn<CharmEffect>("CharmEffect",transform.position + new Vector3(0,0.3f));
+            //매혹 적
             DataManager.Inst.SaveSurviveUnit(this);
             OnDispos(true);
         }

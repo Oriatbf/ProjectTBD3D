@@ -26,6 +26,12 @@ public enum SkillType
     Attack,Utility,Buff,Debuff,Penetration //Penetration : 관통
 }
 
+[UGS(typeof(ConsumptionType))]
+public enum ConsumptionType
+{
+    Consumable,NonConsumable
+}
+
 
 public class SheetDataManager : Singleton<SheetDataManager>
 {

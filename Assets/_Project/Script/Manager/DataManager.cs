@@ -22,6 +22,7 @@ public class UnitSaveData
     public Rarity rarity;
     public float charm;
     public float flipDir = 0;
+    public ConsumptionType consumptionType;
 
     public UnitSaveData() { }
     public UnitSaveData(UnitData.Data unitData)
@@ -34,6 +35,7 @@ public class UnitSaveData
         rarity = unitData.Rarity;
         charm = unitData.Charm;
         flipDir = unitData.Flip;
+        consumptionType = unitData.ConsumptionType;
     }
 
 }
@@ -266,7 +268,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public UnitSaveData GetSavedUnit(int constID)=>Data.units.FirstOrDefault(u => u.constId == constID);
 
     /// <summary>
-    /// 살아남은 플레이어 유닛 저장
+    /// 살아남은 플레이어 유닛 저장, 매혹당한 적 저장
     /// </summary>
     /// <param name="unit"></param>
     public void SaveSurviveUnit(Unit unit)
@@ -281,7 +283,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             id= unitSaveData.id,
             animatorName = unitSaveData.animatorName,
             statContainer = originalStatContainer,
-            bringSkills = unit.GetOriginalBringSkills()
+            bringSkills = unit.GetOriginalBringSkills(),
+            consumptionType = ConsumptionType.NonConsumable
         };
         newUnitSaveData.statContainer.hp.SetBaseValue(unitSaveData.statContainer.hp._baseValue);
         

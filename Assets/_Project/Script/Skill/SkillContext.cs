@@ -39,7 +39,11 @@ namespace SkillData
         public void InitSourceTile(Tile sourceTile)
         {
             this.SourceTile = sourceTile;
-            if(sourceTile.GetUnit() == null)Debug.LogError("sourceUnit is null");
+            if (sourceTile.GetUnit() == null)
+            {
+                Debug.LogError("sourceUnit is null");
+                return;
+            }
             SourceUnit = sourceTile.GetUnit();
             
         }

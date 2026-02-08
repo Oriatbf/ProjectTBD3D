@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -6,12 +7,13 @@ public class EnemyRegisterController : BaseController
 {
     private List<EnemyController> enemies = new List<EnemyController>();
 
-    public void Add(List<Unit> units)
+    public void SetEnemyUnits()
     {
+        var units = InGameUnitInfo.EnemyUnits;
         enemies.Clear();
-        foreach (var unit in units)
+        for(int i = 0;i<units.Count;i++)
         {
-            if (unit.TryGetComponent(out EnemyController enemyController))
+            if (units[i].TryGetComponent(out EnemyController enemyController))
             {
                 enemies.Add(enemyController);
             }
@@ -20,6 +22,7 @@ public class EnemyRegisterController : BaseController
 
     public async UniTask Register()
     {
+        SetEnemyUnits();
         for (int i = 0; i < enemies.Count; i++)
         {
             await enemies[i].RegisterSKill();

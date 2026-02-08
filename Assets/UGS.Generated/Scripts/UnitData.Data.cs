@@ -62,6 +62,7 @@ namespace UnitData
 		public System.Int32 Flip;
 		public System.String AnimatorName;
 		public ManualType ManualType;
+		public ConsumptionType ConsumptionType;
 		public Rarity Rarity;
 		public System.Single TurnGauge;
 		public System.Collections.Generic.List<Int32> BringSkill;

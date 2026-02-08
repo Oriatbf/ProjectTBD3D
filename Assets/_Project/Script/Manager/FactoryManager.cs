@@ -60,7 +60,6 @@ public class FactoryManager : Singleton<FactoryManager>
                          break;
                     }
                }
-               ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
           }
 
           if (playerUnits.Count <= 0)
@@ -80,6 +79,7 @@ public class FactoryManager : Singleton<FactoryManager>
                //전투가 끝나고 남은 유닛들 세이브
                foreach (var unit in playerUnits)
                {
+                    if (unit.GetUnitData().consumptionType == ConsumptionType.Consumable) return;
                     DataManager.Inst.SaveSurviveUnit(unit);
                }
 
@@ -104,11 +104,6 @@ public class FactoryManager : Singleton<FactoryManager>
      {
           UnitAddtionHandle();
           TurnInit();
-          
-          ApplicationManager.Inst.GetModule<TurnController>().Add(playerUnits,Team.PlayerTeam);
-          ApplicationManager.Inst.GetModule<TurnController>().Add(enemyUnits,Team.EnemyTeam);
-          ApplicationManager.Inst.GetModule<EnemyRegisterController>().Add(enemyUnits);
-          
           ApplicationManager.Inst.GetModule<TurnController>().TurnStart();
           
           
@@ -251,6 +246,8 @@ public class FactoryManager : Singleton<FactoryManager>
      private void UnitAddtionHandle()
      {
           InGameUnitInfo.StoreUnits(playerUnits,enemyUnits);
+          ApplicationManager.Inst.GetModule<TurnController>().SetUnits();
+          //ApplicationManager.Inst.GetModule<EnemyRegisterController>().SetEnemyUnits();
      }
 }
 
