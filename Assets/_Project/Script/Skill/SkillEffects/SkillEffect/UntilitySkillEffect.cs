@@ -73,7 +73,7 @@ public class TurnDelete : SkillEffect
     protected override SkillType SkillType => SkillType.Utility;
     public override void SkillAction(SkillContext skillContext)
     { 
-        ApplicationManager.Inst.GetModule<SkillProgressController>().DeleteStack(skillContext.stackTurn,values[0]);
+        ApplicationManager.Inst.GetModule<SkillProgressController>().DeleteStack(skillContext.stackTurn,skillContext.stackTurn+values[0]);
     }
 
     public override string ReturnInformation()
