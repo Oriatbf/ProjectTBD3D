@@ -229,6 +229,29 @@ public class Summon : SkillEffect
     }
 }
 
+public class ComboDamage : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Attack;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var targets = skillContext.GetTargetTiles();
+        for (int i = 0; i < targets.Count; i++)
+        {
+            var targetUnit = targets[i].GetUnit();
+            if(targetUnit == null)continue;
+            for (int j = 0; j < values[0]; j++)
+            {
+                targetUnit.GetDamage(values[1],skillContext,SkillType);
+            }
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"적에게 {values[0]}번 {values[1]}의 데미지를 입힙니다";
+    }
+}
+
 
 
 

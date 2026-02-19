@@ -100,6 +100,7 @@ public class GameData
     public int mainCharacterID = 0;
     public bool isNewData = false;
     public bool isFirstGame = true;
+    public bool autoTarget = false;
 
     public void Reset()
     {
@@ -140,6 +141,12 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            TBDLogger.CommandLog(KeyCode.M,this);
+            Data.autoTarget = !Data.autoTarget;
+        }
+        
         if (Input.GetKeyDown(KeyCode.F5))
         {
             if (!TBDLogger.CommandLog(KeyCode.F5,this))return;
@@ -237,10 +244,12 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     
     public void DataReset()
     {
+        var autoTarget = Data.autoTarget;
         //var nodeCoord = Data.mapData.curNodeCoord;
         Data.Reset();
         Data.isFirstGame = false;
         Data.isNewData = true;
+        Data.autoTarget = autoTarget;
         //Data.mapData.curNodeCoord = nodeCoord;
         JsonSave();
     }
@@ -298,7 +307,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             animatorName = unitSaveData.animatorName,
             statContainer = originalStatContainer,
             bringSkills = unit.GetOriginalBringSkills(),
-            consumptionType = ConsumptionType.NonConsumable
+            consumptionType = ConsumptionType.NonConsumable,
+            flipDir = unitSaveData.flipDir,
         };
         newUnitSaveData.statContainer.hp.SetBaseValue(unitSaveData.statContainer.hp._baseValue);
         
@@ -338,6 +348,8 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             animatorName = originalData.AnimatorName,
             statContainer = originalStatContainer,
             bringSkills = originalData.BringSkill,
+            flipDir = originalData.Flip,
+            consumptionType = ConsumptionType.NonConsumable,
         };
         Data.units.Add(newUnitSaveData);
     }
@@ -353,12 +365,9 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             Data.units.Remove(unit);
         }
     }
-
-
     #endregion
     
-
-
+    
     #region MapAPI
     
     /// <summary>

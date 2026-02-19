@@ -101,3 +101,23 @@ public class Taming : SkillEffect
         return $"일정 확률로 적을 매혹시킵니다";
     }
 }
+
+public class DeathNote : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var targetUnit = skillContext.TargetUnit;
+        if(targetUnit == null) return;
+        var rate = TamingHelper.TaimgCalculator(targetUnit);
+        if (Random.value < rate)
+        {
+            targetUnit.GetDamage(999,null,SkillType);
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return "테이밍 확률에 따라 지정한 적을 즉사시킵니다";
+    }
+}

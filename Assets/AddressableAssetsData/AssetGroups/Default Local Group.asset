@@ -55,6 +55,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2745f3ed64babca4e9e7a645517e64cf
+    m_Address: Assets/_Project/Art/Icons/UsingIcon/Yagami.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2e3345dc41ec0c14d8156ff823b913c1
     m_Address: Assets/_Project/Prefab/UI/SkillStackCanvas.prefab
     m_ReadOnly: 0

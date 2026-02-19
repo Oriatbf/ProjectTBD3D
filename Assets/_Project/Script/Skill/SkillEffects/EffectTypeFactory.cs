@@ -28,7 +28,9 @@ public static class EffectTypeFactory
         SourceFainting,
         TeamCharm,
         PenetrationAttack,
-        Purify
+        Purify,
+        DeathNote,
+        ComboDamage
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -59,6 +61,8 @@ public static class EffectTypeFactory
             EffectType.TeamCharm => new TeamCharm(),
             EffectType.PenetrationAttack => new PenetrationAttack(),
             EffectType.Purify => new Purify(),
+            EffectType.DeathNote => new DeathNote(),
+            EffectType.ComboDamage => new ComboDamage(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

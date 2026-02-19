@@ -26,7 +26,6 @@ namespace _Project.Script.Controller
 
         private bool isUniqueSkill = false;
         private bool isTargeting = false;
-        private bool autoTarget = false;
         private float maxTurnStack = 0;
         private float curTurnStack = 0;
         private int curConstId = -1;
@@ -90,12 +89,7 @@ namespace _Project.Script.Controller
         {
             base.OnUpdate();
             if (characterSkillCanvas == null || !characterSkillCanvas.isShow) return;
-
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                TBDLogger.CommandLog(KeyCode.M,this);
-                autoTarget = !autoTarget;
-            }
+            
             
             
             if (!isTargeting)
@@ -170,7 +164,7 @@ namespace _Project.Script.Controller
                 {
                     if (hit.transform.TryGetComponent(out Tile tile))
                     {
-                        if (!autoTarget)
+                        if (!DataManager.Inst.Data.autoTarget)
                         {
                             curTile = tile;   
                         }

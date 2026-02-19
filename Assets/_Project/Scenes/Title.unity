@@ -1745,6 +1745,7 @@ MonoBehaviour:
     mainCharacterID: 0
     isNewData: 0
     isFirstGame: 0
+    autoTarget: 0
   debugMode: 0
   isTutorial: 0
 --- !u!4 &1878071355
