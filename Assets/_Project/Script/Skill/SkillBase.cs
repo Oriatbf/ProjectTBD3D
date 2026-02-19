@@ -23,6 +23,7 @@ namespace SkillData
             
         public void InitTarget(Tile target)=>skillContext.InitTargetTile(target);
         public void InitSource(Tile owner) => skillContext.InitSourceTile(owner);
+        public void InitStackTurn(float stackTurn) => skillContext.InitStackTurn(stackTurn);
         public SkillContext GetSkillContext() => skillContext;
         public Data GetData()=>_data;
 
@@ -66,7 +67,7 @@ namespace SkillData
                         values.Add(int.Parse(v[i]));
                 }
                 
-                skillEffect.Init(this, values);
+                skillEffect.Init(values);
                 effects.Add(skillEffect);
             }
 
@@ -92,8 +93,6 @@ namespace SkillData
             }
             skillAction?.Invoke(skillContext);
         }
-
-        public float GetFinalDamage(int value) => 1;//_data.SkillType.Calculation<SkillBase>(value,skillContext.SourceTile.GetStatContainer());
 
         /// <summary>
         /// SkillBase 깊은 복사

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using UnitData;
 using UnityEngine;
@@ -8,23 +10,31 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : UnitController
 {
-    private float maxTurn = .5f;
+    private float maxTurn = 0;
     float curTurn = 0;
-    
+    TileController _tileController;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _tileController = ApplicationManager.Inst.GetModule<TileController>();
+        
+    }
+
     /// <summary>
     /// 스킬 등록
     /// </summary>
     public async UniTask  RegisterSKill()
     {
-        Debug.Log("RegisterSKill");
+        if (_unit.GetStatContainer().isStun) return;
+        maxTurn = _unit.GetStatContainer().turnGauge._maxValue;
         var _skillStackInfoList = FindingSkill();
         foreach (var skillStackInfo in _skillStackInfoList)
         {
             var skill = skillStackInfo.skill;
             skill.InitSource(curTile);
             FindingTargetTile(skillStackInfo.skill);
-            ApplicationManager.Inst.GetModule<SkillStackController>().StackSkill(skillStackInfo);
-            ApplicationManager.Inst.GetModule<SkillTurnCounterController>().Enqueue(skillStackInfo);
+            ApplicationManager.Inst.GetModule<SkillProgressController>().Stack(skillStackInfo);
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
         }
         
@@ -48,12 +58,15 @@ public class EnemyController : UnitController
             var targetSkill = skillList[rand];
             if (targetSkill.GetData().RequireTurn <= maxTurn - curTurn)
             {
-                curTurn += targetSkill.GetData().RequireTurn;  
+               //curTrun은 해당 적이 maxTurn까지만 턴을 사용하게 하기 위한 요소
+                curTurn += targetSkill.GetData().RequireTurn; 
+                var realTurn =   InGameUnitInfo.EnemyCurTurn += targetSkill.GetData().RequireTurn;
+               
                 SkillStackInfo _skillStackInfo = new SkillStackInfo()
                 {
                     skill = targetSkill.Clone(),
                     sourceTile = curTile,
-                    stackTurn = curTurn,
+                    stackTurn = realTurn,
                     team = Team.EnemyTeam
                 };
                 resultSkillStackInfo.Add(_skillStackInfo);
@@ -69,32 +82,106 @@ public class EnemyController : UnitController
     {
         int rowCount = skill.GetData().RowCount;
         int columnCount = skill.GetData().ColumnCount;
-        int mid = TileManager.Inst.GetHalfCount();
-        int row = TileManager.Inst.GetRowCount();
+        Tile resultTile = curTile;
 
-        Tile maxTile = null;
-        int maxCount = 0;
-        for (int i = 0; i <= mid; i++)
+        if (skill.GetData().TargetType == TargetType.Area)
         {
-            for (int j = 0; j <row; j++)
+            switch (skill.GetData().SkillType)
             {
-                Tile curTile = TileManager.Inst.GetTile(new Vector2(i, j));
-                var list = TileManager.Inst.GetTiles(curTile,rowCount, columnCount);
-                int playerCnt = 0;
-                if (list.Count > 0)
-                {
-                    foreach (var tile in list)
-                        if(tile.GetUnit()?.GetTeam() == Team.PlayerTeam)playerCnt+=1;
-                }
+                case SkillType.Attack:
+                    resultTile=TargetEnemyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Utility:
+                    resultTile=TargetFriendlyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Buff:
+                    resultTile=TargetFriendlyUnit(rowCount, columnCount);
+                    break;
+                case SkillType.Debuff:
+                    resultTile=TargetEnemyUnit(rowCount, columnCount);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }      
+        }
+      
+        skill.InitTarget(resultTile);
+    }
 
-                if (playerCnt > maxCount)
-                {
-                    maxCount = playerCnt;
-                    maxTile = curTile;
-                }
+    private Tile TargetEnemyUnit(int row, int column)
+    {
+        //가장 많은 적 유닛이 존재하는 곳들을 모아서 저장
+        List<Tile> targetTiles = new List<Tile>();
+        int maxCount = 0;
+        var playerTiles = _tileController.GetAllTeamTiles(Team.PlayerTeam);
+        for (int i = 0; i < playerTiles.Count; i++)
+        {
+            var list = _tileController.GetTiles(playerTiles[i],row, column);
+            int unitCnt = 0;
+            if (list.Count > 0)
+            {
+                foreach (var tile in list)
+                    if(tile.GetUnit()?.GetTeam() == Team.PlayerTeam)unitCnt+=1;
+            }
+
+            if (unitCnt > maxCount)
+            {
+                targetTiles = new List<Tile>();
+                targetTiles.Add(playerTiles[i]);
+                maxCount = unitCnt;
+            }
+            else if (unitCnt == maxCount)
+            {
+                targetTiles.Add(playerTiles[i]);
             }
         }
-        if(maxTile == null)Debug.LogError("maxTile이 없음");
-        skill.InitTarget(maxTile);
+        
+        var random = Random.Range(0, targetTiles.Count);
+        var finalTile = targetTiles[random];
+        return finalTile;
+    }
+
+    private Tile TargetFriendlyUnit(int row, int column)
+    {
+        //가장 많은 적 유닛과 손실된 피를 저장
+        List<(Tile,int)> targetTiles = new  List<(Tile,int)>() ;
+        int maxScore = 0;
+        var enemyTiles = _tileController.GetAllTeamTiles(Team.EnemyTeam);
+        for (int i = 0; i < enemyTiles.Count; i++)
+        {
+            var list = _tileController.GetTiles(enemyTiles[i],row, column);
+            int unitCnt = 0;
+            int lostHp = 0;
+            if (list.Count > 0)
+            {
+                foreach (var tile in list)
+                {
+                    if (tile.GetUnit()?.GetTeam() == Team.EnemyTeam)
+                    {
+                        unitCnt+=1;
+                        var hpStat = tile.GetUnit().GetStatContainer().hp;
+                        var lost = hpStat._maxValue - hpStat._baseValue;
+                        lostHp += (int)lost;
+                    }
+                }
+            }
+
+            var score = lostHp + (unitCnt*3);
+
+            if (score > maxScore)
+            {
+                targetTiles = new  List<(Tile,int)>() ;
+                targetTiles.Add((enemyTiles[i], score));
+                maxScore = score;
+            }
+            else if (score == maxScore)
+            {
+                targetTiles.Add((enemyTiles[i],score));
+            }
+        }
+        if(targetTiles.Count == 0)Debug.LogError("No TargetTiles");
+        var random = Random.Range(0, targetTiles.Count);
+        var finalTile = targetTiles[random].Item1;
+        return finalTile;
     }
 }

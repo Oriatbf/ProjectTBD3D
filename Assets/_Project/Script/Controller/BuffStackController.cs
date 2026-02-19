@@ -2,15 +2,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-public class BuffStackController : BaseController
+public class ActionStateStackController : BaseController
 {
-    private Dictionary<Tile ,List<BuffIcon>> stackData = new Dictionary<Tile, List<BuffIcon>>();
+    private Dictionary<Tile ,List<ActionStateIcon>> stackData = new Dictionary<Tile, List<ActionStateIcon>>();
     private Camera _camera;
     private Transform content;
-    private BuffIcon buffIconPrefab;
+    private ActionStateIcon actionStateIconPrefab;
     private float skillIconInterval = 75;
     private bool isRefreshing = false;
     
@@ -22,11 +23,11 @@ public class BuffStackController : BaseController
     {
         base.OnInitialize();
         _camera = Camera.main;
-        SetPrefab();
+        SetPrefab().Forget();
     }
     
     
-    private async void SetPrefab()
+    private async UniTask SetPrefab()
     {
         
         var _canvas = await Addressables.LoadAssetAsync<GameObject>(buffStackCanvasPath).ToUniTask();
@@ -34,29 +35,42 @@ public class BuffStackController : BaseController
         content= obj.transform.GetChild(0).transform;
         
         var _buffIcon = await Addressables.LoadAssetAsync<GameObject>(buffIconPath).ToUniTask();
-        if(_buffIcon.TryGetComponent(out BuffIcon skillIcon))buffIconPrefab = skillIcon;
+        if(_buffIcon.TryGetComponent(out ActionStateIcon skillIcon))actionStateIconPrefab = skillIcon;
     }
 
-    public void StackBuff(BuffDebuff buffDebuff)
+    
+    public void StackAction(ActionTrigger actionTrigger,ActionState actionState)
     {
-        var tile = buffDebuff.TargetTile;
-        if(tile==null) Debug.LogError("Tile is null");
-        var _buffIcon = GameObject.Instantiate(buffIconPrefab,content);
-        _buffIcon.Init(buffDebuff);
+        var tile = actionState.GetData().ownerTile;
+        var unit = actionState.GetData().ownerUnit;
+        if(tile==null) Debug.LogError("SourceTile is null");
+        var targetActionState = unit.GetActionStateContainer().GetActionState(actionTrigger, actionState.GetId());
+        if (targetActionState == null) return;
+        if (targetActionState.IsVisualized())
+        {
+            Debug.Log($"Same ActionState : {actionState.GetId()}");
+            return;
+        }
         
-        if (stackData.ContainsKey(tile)) stackData[tile].Add(_buffIcon);
-        else stackData.Add(tile,new List<BuffIcon>(new []{_buffIcon}));
+        targetActionState.GetData().isVisualized = true;
+        
+        var _ActionIcon = GameObject.Instantiate(actionStateIconPrefab,content);
+        _ActionIcon.Init(actionState);
+        
+        if (stackData.ContainsKey(tile)) stackData[tile].Add(_ActionIcon);
+        else stackData.Add(tile,new List<ActionStateIcon>(new []{_ActionIcon}));
         RefreshUI(tile,stackData[tile]);
         
     }
 
     public void UnStackBuff(Tile targetTile,string id)
     {
+        
         if(targetTile==null) Debug.LogError("Tile is null");
         if(!stackData.ContainsKey(targetTile)||stackData[targetTile].Count == 0) return;
         foreach (var _buffIcon in stackData[targetTile])
         {
-            if (_buffIcon.GetBuffDebuff().id == id)
+            if (_buffIcon.GetActionState().GetId() == id)
             {
                 stackData[targetTile].Remove(_buffIcon);
                 GameObject.Destroy(_buffIcon.gameObject);
@@ -90,7 +104,7 @@ public class BuffStackController : BaseController
         stackData.Clear();
     }
 
-    private void RefreshUI(Tile tile,List<BuffIcon> list)
+    private void RefreshUI(Tile tile,List<ActionStateIcon> list)
     {
         isRefreshing = true;
         Vector3 screenPos = _camera.WorldToScreenPoint(tile.GetPos());

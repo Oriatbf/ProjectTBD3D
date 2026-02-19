@@ -18,6 +18,7 @@ public readonly struct StatModifier
 [Serializable]
 public class StatModifierCollection
 {
+    [Serializable]
     private struct ModifierEntry
     {
         public float Value;
@@ -44,7 +45,7 @@ public class StatModifierCollection
     // Lazy initialization - null 체크 시 자동 초기화
     private void EnsureInitialized()
     {
-        if (_entries == null)
+        if (_entries == null || _entries.Length ==0)
         {
             _entries = new ModifierEntry[4];
             _capacity = 4;
@@ -55,8 +56,10 @@ public class StatModifierCollection
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Add(float value)
     {
+        Debug.Log("add");
         EnsureInitialized();
-
+        Debug.Log(_entries.Length);
+        Debug.Log(_count);
         // 용량 초과 시 리사이즈
         if (_count >= _capacity)
         {
@@ -115,6 +118,7 @@ public class StatModifierCollection
         EnsureInitialized();
         
         var sum = 0f;
+        Debug.Log($" count : {_count}  length : {_entries.Length}");
         for (int i = 0; i < _count; i++)
         {
             if (_entries[i].IsActive)

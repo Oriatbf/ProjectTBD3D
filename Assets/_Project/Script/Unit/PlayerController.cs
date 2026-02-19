@@ -1,5 +1,7 @@
 using System;
+using _Project.Script.Controller;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : UnitController
 {
@@ -7,17 +9,13 @@ public class PlayerController : UnitController
     
     private void OnMouseDown()
     {
-        if (!infoShow)
-        {
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Show();
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Init
-                (_unit.GetStatContainer().turnGauge,_unit.GetSkillList(),curTile);
-            infoShow = true;
-        }
-        else
-        {
-            ApplicationManager.Inst.GetModule<CharacterInfoController>().Hide();
-            infoShow = false;
-        }
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+        if (_unit.GetStatContainer().isStun || !FactoryManager.Inst.IsGameStart()) return;
+        ApplicationManager.Inst.GetModule<CharacterSkillController>().Init
+            (_unit,_unit.GetSkillList(),curTile);
+         
+        
+
     }
 }

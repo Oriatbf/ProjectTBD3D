@@ -2,25 +2,35 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopSkillIcon : Icon
+public class ShopSkillIcon : Icon,IBuyable
 {
+    public bool isBuyed { get; set; }
+    public int value { get; set; }
     [SerializeField] private Button button;
     [SerializeField] private TextMeshProUGUI priceTxt;
-    
 
     public void SetBtn()
     {
+        isBuyed = false;
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(BtnAction);
-        priceTxt.text = "100" + "G";
+        
+        value = ShopHelper.ReturnValue(_skillBase.GetData().Rarity);
+        priceTxt.text = $"{value}G";
     }
 
     private void BtnAction()
     {
-        var curGold = DataManager.Inst.GetGold();
-        if (curGold < 100) return;
-        ApplicationManager.Inst.GetModule<TopInfoController>().AddGold(-curGold);
-        ApplicationManager.Inst.GetModule<SkillChangeController>().SetLootSkill(skillBase);
+        if (isBuyed) return;
+        if (!ShopHelper.Buy(value)) return;
+        isBuyed = true;
+        SetFrameColor(IconState.Blocked,true,false);
+        var shopCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas<ShopCanvas>("ShopCanvas");
+        shopCanvas.ChangeState(false,true);
+        ApplicationManager.Inst.GetModule<SkillChangeController>()
+            .SetLootSkill(_skillBase,()=>shopCanvas.ChangeState(true,true,true));
 
     }
+
+  
 }

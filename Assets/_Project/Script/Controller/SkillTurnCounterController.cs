@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
@@ -7,39 +9,18 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-public class SkillTurnCounterController : BaseController
+public class SkillTurnCounter 
 {
-    private string canvasPath = "Assets/_Project/Prefab/UI/TurnCounter/TurnCounterCanvas.prefab";
-    private string playerTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/PlayerTurnCounter Variant.prefab";
-    private string enemyTurnImagePath = "Assets/_Project/Prefab/UI/TurnCounter/EnemyTurnCounter Variant.prefab";
-    private GameObject playerTurnImage,enemyTurnImage;
+    private GameObject playerTurnImage,enemyTurnImage,expectationTurnImage;
     
     private Queue<SkillStackInfo> turnQueue = new Queue<SkillStackInfo>();
     private Queue<TurnImage> turnImageQueue = new Queue<TurnImage>();
-    private GameObject canvas;
+    private GameObject turnCounterCanvas;
     private Transform parent;
     private float imageMoveDistance = 200;
     private float imageInterval = 60;
     
-    public override void OnInitialize()
-    {
-        SetCanvas();
-    }
-
-    public override void OnUpdate()
-    {
-        base.OnUpdate();
-
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            TBDLogger.CommandLog(KeyCode.F6,this);
-            var list = turnImageQueue.ToList();
-            for (int i = 0; i < list.Count; i++)
-            {
-                Debug.Log($"{list[i]}");
-            }
-        }
-    }
+    
 
     /// <summary>
     /// 등록된 모든 스킬 사행
@@ -54,43 +35,62 @@ public class SkillTurnCounterController : BaseController
         for (int i = 0; i < _count; i++)
         {
             RectTransform _rect = null;
-            if (turnQueue.Count <= 0 || turnImageQueue.Count<=0) return;
+            if (turnQueue.Count <= 0 || turnImageQueue.Count <= 0) break;
+            //실행할(삭제될) 스킬TurnImage 받기
             var image = turnImageQueue.Dequeue();
+            Debug.Log($"Dequeue");
             destroyObj.Add(image.gameObject);
             if(image.TryGetComponent(out RectTransform rect)) _rect = rect;
             var curPos  = rect.anchoredPosition;
-            if (_rect != null)
-            {
-                int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
-                //UI이미지 이동 + 투명화
-                Sequence sequence = DOTween.Sequence();
-                sequence.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion* imageMoveDistance, 0), 0.2f));
-                image.ArrowAlpha();
-                await sequence.Play().AsyncWaitForCompletion();
-            }
             //실행할(삭제될) 스킬 받기
             var skillStackInfo = turnQueue.Dequeue();
             var skill = skillStackInfo.skill;
-            skill.SkillAction();
-            Debug.Log(skill.GetSkillContext().SourceUnit);
+            
+            var sourceUnit = skill.GetSkillContext().SourceUnit;
+            
+          
+            
             await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().SourceUnit);
-            //몬스터 위에 스킬 스택되어있던거 삭제
-            ApplicationManager.Inst.GetModule<SkillStackController>().UnstackSkill(skillStackInfo.sourceTile);
+            await sourceUnit.AttackAnim();
+            //스킬 실행
+            skill.SkillAction();
+            if(skill.GetSkillContext().TargetUnit!=null)
+                await ApplicationManager.Inst.GetModule<CameraController>().TargetLook(skill.GetSkillContext().TargetUnit);
+            // 스킬 실행 후 UI 애니메이션 시작
+            if (_rect != null)
+            {
+                Sequence seq = DOTween.Sequence();
+                int inversion = image.GetTeam() == Team.PlayerTeam ? 1 : -1;
+
+                //UI이미지 이동 + 투명화
+                seq.Append(_rect.DOAnchorPos(curPos + new Vector2(inversion * imageMoveDistance, 0), 0.2f));
+                seq.JoinCallback(() => image.ArrowAlpha());
+                //몬스터 위에 스킬 스택되어있던거 삭제
+                seq.AppendCallback(() =>
+                    ApplicationManager.Inst.GetModule<SkillProgressController>().GetSkillStack().UnstackSkill(skillStackInfo.sourceTile));
+                await seq.Play().AsyncWaitForCompletion();
+
+            }
+
+            
+            
         }
         //한 턴에 해당하는 UI gameObject 삭제
-        foreach (var obj in destroyObj) GameObject.Destroy(obj);
-        ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
+        foreach (var obj in destroyObj) Object.Destroy(obj);
+        RefreshUI();
+        Debug.Log("SkillTurnCounterOriginLook");
+        await ApplicationManager.Inst.GetModule<CameraController>().OriginLook();
         //한 턴이 끝
         ApplicationManager.Inst.GetModule<TurnController>().Reset();
     }
 
-    private async void SetCanvas()
+    public void SetCanvas()
     {
-        canvas= await Addressables.LoadAssetAsync<GameObject>(canvasPath).Task;
-        playerTurnImage = await Addressables.LoadAssetAsync<GameObject>(playerTurnImagePath).Task;
-        enemyTurnImage = await Addressables.LoadAssetAsync<GameObject>(enemyTurnImagePath).Task;
-        var obj = GameObject.Instantiate(canvas);
-        parent = obj.transform.GetChild(0);
+        turnCounterCanvas= ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas("TurnCounterCanvas");
+        playerTurnImage = Resources.Load<GameObject>("UI/TurnCounter/PlayerTurnCounter");
+        enemyTurnImage = Resources.Load<GameObject>("UI/TurnCounter/EnemyTurnCounter");
+        expectationTurnImage = Resources.Load<GameObject>("UI/TurnCounter/ExpectationTurnCounter");
+        parent = turnCounterCanvas.transform.GetChild(0);
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class SkillTurnCounterController : BaseController
     public void Enqueue(SkillStackInfo skillStackInfo)
     {
         var image = skillStackInfo.team == Team.PlayerTeam ? playerTurnImage : enemyTurnImage;
-        var obj = GameObject.Instantiate(image, parent);
+        var obj = Object.Instantiate(image, parent);
         if (obj.TryGetComponent(out TurnImage turnImage))
         {
             turnImage.SetInfo(skillStackInfo);
@@ -120,6 +120,7 @@ public class SkillTurnCounterController : BaseController
         for (int i = 0; i < skillList.Count; i++)
         {
             var skillReq = skillList[i].stackTurn;
+            //턴 순서 정리
             if (curSkillReq < skillReq)
             {
                 skillList.Insert(i,skillStackInfo);
@@ -141,9 +142,10 @@ public class SkillTurnCounterController : BaseController
     private void RefreshUI()
     {
         var list = turnImageQueue.ToList();
+        Debug.Log("턴 이미지의 개수는 "+list.Count);
         for (int i = 0; i < list.Count; i++)
         {
-            list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-imageInterval*i), 0.2f);
+            list[i].GetComponent<RectTransform>().DOAnchorPos(new Vector2(0,-130-imageInterval*i), 0.2f);
         }
     }
 
@@ -156,24 +158,151 @@ public class SkillTurnCounterController : BaseController
         turnImageQueue.Clear();
         turnQueue.Clear();
     }
-    
 
-    public void DequeueByTile(Tile sourceTile)
+    /// <summary>
+    /// 예상 스킬 보여주기
+    /// </summary>
+    public TurnImage EnqueueExpectSkill(SkillBase skillBase)
     {
-        var list = turnQueue.ToList();
-        var imageList = turnImageQueue.ToList();
-        for (int i = 0; i < list.Count; i++)
+        var skillContext = skillBase.GetSkillContext();
+        var skillData = skillBase.GetData();
+        var stackTurn = InGameUnitInfo.PlayerCurTurn + skillData.RequireTurn;
+        var skillStackInfo = new SkillStackInfo
+            (skillBase,skillContext.SourceTile,stackTurn,Team.PlayerTeam);
+        var obj = Object.Instantiate(expectationTurnImage, parent);
+        if (obj.TryGetComponent(out TurnImage turnImage))
         {
-            if (list[i].sourceTile == sourceTile)
+            turnImage.SetInfo(skillStackInfo);
+        };
+        
+        var skillList = turnQueue.ToList();
+        var turnImageList = turnImageQueue.ToList();
+        for (int i = 0; i < skillList.Count; i++)
+        {
+            var skillReq = skillList[i].stackTurn;
+            //턴 순서 정리
+            if (stackTurn < skillReq)
             {
-                list.RemoveAt(i);
-                GameObject.Destroy(imageList[i].gameObject);
-                imageList.RemoveAt(i);
+                turnImageList.Insert(i,turnImage);
+                turnImageQueue = new Queue<TurnImage>(turnImageList);
+                RefreshUI();
+                return turnImage;
             }
         }
-        turnQueue = new Queue<SkillStackInfo>(list);
-        turnImageQueue = new Queue<TurnImage>(imageList);
+        turnImageList.Add(turnImage);
+        turnImageQueue = new Queue<TurnImage>(turnImageList);
         RefreshUI();
+        return turnImage;
+    }
+
+    public void DequeueExpectSkill(TurnImage turnImage)
+    {
+        var list = turnImageQueue.ToList();
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == turnImage)
+            {
+                list.RemoveAt(i);
+            }
+        }
+        turnImageQueue = new Queue<TurnImage>(list);
+        Object.Destroy(turnImage.gameObject);
+        RefreshUI();
+    }
+    
+
+    public void DequeueAllByTile(Tile sourceTile)
+    {
+        var skillStackInfos = turnQueue.ToList();
+        var turnImages = turnImageQueue.ToList();
+        for (int i = skillStackInfos.Count - 1; i >= 0; i--)
+        {
+            if (skillStackInfos[i].sourceTile == sourceTile)
+            {
+                skillStackInfos.RemoveAt(i);
+                Object.Destroy(turnImages[i].gameObject);
+                turnImages.RemoveAt(i);
+            }
+        }
+
+        turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
+        turnImageQueue = new Queue<TurnImage>(turnImages);
         
     }
+
+    public void DequeueByTurn(float curStackTurn,float deleteStackTurn)
+    {
+        var skillStackInfos = turnQueue.ToList();
+        var turnImages = turnImageQueue.ToList();
+
+        for (int i = skillStackInfos.Count-1; i >= 0; i--)
+        {
+            var curSkillStackTurn = skillStackInfos[i].stackTurn;
+            if (curSkillStackTurn >= curStackTurn && curSkillStackTurn <= deleteStackTurn)
+            {
+                skillStackInfos.RemoveAt(i);
+                Object.Destroy(turnImages[i].gameObject);
+                turnImages.RemoveAt(i);
+            }
+        }
+        
+        turnQueue = new Queue<SkillStackInfo>(skillStackInfos);
+        turnImageQueue = new Queue<TurnImage>(turnImages);
+        RefreshUI();
+    }
+
+    #region Tutorial
+
+    public void RegisterTutorial()
+    {
+        SetTutorial();
+        SetTutorial2();
+    }
+        
+    /// <summary>
+    /// 튜토리얼 등록
+    /// </summary>
+    private void SetTutorial()
+    {
+        var obj = Object.Instantiate(playerTurnImage, parent);
+        RectTransform targetRect = obj.GetComponent<RectTransform>();
+        targetRect.DOAnchorPos(new Vector2(0, -130 ), 0);
+        obj.gameObject.SetActive(false);
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 6,
+            informationTxt = "적과 아군이 등록한 스킬은\n이쪽에 등록됩니다",
+            highLightRect = targetRect,
+            transformType = TransformType.Rect,
+            highLightSize = targetRect.sizeDelta,
+            textOffset = new Vector2(50,100),
+            btnAction = () =>
+            {
+                var list  = turnImageQueue.ToList();
+                list[0].ClickAction(true);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 7,
+            informationTxt = "등록된 턴을 호버 시 시전자와 피격자가 표시됩니다.",
+            highlightPos = new Vector2(0,0),
+            transformType = TransformType.Position,
+            highLightSize = new Vector2(1800,600),
+            textOffset = new Vector2(0,400),
+            btnAction = () =>
+            {
+                var list  = turnImageQueue.ToList();
+                list[0].ResetVisualize(true);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+
+    #endregion
 }

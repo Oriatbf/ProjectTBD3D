@@ -1,49 +1,57 @@
 using System;
 using System.Collections.Generic;
+using _Project.Script.Controller;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
-public class PlayerSpawnCanvas : MonoBehaviour
+public class PlayerSpawnCanvas : BaseCanvas
 {
-    [SerializeField ]private Transform parent;
     [SerializeField] private RectTransform backGround;
+    [SerializeField] private Transform content;
     [SerializeField] private Button spawnEndBtn;
+    [SerializeField] private List<UnitIcon> _unitIcons = new List<UnitIcon>();
+
     
-    private CharacterHead _characterHeadPrefab;
-    private readonly string characterHeadPath = "Assets/_Project/Prefab/UI/ChracterInfoCanvas/CharacterHead.prefab";
 
-
-
-    public async void  Init(List<UnitSaveData> unitSaveData)
+    private void Start()
     {
-         var obj = await Addressables.LoadAssetAsync<GameObject>(characterHeadPath).ToUniTask();
-         _characterHeadPrefab = obj.GetComponent<CharacterHead>();
-        foreach (var unitData in unitSaveData)
+        
+        SetTutorial();
+    }
+
+    public void  Init(List<UnitSaveData> unitSaveData)
+    {
+        for (int i = 0; i < unitSaveData.Count; i++)
         {
-            var instance = Instantiate(_characterHeadPrefab,parent);
-            instance.Init(unitData);
+            _unitIcons[i].Init(unitSaveData[i]);
         }
+    }
+    
+    private void SetTutorial()
+    {
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 2,
+            informationTxt = "소환 종료를 누르세요",
+            highLightRect = spawnEndBtn.GetComponent<RectTransform>(),
+            transformType = TransformType.Rect,
+            highLightSize = spawnEndBtn.GetComponent<RectTransform>().sizeDelta,
+            textOffset = new Vector2(-150,100),
+            btnAction = ()=>spawnEndBtn.onClick.Invoke()
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
     }
 
     public void SetSpawnEndAction(Action action)
     {
         spawnEndBtn.onClick.AddListener(()=>action?.Invoke());
     }
+    
+    public List<UnitIcon> GetUnitIcons => _unitIcons;
 
-    public void SetPos(Vector2 pos,bool tween = false,float duration = 0.5f,Ease ease = Ease.OutQuad)
-    {
-        backGround.DOComplete();
-        if (!tween)
-        {
-            backGround.anchoredPosition = pos;
-        }
-        else
-        {
-            backGround.DOAnchorPos(pos, duration).SetEase(ease);
-        }
-    }
+  
     
 }

@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class BaseCanvas : MonoBehaviour
     [SerializeField] private RectTransform parent;
     protected CanvasGroup canvasGroup;
     protected Canvas canvas;
-    protected bool isShow = false;
+    public bool isShow = false;
 
     protected virtual void Awake()
     {
@@ -19,14 +20,20 @@ public class BaseCanvas : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
         if(canvasGroup == null )Debug.LogError("canvasGroup is null");
         if(canvas == null )Debug.LogError("canvas is null");
-        ChangeState(false);
+        ForceChangeState(false);
+    }
+
+    private void ForceChangeState(bool isShow)
+    {
+        if(isShow)Show(false,true,0);
+        else if(!isShow ) Hide(false,false,0);
+        this.isShow = isShow;
     }
 
     public void ChangeState(bool isShow,bool isDotween = false,bool isRaycast = false,float tweenDuration =0.25f)
     {
-        if(isShow)Show(isDotween,isRaycast,tweenDuration);
-        else Hide(isDotween,isRaycast,tweenDuration);
-        this.isShow = isShow;
+        if(isShow && !this.isShow)Show(isDotween,isRaycast,tweenDuration);
+        else if(!isShow && this.isShow) Hide(isDotween,isRaycast,tweenDuration);
     }
 
     public void SetPos(Vector2 pos, bool tween = false, float duration = 0.5f, Ease ease = Ease.OutQuad)
@@ -38,15 +45,17 @@ public class BaseCanvas : MonoBehaviour
         }
         else
         {
-            parent.DOAnchorPos(pos, duration).SetEase(ease);
+            parent.DOAnchorPos(pos, duration).SetEase(ease).SetUpdate(true);
         }
     }
 
-    private void Show(bool isDotween,bool isRaycast,float tweenDuration)
+    protected virtual void Show(bool isDotween,bool isRaycast,float tweenDuration)
     {
+        canvasGroup.DOKill();
+        isShow = true;
         if (isDotween)
         {
-            canvasGroup.DOFade(1,tweenDuration);
+            canvasGroup.DOFade(1,tweenDuration).SetUpdate(true);
         }
         else
         {
@@ -57,9 +66,11 @@ public class BaseCanvas : MonoBehaviour
 
     private void Hide(bool isDotween, bool isRaycast, float tweenDuration)
     {
+        canvasGroup.DOKill();
+        isShow = false;
         if (isDotween)
         {
-            canvasGroup.DOFade(0,tweenDuration);
+            canvasGroup.DOFade(0,tweenDuration).SetUpdate(true);
         }
         else
         {
@@ -67,4 +78,6 @@ public class BaseCanvas : MonoBehaviour
         }
         canvasGroup.blocksRaycasts = isRaycast;
     }
+    
+    public RectTransform GetParent() => parent;
 }

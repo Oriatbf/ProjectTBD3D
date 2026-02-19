@@ -34,9 +34,10 @@ public class BuffInfoController : BaseController
 
     }
 
-    public void InitData(BuffDebuff buffDebuff,Vector3 targetPos)
+    public void InitData(ActionState actionState,Vector3 targetPos)
     {
-        buffInfo.InitData(buffDebuff.GetStatusString(), targetPos);
+        string info = $"{actionState.GetData().id} {actionState.GetData().turn}턴 {actionState.GetData().stack}스택";
+        buffInfo.InitData(info, targetPos);
         Show();
     }
     

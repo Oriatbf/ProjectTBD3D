@@ -59,13 +59,14 @@ namespace UnitData
 		public System.Int32 Id;
 		public System.String Name;
 		public System.String Infor;
+		public System.Int32 Flip;
 		public System.String AnimatorName;
+		public ManualType ManualType;
+		public ConsumptionType ConsumptionType;
+		public Rarity Rarity;
 		public System.Single TurnGauge;
 		public System.Collections.Generic.List<Int32> BringSkill;
-		public System.Single Strength;
 		public System.Single Hp;
-		public System.Single Intelligence;
-		public System.Single Avoidance;
 		public System.Single Charm;
 		public System.Single CharmResist;
   

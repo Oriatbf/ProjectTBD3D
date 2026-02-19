@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64a02f305374a4a43ab726803fb3729a, type: 3}
+  m_Name: PoolingLoader
+  m_EditorClassIdentifier: 
+  PoolList:
+  - Key: HealthContent
+    Prefab: {fileID: 892135625899414821, guid: d5670ed4974fca24aaa5178db619e8d6, type: 3}
+    poolType: 0
+    canvasOrder: 3
+  - Key: Dialogue
+    Prefab: {fileID: 3874875791180013171, guid: e7f406ec2d8a651459b1fb108971d884, type: 3}
+    poolType: 0
+    canvasOrder: 5
+  - Key: HitEffect
+    Prefab: {fileID: 5309871272523621556, guid: 65acf328488853343a48f052e5b16b31, type: 3}
+    poolType: 1
+    canvasOrder: 0
+  - Key: CharmEffect
+    Prefab: {fileID: 664035756220542408, guid: 4f0e66d1545ea1f4da2310c59b621bef, type: 3}
+    poolType: 1
+    canvasOrder: 0
+  - Key: PopUpTxt
+    Prefab: {fileID: 7017776862379325499, guid: 49ad7e550963d7f43bcb29a74b5e7a83, type: 3}
+    poolType: 0
+    canvasOrder: 1
+  - Key: RelicIcon
+    Prefab: {fileID: 3332520036445807150, guid: ad95f09489a06144c8216e9069223953, type: 3}
+    poolType: 0
+    canvasOrder: 0
+  - Key: ThunderEffect
+    Prefab: {fileID: 8592025396316687487, guid: 3a1a46f0f082adc4b8bf061a97084ce5, type: 3}
+    poolType: 1
+    canvasOrder: 0

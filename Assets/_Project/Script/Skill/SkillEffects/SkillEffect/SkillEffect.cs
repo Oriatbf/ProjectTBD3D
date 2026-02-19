@@ -4,10 +4,6 @@ using SkillData;
 using UnityEngine;
 
 
-public enum SkillType
-{
-    Attack,Utility,Buff
-}
 
 /// <summary>
 /// SkillEffect는 부모인 SkillBase에서 하나의 스킬을 담당하는 요소
@@ -20,7 +16,7 @@ public abstract class SkillEffect
     /// <summary>
     /// SkillBase, values 데이터 받는 코드 values는 스킬별 사용되는 값들이 저장되어 있음
     /// </summary>
-    public void Init(SkillBase skillBase,List<int> values)
+    public void Init(List<int> values)
     {
         this.values = values;
     }
@@ -32,7 +28,8 @@ public abstract class SkillEffect
     {
         skillAction += SkillAction;
     }
-    protected abstract void SkillAction(SkillContext skillContext);
+
+    public abstract void SkillAction(SkillContext skillContext);
     
     /// <summary>
     /// 각 스킬별 설명을 적어서 리턴하는 코드

@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
+using _Project.Script.Controller;
+using Core.Utility;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using SkillData;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.InputSystem;
 
 public class SkillStackInfo
 {
@@ -19,8 +22,18 @@ public class SkillStackInfo
     {
         stackTurn = skillStackInfo.stackTurn;
         skill = skillStackInfo.skill.Clone();
+        skill.InitStackTurn(stackTurn);
         sourceTile = skillStackInfo.sourceTile;
         team = skillStackInfo.team;
+    }
+
+    public SkillStackInfo(SkillBase skill, Tile curTile, float stackTurn, Team team)
+    {
+        this.stackTurn = stackTurn;
+        this.skill = skill.Clone();
+        this.skill.InitStackTurn(stackTurn);
+        sourceTile = curTile;
+        sourceTile = curTile;
     }
 
     public SkillStackInfo(SkillBase skillBase)
@@ -28,10 +41,11 @@ public class SkillStackInfo
         skill = skillBase.Clone();
         stackTurn = skill.GetData().RequireTurn;
         sourceTile = skill.GetSkillContext().SourceTile;
+        skill.InitStackTurn(stackTurn);
         team = Team.PlayerTeam;
     }
 }
-public class SkillStackController : BaseController
+public class SkillStack 
 {
     private readonly string skillIconPath = "Assets/_Project/Prefab/UI/Skill/SkillIcon.prefab";
     private readonly string SkillStackCanvasPath = "Assets/_Project/Prefab/UI/SkillStackCanvas.prefab";
@@ -39,18 +53,15 @@ public class SkillStackController : BaseController
     private Icon iconPrefab;
     private Camera _camera;
     private Dictionary<Tile ,Queue<Icon>> stackData = new Dictionary<Tile ,Queue<Icon>>();
+    private Dictionary<Icon, Tile> iconToTile = new();
+    private List<(float,Icon)> stackIcons = new List<(float,Icon)>();
     private float skillIconInterval = 100;
     bool isRefreshing = false;
 
-    public override void OnInitialize()
-    {
-        base.OnInitialize();
-        _camera = Camera.main;
-        SetPrefab();
-    }
 
-    private async void SetPrefab()
+    public async UniTask SetPrefab()
     {
+        _camera = Camera.main;
         var _canvas = await Addressables.LoadAssetAsync<GameObject>(SkillStackCanvasPath).ToUniTask();
         var obj = GameObject.Instantiate(_canvas);
         this.content = obj.transform.GetChild(0).transform;
@@ -63,11 +74,14 @@ public class SkillStackController : BaseController
     {
         var tile = skillStackInfo.sourceTile;
         if(tile==null) Debug.LogError("Tile is null");
-        var obj = GameObject.Instantiate(iconPrefab,content);
+        var obj = Object.Instantiate(iconPrefab,content);
         obj.Init(skillStackInfo.skill);
         
+        if(obj == null)Debug.LogError("iconPrefab" + " is null");
         if (stackData.ContainsKey(tile)) stackData[tile].Enqueue(obj);
         else stackData.Add(tile,new Queue<Icon>(new []{obj}));
+        stackIcons.Add((skillStackInfo.stackTurn,obj));
+        iconToTile.Add(obj,tile);
         RefreshUI(tile,stackData[tile]);
         
     }
@@ -81,17 +95,33 @@ public class SkillStackController : BaseController
         RefreshUI(tile,stackData[tile]);
     }
 
+    public void UnstackSkillByTurn(float curStackTurn, float deleteStackTurn)
+    {
+        for (int i = stackIcons.Count-1; i >= 0; i--)
+        {
+            var iconTurnStack = stackIcons[i].Item1;
+            if (iconTurnStack >= curStackTurn && iconTurnStack <= deleteStackTurn)
+            {
+                var targetIcon = stackIcons[i].Item2;
+                var targetTile = iconToTile[targetIcon];
+                UnstackSkill(targetTile);
+            }
+        }
+    }
+
     public void UnstackAllUnitSkills(Tile tile)
     {
         if (!stackData.ContainsKey(tile)) return;
         if(stackData[tile].Count ==0)return;
-        for (int i = 0; i < stackData[tile].Count; i++)
+        if (!stackData.TryGetValue(tile, out var queue)) return;
+
+        while (queue.Count > 0)
         {
-            var skillIcon = stackData[tile].Dequeue();
-            GameObject.Destroy(skillIcon.gameObject);
-            
+            var skillIcon = queue.Dequeue();
+            Object.Destroy(skillIcon.gameObject);
         }
-        RefreshUI(tile,stackData[tile]);   
+
+        RefreshUI(tile, queue);
     }
 
     public void ResetAllSkillStacks()
@@ -137,4 +167,61 @@ public class SkillStackController : BaseController
             list[i].transform.position = pos;
         }
     }
+    
+    #region Tutorial
+
+    public void RegisterTutorial()
+    {
+        SetTutorial();
+        SetTutorial2();
+    }
+        
+    /// <summary>
+    /// 튜토리얼 등록
+    /// </summary>
+    private void SetTutorial()
+    {
+        var targetTile = ApplicationManager.Inst.GetModule<TileController>().GetEnemyTile(new Vector2(2,1));
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 4,
+            informationTxt = "적 스킬 아이콘 위에 마우스를 올리세요",
+            highlightTrans = targetTile.transform,
+            highlightOffset = new Vector2(0,400),
+            transformType = TransformType.Transform,
+            highLightSize = new Vector2(100,100),
+            textOffset = new Vector2(0,500),
+            btnRay = true,
+            btnAction = () =>
+            {
+                var tile =  InGameUnitInfo.EnemyUnits[0].GetTile();
+                var list = stackData[tile].ToList();
+                var skill = list[0].GetSkillBase();
+                ApplicationManager.Inst.GetModule<InformationController>().InitSkillData(skill,Input.mousePosition);
+                ApplicationManager.Inst.GetModule<InformationController>().Show(DataType.Skill);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    
+    private void SetTutorial2()
+    {
+        var targetRect = ApplicationManager.Inst.GetModule<InformationController>().GetSkillUnfoCard().GetParent();
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 5,
+            informationTxt = "일부 아이콘들은 호버 시 정보를 표시합니다",
+            highLightRect = targetRect,
+            highlightOffset = new Vector2(0,0),
+            transformType = TransformType.Rect,
+            highLightSize =targetRect.sizeDelta,
+            textOffset = new Vector2(0,250),
+            btnAction = () =>
+            {
+                ApplicationManager.Inst.GetModule<InformationController>().Hide(DataType.Skill);
+            }
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
+    }
+    #endregion
 }

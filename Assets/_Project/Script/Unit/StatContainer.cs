@@ -12,6 +12,7 @@ public class StatContainer
     public Stat barrier;
     public Stat charm;
     public Stat charmResist;
+    public bool isStun = false;
 
     public StatContainer() { }
     public StatContainer(UnitData.Data unitData)
@@ -21,10 +22,11 @@ public class StatContainer
         intelligence = Stat.Create(0);
         barrier = Stat.Create(0);
         
-        hp = Stat.Create(data.Hp);
-        turnGauge = Stat.Create(0,data.TurnGauge);
-        avoidance = Stat.Create(data.Avoidance);
-        charm = Stat.Create(data.Charm);
-        charmResist = Stat.Create(data.CharmResist);
+        hp = Stat.Create(data.Hp,false,data.Hp,data.Hp);
+        turnGauge = Stat.Create(0,false,data.TurnGauge,data.TurnGauge);
+        charm = Stat.Create(0);
+        charmResist = Stat.Create(0,false,data.CharmResist,data.CharmResist);
+        isStun = false;
     }
+    
 }

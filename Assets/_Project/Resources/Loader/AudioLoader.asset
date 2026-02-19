@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c487b5be66d74712b3274fb301d68622, type: 3}
+  m_Name: AudioLoader
+  m_EditorClassIdentifier: 
+  AudioDatas:
+  - audioName: Hit
+    clip: {fileID: 8300000, guid: 1ec063843ed6e6b4aa6d7fd9e8e678bb, type: 3}
+    audioType: 1
+  - audioName: BattleBGM
+    clip: {fileID: 8300000, guid: a6054b7c9bec37c4c893953a42963dff, type: 3}
+    audioType: 0
+  - audioName: ShopBGM
+    clip: {fileID: 8300000, guid: 18d17947a12d96e4a93bf7e3eebe1080, type: 3}
+    audioType: 0
+  - audioName: TitleBGM
+    clip: {fileID: 8300000, guid: 0a0860460ecb0b74b8702c40f8d543c9, type: 3}
+    audioType: 0
+  - audioName: Btn
+    clip: {fileID: 8300000, guid: d6804366541e1e24da4ab949196ae9d2, type: 3}
+    audioType: 1

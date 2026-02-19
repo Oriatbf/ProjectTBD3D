@@ -14,19 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_GroupName: EnemySO
   m_GUID: 0ad36f5b3fae41c42bd90399a0c71b49
-  m_SerializeEntries:
-  - m_GUID: a69e68f08b8e1254db0386fcba6491c2
-    m_Address: Assets/_Project/Script/SO/test 1.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EnemySO
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ddf705fefeead2448b9e053961de29b1
-    m_Address: Assets/_Project/Script/SO/test.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - EnemySO
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: be1719bc3deec8d458d8cd3d5efbd493, type: 2}
   m_SchemaSet:

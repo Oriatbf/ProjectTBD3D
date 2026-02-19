@@ -1,15 +1,20 @@
 using System;
+using System.Collections.Generic;
+using Core.Utility;
 using DG.Tweening;
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using VInspector;
 
-public class TurnImage : MonoBehaviour
+public class TurnImage : MonoBehaviour,IPointerEnterHandler,IPointerExitHandler
 {
     [SerializeField] private Button arrowBtn;
     [SerializeField]private Image image;
-    [SerializeField]private TextMeshProUGUI text;
+    [SerializeField]private TextMeshProUGUI nameTxt;
+    [SerializeField] private TextMeshProUGUI turnTxt;
     
     [Foldout("Debuggingg")]
     [SerializeField] private float turnGauge;
@@ -17,10 +22,12 @@ public class TurnImage : MonoBehaviour
     private SkillData.SkillBase skill;
     private Team team;
     private CanvasGroup canvasGroup;
+    private SkillStackInfo skillStackInfo;
+
+    private bool _isForceShow = false;
 
     private void Start()
     {
-        arrowBtn.onClick.AddListener(ClickAction);
         canvasGroup = GetComponent<CanvasGroup>();
     }
     
@@ -29,10 +36,12 @@ public class TurnImage : MonoBehaviour
 
     public void SetInfo(SkillStackInfo skillStackInfo)
     {
+        this.skillStackInfo = skillStackInfo;
         turnGauge = skillStackInfo.stackTurn;
         this.team = skillStackInfo.team;
         this.skill = skillStackInfo.skill;
-        text.text = skill.GetData().Name + $" turn : {skillStackInfo.stackTurn}";
+        nameTxt.text = skill.GetData().Name;
+        turnTxt.text =  $"시전 턴:{skillStackInfo.stackTurn}";
     }
 
     public  void ArrowAlpha()
@@ -40,9 +49,79 @@ public class TurnImage : MonoBehaviour
         canvasGroup.DOFade(0, 0.2f);
     }
 
-    private void ClickAction()
+    public SkillStackInfo GetSkillStackInfo() => skillStackInfo;
+    
+    /// <summary>
+    /// 시전자, 피격자와 피격 타일 보이기
+    /// </summary>
+    public void ClickAction(bool force = false)
     {
+        _isForceShow = force;
+        TileController tileController = ApplicationManager.Inst.GetModule<TileController>();
+        ResetVisualize();
+        
         var skillContext = skill.GetSkillContext();
-        Debug.Log($"{skillContext.SourceTile.GetUnit().GetUnitData().id}");
+        if (skill.GetData().TargetType == TargetType.Source)
+        {
+            if(skillContext.SourceUnit!=null)
+                skillContext.SourceUnit.ShowOutLine(Color.green);
+        }
+        else
+        {
+            if(skillContext.SourceUnit!=null)
+                skillContext.SourceUnit.ShowOutLine(Color.green);
+            if(skillContext.TargetUnit!=null)
+                skillContext.TargetUnit.ShowOutLine(Color.red);
+        }
+       
+        List<Tile> targetTiles = new List<Tile>();
+        //시전할 위치 타일
+        var standardTile = skill.GetData().TargetType 
+                           == TargetType.Source?skillContext.SourceTile:skillContext.TargetTile;
+        if(skill.GetData().TargetType == TargetType.All)
+        {
+            //전체 타일을 타겟으로
+            targetTiles = tileController.GetAllTiles();
+        }
+        else
+        {
+            targetTiles  =tileController.GetTiles
+                (standardTile,skillContext.rowCount,skillContext.columnCount);
+        }
+       
+        foreach (var targetTile in targetTiles)
+        {
+            targetTile.Target();
+        }
+    }
+
+    /// <summary>
+    /// 시전자, 피격자와 피격 타일 보이기 삭제
+    /// </summary>
+    public void ResetVisualize(bool force = false)
+    {
+        _isForceShow = force;
+        TileController tileController = ApplicationManager.Inst.GetModule<TileController>();
+        var allTiles = tileController.GetAllTiles();
+        foreach (var tile in allTiles)tile.UnTarget();
+        var allUnits = InGameUnitInfo.AllUnits;
+        for (int i = 0; i < allUnits.Count; i++)
+        {
+            allUnits[i].HideOutLine();
+        }
+
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_isForceShow) return;
+        ResetVisualize();
+        ClickAction();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_isForceShow) return;
+        ResetVisualize();
     }
 }

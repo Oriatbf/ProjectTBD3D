@@ -6,14 +6,16 @@ using UnityEditor;
 
 public static class TBDLogger
 {
-    public static void CommandLog<T>(KeyCode key, T t, string detail = null)
+    public static bool CommandLog<T>(KeyCode key, T t, string detail = null)
     {
+        if (!DataManager.Inst.debugMode) return false;
         string fileInfo = GetScriptFileInfo<T>();
 
         Debug.Log($"{key} Command In {typeof(T).Name} Script\n{fileInfo}");
 
         if (detail != null)
             Debug.Log(detail);
+        return true;
     }
 
     private static string GetScriptFileInfo<T>()

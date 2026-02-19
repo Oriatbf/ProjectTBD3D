@@ -60,8 +60,11 @@ namespace SkillData
 		public System.String Name;
 		public System.String SpriteName;
 		public System.String Infor;
+		public ManualType ManualType;
+		public Rarity Rarity;
 		public System.Single RequireTurn;
 		public TargetType TargetType;
+		public SkillType SkillType;
 		public System.Int32 RowCount;
 		public System.Int32 ColumnCount;
 		public System.String EffectData;

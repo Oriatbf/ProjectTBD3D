@@ -1,35 +1,71 @@
 using System;
+using _Project.Script.Controller;
+using Cysharp.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class PlayerTurnEnd : MonoBehaviour
+public class TurnEndCanvas : BaseCanvas
 {
     [SerializeField] Button turnEndBtn, nextStageBtn;
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         nextStageBtn.gameObject.SetActive(false);
         turnEndBtn.gameObject.SetActive(true);
+        SetNextStageAction();
+        SetTurnEndAction();
+        SetTutorial_TurnEnd();
+    }
+    private void SetTutorial_TurnEnd()
+    {
+        TutorialInfo tutorialInfo = new TutorialInfo()
+        {
+            order = 16,
+            informationTxt = "턴이 종료되면 스킬이 시전됩니다",
+            highLightRect = turnEndBtn.GetComponent<RectTransform>(),
+            transformType = TransformType.Rect,
+            highLightSize =turnEndBtn.GetComponent<RectTransform>().sizeDelta,
+            textOffset = new Vector2(-150,100),
+            btnAction = ()=>turnEndBtn.onClick.Invoke()
+        };
+        ApplicationManager.Inst.GetModule<TutorialController>().SetTutorial(tutorialInfo);
     }
 
-    public void SetTurnEndAction( Action action )
+    private void Update()
     {
-        if (action != null)
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            turnEndBtn.onClick.RemoveAllListeners();
-            turnEndBtn.onClick.AddListener(action.Invoke);
+            if (!TBDLogger.CommandLog(KeyCode.Q, this)) return;
+            nextStageBtn.onClick.Invoke();
         }
+    }
+
+
+    private void SetTurnEndAction()
+    {
+        turnEndBtn.onClick.AddListener(() => ApplicationManager.Inst.GetModule<TurnController>().PlayerTurnEndAction().Forget());
        
     }
 
-    public void SetNextStageAction(Action action)
+    private void SetNextStageAction()
     {
-        if (action != null)
+        nextStageBtn.onClick.AddListener(NextStageHandle);
+    }
+
+    private void NextStageHandle()
+    {
+        if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) 
         {
-            nextStageBtn.onClick.RemoveAllListeners();
-            nextStageBtn.onClick.AddListener(action.Invoke);
+            FadeInFadeOutManager.Inst.FadeOut("Title", true);
+            return;
         }
+
+        FadeInFadeOutManager.Inst.FadeOut("MapScene", true);
+        DataManager.Inst.ClearMap();
+        DataManager.Inst.JsonSave();
     }
 
     public void NextStageActive()

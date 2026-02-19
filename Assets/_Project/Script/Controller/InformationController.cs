@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using SkillData;
 using UnityEngine;
@@ -5,71 +6,100 @@ using UnityEngine.AddressableAssets;
 
 public enum DataType
 {
-    Skill,Unit
+    Skill,Unit, Relic
 }
 public class InformationController : BaseController
 {
     private SkillInfoCardCanvas _skillInfoCardCanvas;
     private UnitInfoCardCanvas _unitInfoCardCanvas;
-    private bool isUnitShow = false;
-    private bool isSkillShow = false;
+    private RelicInfoCardCanvas relicInfoCardCanvas;
+
+    public override ControllerInfo ControllerInfo { get; }= new()
+    {
+        ContainSceneNames = new string[] {"GamePlay" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
+
     public override void OnInitialize()
     {
         base.OnInitialize();
         SetCanvas();
     }
 
-    private  void SetCanvas()
+    private void SetCanvas()
     {
-        var skillCardCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas("SkillInfoCardCanvas");
-        if(skillCardCanvas.TryGetComponent(out SkillInfoCardCanvas skillInfoCardCanvas))
-            _skillInfoCardCanvas = skillInfoCardCanvas;
-        var unitInfoCanvas = ApplicationManager.Inst.GetModule<CanvasController>().GetCanvas("UnitInfoCardCanvas");
-        if (unitInfoCanvas.TryGetComponent(out UnitInfoCardCanvas unitInfoCardCanvas))
-            _unitInfoCardCanvas= unitInfoCardCanvas;
+        var canvasController = ApplicationManager.Inst.GetModule<CanvasController>();
+        _skillInfoCardCanvas = canvasController.GetCanvas<SkillInfoCardCanvas>("SkillInfoCardCanvas");
+        _unitInfoCardCanvas = canvasController.GetCanvas<UnitInfoCardCanvas>("UnitInfoCardCanvas");
+        relicInfoCardCanvas = canvasController.GetCanvas<RelicInfoCardCanvas>("RelicInfoCardCanvas");
     }
 
     public void InitSkillData(SkillBase skillBase,Vector3 targetPos)
     {
         _skillInfoCardCanvas.InitData(skillBase, targetPos);
-        Show(DataType.Skill);
     }
 
-    public void InitUnitData(UnitData.Data unitData, Vector3 targetPos)
+    public void InitUnitData(UnitSaveData unitSaveData)
     {
-        _unitInfoCardCanvas.InitData(unitData, targetPos);
-        //Show();
+        var unitData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
+        _unitInfoCardCanvas.InitData(unitData,unitSaveData);
+       
     }
+
+    public void InitUnitPos( Vector3 targetPos)
+    { 
+        _unitInfoCardCanvas.InitPos(targetPos);
+    }
+
+    public void InitRelicData(RelicBase relicBase)
+    {
+        relicInfoCardCanvas.InitData(relicBase);
+    }
+    
+    public void InitRelicPos( Vector3 targetPos)
+    { 
+        relicInfoCardCanvas.InitPos(targetPos);
+    }
+
     
     public void Show(DataType dataType)
     {
-        if (dataType == DataType.Skill)
+        switch (dataType)
         {
-            if(isSkillShow)return;
-            isSkillShow = true;
-            _skillInfoCardCanvas.ChangeState(true,true,true);
-        }
-        else if (dataType == DataType.Unit)
-        {
-            if(isUnitShow)return;
-            isUnitShow = true;
-            _unitInfoCardCanvas.ChangeState(true,true,true);
+            case DataType.Skill:
+                _skillInfoCardCanvas.ChangeState(true,true,false);
+                break;
+            case DataType.Unit:
+                _unitInfoCardCanvas.ChangeState(true,true,false);
+                break;
+            case DataType.Relic:
+                relicInfoCardCanvas.ChangeState(true,true,false);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
         }
     }
 
+    public SkillInfoCardCanvas GetSkillUnfoCard() => _skillInfoCardCanvas;
+
     public void Hide(DataType dataType)
     {
-        if (dataType == DataType.Skill)
+        switch (dataType)
         {
-            if(!isSkillShow)return;
-            isSkillShow = false;
-            _skillInfoCardCanvas.ChangeState(false,true);
-        }
-        else if (dataType == DataType.Unit)
-        {
-            if(!isUnitShow)return;
-            isUnitShow = false;
-            _unitInfoCardCanvas.ChangeState(false,true);
+            case DataType.Skill:
+                _skillInfoCardCanvas.ChangeState(false,true,false);
+                break;
+            case DataType.Unit:
+                _unitInfoCardCanvas.ChangeState(false,true,false);
+                break;
+            case DataType.Relic:
+                relicInfoCardCanvas.ChangeState(false,true,false);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(dataType), dataType, null);
         }
     }
 }

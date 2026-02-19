@@ -11,7 +11,7 @@ public static class EffectTypeFactory
         BarrierToSource,
         SelfPDamage,
         Fire,
-        Posion,
+        Poison,
         InCreaseCharm,
         BloodSuck,
         Ice,
@@ -19,7 +19,18 @@ public static class EffectTypeFactory
         SkillChange,
         DamageBuff,
         BloodBuff,
-        BloodHeal
+        BloodHeal,
+        Summon,
+        BarrierAttack,
+        TurnDelete,
+        Taming,
+        Fainting,
+        SourceFainting,
+        TeamCharm,
+        PenetrationAttack,
+        Purify,
+        DeathNote,
+        ComboDamage
     }
     public static SkillEffect CreateInstance(EffectType effectType)
     {
@@ -32,7 +43,7 @@ public static class EffectTypeFactory
             EffectType.BarrierToSource => new BarrierToSource(),
             EffectType.SelfPDamage => new SelfPDamage(),
             EffectType.Fire => new Fire(),
-            EffectType.Posion => new Poison(),
+            EffectType.Poison => new Poison(),
             EffectType.InCreaseCharm => new InCreaseCharm(),
             EffectType.BloodSuck => new BloodSuck(),
             EffectType.Ice => new Ice(),
@@ -41,7 +52,17 @@ public static class EffectTypeFactory
             EffectType.DamageBuff => new DamageBuff(),
             EffectType.BloodBuff => new BloodBuff(),
             EffectType.BloodHeal => new BloodHeal(),
-            
+            EffectType.Summon => new Summon(),
+            EffectType.BarrierAttack => new BarrierAttack(),
+            EffectType.TurnDelete => new TurnDelete(),
+            EffectType.Taming => new Taming(),
+            EffectType.Fainting => new Fainting(),
+            EffectType.SourceFainting => new SourceFainting(),
+            EffectType.TeamCharm => new TeamCharm(),
+            EffectType.PenetrationAttack => new PenetrationAttack(),
+            EffectType.Purify => new Purify(),
+            EffectType.DeathNote => new DeathNote(),
+            EffectType.ComboDamage => new ComboDamage(),
             _ => throw new ArgumentOutOfRangeException(nameof(effectType), effectType, null)
         };
     }

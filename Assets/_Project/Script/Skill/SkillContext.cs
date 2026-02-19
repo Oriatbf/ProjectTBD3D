@@ -12,6 +12,8 @@ namespace SkillData
         public Unit TargetUnit { get; set; }
         
         public int rowCount=0,columnCount=0;
+
+        public float stackTurn = 0;
         public TargetType targetType { get; set; }
 
         public void Init(TargetType targetType,int rowCount, int columnCount)
@@ -37,9 +39,18 @@ namespace SkillData
         public void InitSourceTile(Tile sourceTile)
         {
             this.SourceTile = sourceTile;
-            if(sourceTile.GetUnit() == null)Debug.LogError("sourceUnit is null");
+            if (sourceTile.GetUnit() == null)
+            {
+                Debug.LogError("sourceUnit is null");
+                return;
+            }
             SourceUnit = sourceTile.GetUnit();
             
+        }
+
+        public void InitStackTurn(float stackTurn)
+        {
+            this.stackTurn = stackTurn;
         }
 
         public void InitTargetTile(Tile targetTile)
@@ -60,18 +71,19 @@ namespace SkillData
             }
         }
 
-        private List<Tile> GetTargetTiles()
+        public List<Tile> GetTargetTiles()
         {
             List<Tile> _tiles = new List<Tile>();
+            var tileController = ApplicationManager.Inst.GetModule<TileController>();
             switch (targetType)
             {
                 case TargetType.Area:
-                    _tiles = TileManager.Inst.GetTiles(TargetTile,rowCount,columnCount);
+                    _tiles = tileController.GetTiles(TargetTile,rowCount,columnCount);
                     break;
                 case TargetType.Source:
                     break;
                 case TargetType.All:
-                    _tiles = TileManager.Inst.GetAllTiles();
+                    _tiles = tileController.GetAllTiles();
                     break;
             }
             

@@ -1,16 +1,43 @@
+using _Project.Script.Controller;
+using Core.Utility;
 using SkillData;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Counter : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
-        if(skillContext == null)Debug.LogError("no skill context");
-        if(skillContext.SourceUnit == null)Debug.LogError("no source unit");
-        if(skillContext.SourceUnit.GetActionContainer() == null)Debug.LogError("no ActionContainer");
-        skillContext.SourceUnit.GetActionContainer().hurtAction += Action;
+        var unit = skillContext.SourceUnit;
+        ActionData counterData = new ActionData(
+            id: "Counter",
+            owner: unit,
+            stack: values[0],      // 데미지
+            turn: 1,       // 턴 수
+            decreaseType: DecreaseType.OnlyTurn,
+            targetType: ActionTargetType.Self,
+            buffType: SkillType.Buff
+        );
+
+        // 시전자 정보 저장
+        counterData.sourceUnit = skillContext.SourceUnit;
+
+        counterData.action = (data, context) =>
+        {
+            context.SourceUnit?.GetDamage(data.stack, null, SkillType.Utility);
+        };
+
+        counterData.finishAction = (data) =>
+        {
+            
+        };
+
+        ActionState counterState = new ActionState(counterData);
+        unit.GetActionStateContainer().AddActionState(ActionTrigger.OnHitted, counterState);
+        ApplicationManager.Inst.GetModule<ActionStateStackController>().StackAction(ActionTrigger.OnHitted,counterState);
+   
     }
     
     private void Action(SkillContext skillContext,SkillType targetSkillType)
@@ -30,7 +57,7 @@ public class SkillChange : SkillEffect
 {
     protected override SkillType SkillType => SkillType.Utility;
 
-    protected override void SkillAction(SkillContext skillContext)
+    public override void SkillAction(SkillContext skillContext)
     {
         skillContext.SourceUnit.SetBringSkills(values);
     }
@@ -38,5 +65,59 @@ public class SkillChange : SkillEffect
     public override string ReturnInformation()
     {
         return $"체인소모드로 변경합니다.";
+    }
+}
+
+public class TurnDelete : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    { 
+        ApplicationManager.Inst.GetModule<SkillProgressController>().DeleteStack(skillContext.stackTurn,skillContext.stackTurn+values[0]);
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"{ColorText.GetTextColor(TxtColorType.Intelligence)}{values[0]}</color>만큼 앞의 턴을 삭제합니다.";
+    }
+}
+
+public class Taming : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        if (skillContext.TargetUnit.GetTeam() == Team.PlayerTeam) return;
+        var rate = TamingHelper.TaimgCalculator(skillContext.TargetUnit);
+        Debug.Log($"테이밍 확률은 {rate}");
+        if (Random.value < rate)
+        {
+            skillContext.TargetUnit.GetStatContainer().charmResist.AddBaseValue(999);
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return $"일정 확률로 적을 매혹시킵니다";
+    }
+}
+
+public class DeathNote : SkillEffect
+{
+    protected override SkillType SkillType => SkillType.Utility;
+    public override void SkillAction(SkillContext skillContext)
+    {
+        var targetUnit = skillContext.TargetUnit;
+        if(targetUnit == null) return;
+        var rate = TamingHelper.TaimgCalculator(targetUnit);
+        if (Random.value < rate)
+        {
+            targetUnit.GetDamage(999,null,SkillType);
+        }
+    }
+
+    public override string ReturnInformation()
+    {
+        return "테이밍 확률에 따라 지정한 적을 즉사시킵니다";
     }
 }

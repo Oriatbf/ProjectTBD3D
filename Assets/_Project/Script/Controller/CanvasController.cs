@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Project.Resources.Loader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +7,16 @@ public class CanvasController : BaseController
 {
     CanvasLoader _canvasLoader;
     Dictionary<string, GameObject> _canvasDictionary = new Dictionary<string, GameObject>();
+   
+    public override ControllerInfo ControllerInfo { get; } = new()
+    {
+        ContainSceneNames = new string[] {"All" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
+
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -13,10 +24,21 @@ public class CanvasController : BaseController
         LoadSceneCanvas(SceneManager.GetActiveScene().name);
     }
 
+   
     public GameObject GetCanvas(string canvasName)
     {
         if(!_canvasDictionary.ContainsKey(canvasName))Debug.LogError($"{canvasName}의 이름을 가진 canvas프래팹이 없음");
         return _canvasDictionary[canvasName];
+    }
+
+    public T GetCanvas<T>(string canvasName)
+    {
+        if(!_canvasDictionary.ContainsKey(canvasName))Debug.LogError($"{canvasName}의 이름을 가진 canvas프래팹이 없음");
+        var obj = _canvasDictionary[canvasName];
+        if(obj.TryGetComponent(out T canvas))
+            return canvas;
+        else Debug.LogError($"{canvas}가 없음");
+        return default;
     }
 
     public void LoadSceneCanvas(string sceneName)

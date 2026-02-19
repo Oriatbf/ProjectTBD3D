@@ -15,13 +15,74 @@ MonoBehaviour:
   CanvasDictionary:
   - Key: SkillCheatCanvas
     Prefab: {fileID: 597888929260669894, guid: b4f39c14f54c60f4eb068df91b512d45, type: 3}
-    SceneName: SkillTest
+    SceneName:
+    - GamePlay
   - Key: ShopCanvas
     Prefab: {fileID: 7626600485559309776, guid: 8b6b803b6677b1c458242bbfcbdd2c36, type: 3}
-    SceneName: MapScene
+    SceneName:
+    - GamePlay
   - Key: SkillInfoCardCanvas
     Prefab: {fileID: 77820003223514308, guid: d66f580e529fb5c459c9e462c400d30b, type: 3}
-    SceneName: GameScene
+    SceneName:
+    - GamePlay
   - Key: UnitInfoCardCanvas
     Prefab: {fileID: 8889348253450800113, guid: 5cc978187e651d243949c21064e13f03, type: 3}
-    SceneName: GameScene
+    SceneName:
+    - GamePlay
+  - Key: DebugCanvas
+    Prefab: {fileID: 6315807230441473441, guid: bdae0bb521d82774fbd47311288a9211, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: SettingCanvas
+    Prefab: {fileID: 5308735517706857501, guid: 459c8fee09893834781859606e21a9b6, type: 3}
+    SceneName:
+    - GamePlay
+    - MapScene
+  - Key: TurnEndCanvas
+    Prefab: {fileID: 1353097011255005364, guid: 18f87c6d50cf998459ef462c4df98923, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: TitleCanvas
+    Prefab: {fileID: 4846788074027521764, guid: 4358daf68c501da42a53c7a95564602b, type: 3}
+    SceneName:
+    - Title
+  - Key: TitleMenuCanvas
+    Prefab: {fileID: 1168243791478800428, guid: d01f59c806a0e714dbe38448f0515a43, type: 3}
+    SceneName:
+    - Title
+  - Key: SkillChangeInventoryCanvas
+    Prefab: {fileID: 2034335604620626173, guid: 587c2a2a79f6ae240b9ff2d384fd8078, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: PlayerSpawnCanvas
+    Prefab: {fileID: 8578380960290337167, guid: 1e7faa63a5c481842b65ecb547b4a549, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: MainCharacterSelectCanvas
+    Prefab: {fileID: 8459421187842030804, guid: 8d6701c365dbe6947a3b1dcaee0cbff3, type: 3}
+    SceneName:
+    - Title
+  - Key: RelicInfoCardCanvas
+    Prefab: {fileID: 6082594679596134325, guid: 519ef72c642233249bcd805f028a8ccd, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: TutorialCanvas
+    Prefab: {fileID: 8919878554540582406, guid: 77fe3a1ec9cce3c488b04f006526310a, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: TurnCounterCanvas
+    Prefab: {fileID: 3223632354152057054, guid: eb9ee628091661043afd18ed5278ebe5, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: LoseCanvas
+    Prefab: {fileID: 2311560917153567004, guid: 90d65fedd14fba646bc9c0a08b077713, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: TopInfoCanvas
+    Prefab: {fileID: 1765680143217015501, guid: e7f0a0c52cbaf17439124f80e9a3c6b5, type: 3}
+    SceneName:
+    - GamePlay
+  - Key: VictoryCanvas
+    Prefab: {fileID: 553995174333583163, guid: 1c7324e9d60a74c49aadcde2526ddc98, type: 3}
+    SceneName:
+    - GamePlay

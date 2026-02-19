@@ -8,10 +8,19 @@ public class CameraController : BaseController
     private Camera _camera;
     private Vector3 originalPos;
     private Quaternion originalRot;
-    private float fov = 0; 
+    private float fov = 0; //Camera Field Of View
     
     private readonly float clampRotY = 2.5f;
     private readonly float dur = 0.75f;
+    
+    public override ControllerInfo ControllerInfo { get; } = new()
+    {
+        ContainSceneNames = new string[] {"GamePlay" },
+        Priority = 0,
+        UpdateInterval = 1,
+        LateUpdateInterval = 1,
+        FixedUpdateInterval = 1,
+    };
     public override void OnInitialize()
     {
         base.OnInitialize();
@@ -43,13 +52,16 @@ public class CameraController : BaseController
         euler.y = originalYAngle + deltaY;
         _camera.DOFieldOfView(fov - 1, dur).SetEase(Ease.OutQuad);
          await _camera.transform.DORotate(euler, dur).SetEase(Ease.OutQuad).ToUniTask();
-         await UniTask.WaitForSeconds(.15f);
-         await  _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
+         await UniTask.WaitForSeconds(.1f);
+        _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
     }
 
-    public void OriginLook()
+    public async UniTask OriginLook()
     {
-        _camera.transform.DORotateQuaternion(originalRot, dur);
+        _camera.DOKill();
+        var rotTask =  _camera.transform.DORotateQuaternion(originalRot, dur).ToUniTask();
+        var fovTask =  _camera.DOFieldOfView(fov, dur).SetEase(Ease.OutQuad).ToUniTask();
+        await UniTask.WhenAll(rotTask, fovTask);
     }
 
     private void Rotate()
