@@ -23,7 +23,6 @@ public class MapRenderer : MonoBehaviour
     private List<List<MapNode>> map;
     private Dictionary<NodeCoord, MapNodeUI> nodeUIs = new();
     private MapNode currentNode;
-    private int _curFloor = 0;
     private NodeCoord _curNodeCoord;
     
     private Sprite enemySpr,shopSpr,eventSpr,bossSpr,strongEnemySpr;
@@ -47,16 +46,17 @@ public class MapRenderer : MonoBehaviour
 
     void GenerateAndRender()
     {
-        if (!DataManager.Inst.GetMapData().isMapGenerated)
+        if (!DataManager.Inst.GetMapData().isMapGenerated || DataManager.Inst.GetMapData().curNodeCoord.floor==-1)
         {
             MapGenerator generator = new MapGenerator();
             map = generator.Generate();
             DataManager.Inst.SaveMapData(map);   
+            _curNodeCoord = new NodeCoord(-1,0,NodeType.None);
         }
         else
         {
             map = DataManager.Inst.GetMapData().mapDict;
-            _curFloor = DataManager.Inst.GetMapData().curFloor;
+           
             _curNodeCoord = DataManager.Inst.GetMapData().curNodeCoord;
         }
         Debug.Log(map.Count);
@@ -91,7 +91,8 @@ public class MapRenderer : MonoBehaviour
         }
 
         // 시작 노드 설정
-        currentNode = map[_curNodeCoord.floor][_curNodeCoord.index];
+        
+        currentNode = map[_curNodeCoord.floor>=0?_curNodeCoord.floor:0][_curNodeCoord.index];
         UpdateInteractable();
     }
 
@@ -187,14 +188,18 @@ public class MapRenderer : MonoBehaviour
 
     void UpdateInteractable()
     {
-        if (_curFloor == 0)
+        if (_curNodeCoord.floor == -1)
         {
             foreach (var pair in nodeUIs)
                 pair.Value.SetInteractable(false,MapNodeUI.NodeInteract.UnInteract);
 
             nodeUIs[currentNode.nodeCoord].SetInteractable(true,MapNodeUI.NodeInteract.Visualize);
             return;
+
         }
+  
+            
+        
         foreach (var pair in nodeUIs)
             pair.Value.SetInteractable(false,MapNodeUI.NodeInteract.UnInteract);
 

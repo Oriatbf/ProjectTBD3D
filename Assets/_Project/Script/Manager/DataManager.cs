@@ -45,7 +45,8 @@ public class MapData
 {
     public List<List<MapNode>> mapDict =new List<List<MapNode>>();
     public bool isMapGenerated = false;
-    public NodeCoord curNodeCoord = new NodeCoord();
+    public NodeCoord curNodeCoord = new NodeCoord(-1,0,NodeType.None);
+    public NodeCoord prevNodeCoord = new NodeCoord(); //클리어 시 예상노드
     public int curFloor = 0;
 }
 
@@ -187,9 +188,13 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
             JsonSave();
         }
 
-        var k = Input.GetKey(KeyCode.K);
-        var j = Input.GetKey(KeyCode.J);
-        if(Input.GetKeyDown(KeyCode.W) && k && j) debugMode = !debugMode;
+        var k = Input.GetKey(KeyCode.O);
+        var j = Input.GetKey(KeyCode.R);
+        if (Input.GetKeyDown(KeyCode.I) && k && j)
+        {
+            debugMode = !debugMode;
+            Debug.Log($"디버그모드 {debugMode}");
+        }
 
 
         if (debugMode && Input.GetKeyDown(KeyCode.Keypad5))
@@ -297,6 +302,7 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
     public void SaveSurviveUnit(Unit unit)
     {
         if (ApplicationManager.Inst.GetModule<GameFlowController>().GetCurNodeType() == NodeType.Tutorial) return;
+        if (Data.units.Count >= 8) return;
         var unitSaveData = unit.GetUnitData();
         var originalData = SheetDataManager.Inst.GetUnitData(unitSaveData.id);
         var originalStatContainer = new StatContainer(originalData);
@@ -383,13 +389,14 @@ public class DataManager : SingletonDontDestroyOnLoad<DataManager>
 
     public void SaveCurNodeType(NodeCoord prevNodeCoord)
     {
-        Data.mapData.curNodeCoord = prevNodeCoord;
+        Data.mapData.prevNodeCoord = prevNodeCoord;
         saveAction?.Invoke();
     }
 
     public void ClearMap()
     {
         Data.mapData.curFloor += 1;
+        Data.mapData.curNodeCoord = Data.mapData.prevNodeCoord;
         saveAction?.Invoke();
     }
 

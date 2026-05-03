@@ -185,6 +185,7 @@ public class Unit : MonoBehaviour
         Debug.Log("공격 애니메이션 끝");
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     public void GetDamage(float damage,SkillContext skillContext,SkillType skillType)
     {
         if(isDead) return;

@@ -181,6 +181,7 @@ public class PlayerSpawnController : BaseController
             {
                 if (tile.GetIndex().x >= ApplicationManager.Inst.GetModule<TileController>().GetHalfCount())
                     return;
+                if (tile.GetUnit() != null) return;
                 if(Input.GetMouseButtonDown(0))
                 {
                     if (EventSystem.current.IsPointerOverGameObject()) return;

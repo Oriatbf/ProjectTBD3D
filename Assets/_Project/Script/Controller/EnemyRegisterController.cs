@@ -13,7 +13,7 @@ public class EnemyRegisterController : BaseController
         enemies.Clear();
         for(int i = 0;i<units.Count;i++)
         {
-            if (units[i].TryGetComponent(out EnemyController enemyController))
+            if (units[i] != null&&units[i].TryGetComponent(out EnemyController enemyController))
             {
                 enemies.Add(enemyController);
             }
